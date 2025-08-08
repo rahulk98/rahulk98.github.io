@@ -1,0 +1,80 @@
+:root{--bg:#0b0f14;--text:#e6edf3;--muted:#9fb1c1;--card:#111827;--accent:#3b82f6;--accent-2:#22c55e;--border:#1f2937}
+:root.light{--bg:#ffffff;--text:#0b0f14;--muted:#4b5563;--card:#f8fafc;--accent:#2563eb;--accent-2:#16a34a;--border:#e5e7eb}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,'Helvetica Neue',Arial,'Noto Sans',sans-serif;background:var(--bg);color:var(--text);line-height:1.6}
+img{max-width:100%;height:auto;border-radius:12px}
+.container{width:min(1100px,92%);margin-inline:auto}
+.section{padding:72px 0}
+.section.alt{background:var(--card)}
+.title{font-size:clamp(2rem,5vw,3rem);margin:0 0 8px}
+.tagline{color:var(--muted);font-size:1.1rem;margin:0 0 6px}
+.role{color:var(--muted);margin-bottom:18px}
+.muted{color:var(--muted)}
+.btn{display:inline-block;background:var(--accent);color:white;padding:10px 14px;border-radius:10px;border:1px solid transparent;text-decoration:none;transition:.2s ease;font-weight:600}
+.btn:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(59,130,246,.25)}
+.btn.ghost{background:transparent;color:var(--text);border-color:var(--border)}
+.btn.small{padding:8px 10px;font-size:.9rem}
+.skip-link{position:absolute;left:-999px}
+.skip-link:focus{left:8px;top:8px;background:#000;color:#fff;padding:8px;border-radius:6px;z-index:1000}
+
+/* Header */
+.site-header{position:sticky;top:0;background:rgba(11,15,20,.8);backdrop-filter:saturate(180%) blur(10px);border-bottom:1px solid var(--border);z-index:50}
+:root.light .site-header{background:rgba(255,255,255,.8)}
+.nav{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px 4%}
+.logo{font-weight:800;color:var(--text);text-decoration:none;font-size:1.1rem;letter-spacing:.5px}
+.menu{list-style:none;display:flex;gap:18px;margin:0;padding:0}
+.menu a{color:var(--text);text-decoration:none;border-radius:8px;padding:8px 10px}
+.menu a:hover{background:rgba(255,255,255,.06)}
+.icon-btn{background:transparent;border:1px solid var(--border);color:var(--text);border-radius:8px;padding:8px 10px;cursor:pointer}
+@media (max-width:840px){
+  #menu{display:none;position:absolute;right:12px;top:56px;background:var(--card);border:1px solid var(--border);padding:12px 10px;border-radius:10px;flex-direction:column;gap:8px}
+  .menu.show{display:flex}
+}
+
+/* Hero */
+.grid-2{display:grid;grid-template-columns:1.2fr .8fr;gap:36px}
+@media (max-width:840px){.grid-2{grid-template-columns:1fr}}
+.photo-wrap{display:flex;align-items:center;justify-content:center}
+.photo{width:min(280px,80%);aspect-ratio:1/1;object-fit:cover;border:2px solid var(--border);box-shadow:0 10px 30px rgba(0,0,0,.25)}
+
+/* Timeline */
+.timeline{border-left:2px dashed var(--border);margin-top:18px;padding-left:16px}
+.tl-item{position:relative;margin:18px 0}
+.tl-dot{position:absolute;left:-11px;top:6px;width:12px;height:12px;background:var(--accent);border-radius:50%}
+.tl-content h3{margin:0 0 4px;font-size:1.05rem}
+
+/* Skills */
+.skills-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+@media (max-width:1024px){.skills-grid{grid-template-columns:repeat(3,1fr)}}
+@media (max-width:720px){.skills-grid{grid-template-columns:repeat(2,1fr)}}
+.skill-card{background:var(--card);border:1px solid var(--border);padding:14px;border-radius:12px}
+.skill-card h3{margin:0 0 8px;font-size:1rem}
+
+/* Cards */
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+@media (max-width:1024px){.cards{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:720px){.cards{grid-template-columns:1fr}}
+.card{background:var(--card);border:1px solid var(--border);padding:18px;border-radius:14px;transition:border-color .2s,transform .2s}
+.card:hover{transform:translateY(-2px);border-color:var(--accent)}
+.card header{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.stack{color:var(--muted);font-size:.95rem}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+
+/* Experience */
+.experience ul{margin:8px 0 0 18px}
+.experience li{margin:6px 0}
+
+/* Education */
+.edu-list{list-style:none;padding:0}
+.edu-list li{background:var(--card);border:1px solid var(--border);padding:12px;border-radius:12px;margin:10px 0}
+
+/* Footer */
+.site-footer{border-top:1px solid var(--border);padding:24px 0}
+.footer-grid{display:flex;align-items:center;justify-content:space-between;gap:16px}
+.social a{color:var(--text);text-decoration:none;font-weight:700;border:1px solid var(--border);padding:6px 10px;border-radius:8px}
+.social a:hover{background:rgba(255,255,255,.06)}
+
+/* AOS-lite */
+[data-animate]{opacity:0;transform:translateY(8px);transition:opacity .6s ease,transform .6s ease}
+[data-animate].in{opacity:1;transform:none}
