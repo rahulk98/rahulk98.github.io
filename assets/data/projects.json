@@ -1,0 +1,48 @@
+[
+  {
+    "title": "Gaze-Guided Retrieval using CLIP",
+    "date": "2024-08-01",
+    "year": "2024",
+    "slug": "gaze-clip",
+    "stack": [
+      "Python",
+      "PyTorch",
+      "CLIP",
+      "Gradio"
+    ],
+    "links": {},
+    "summary": "Eye-gaze driven image retrieval leveraging CLIP (ViT-B/32) with an interactive Gradio interface."
+  },
+  {
+    "title": "Sentiment Analysis (YouTube Comments)",
+    "date": "2024-04-15",
+    "year": "2024",
+    "slug": "sentiment-bert",
+    "stack": [
+      "Python",
+      "BERT",
+      "Flask",
+      "Docker",
+      "GitHub Actions"
+    ],
+    "links": {
+      "github": "https://github.com/rahulk98/Sentiment-Analysis-with-BERT-Model"
+    },
+    "summary": "End-to-end sentiment classification using BERT with a Flask API, containerized with Docker, and deployed with CI/CD."
+  },
+  {
+    "title": "Glaucoma Detection",
+    "date": "2020-03-01",
+    "year": "2020",
+    "slug": "glaucoma",
+    "stack": [
+      "MATLAB",
+      "Image Processing",
+      "SVM"
+    ],
+    "links": {
+      "paper": "https://ieeexplore.ieee.org/document/9182388"
+    },
+    "summary": "Detection of glaucoma from retinal fundus images using region growing and SVM (ICCSP 2020)."
+  }
+]

@@ -1,0 +1,31 @@
+name: Build projects manifest
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - "projects/**"
+      - "scripts/build_projects.py"
+      - ".github/workflows/build-projects.yml"
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install pyyaml
+      - run: python scripts/build_projects.py
+      - name: Commit projects.json
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@users.noreply.github.com"
+          git add assets/data/projects.json
+          git commit -m "chore: update projects.json" || echo "No changes"
+          git push

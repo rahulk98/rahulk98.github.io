@@ -110,53 +110,11 @@
     <!-- Projects -->
     <section id="projects" class="section" aria-labelledby="projects-title" data-animate>
       <div class="container">
-        <h2 id="projects-title">Projects</h2>
-        <div class="cards">
-          <!-- Project 1 -->
-          <a class="card-link" href="project.html?id=sentiment-bert" aria-label="View details: Sentiment Analysis (YouTube Comments)"><article class="card" tabindex="0">
-            <header>
-              <h3>Sentiment Analysis (YouTube Comments)</h3>
-              <span class="muted">2024</span>
-            </header>
-            <p>
-              End-to-end sentiment classification using BERT with a Flask API, containerized with Docker, and deployed with CI/CD.
-            </p>
-            <p class="stack">Stack: Python, BERT, Flask, Docker, GitHub Actions</p>
-            <div class="actions">
-              <a class="btn small" href="https://github.com/rahulk98/Sentiment-Analysis-with-BERT-Model" target="_blank" rel="noopener">GitHub</a>
-            </div>
-          </article></a>
-
-          <!-- Project 2 -->
-          <a class="card-link" href="project.html?id=gaze-clip" aria-label="View details: Gaze-Guided Retrieval using CLIP"><article class="card" tabindex="0">
-            <header>
-              <h3>Gaze-Guided Retrieval using CLIP</h3>
-              <span class="muted">2024</span>
-            </header>
-            <p>
-              Eye-gaze driven image retrieval leveraging CLIP (ViT-B/32) and an interactive Gradio interface for human-in-the-loop refinement.
-            </p>
-            <p class="stack">Stack: Python, PyTorch, CLIP, Gradio</p>
-            <div class="actions">
-              <a class="btn small" href="#" aria-disabled="true">Demo (coming soon)</a>
-            </div>
-          </article></a>
-
-          <!-- Project 3 -->
-          <a class="card-link" href="project.html?id=glaucoma" aria-label="View details: Glaucoma Detection"><article class="card" tabindex="0">
-            <header>
-              <h3>Glaucoma Detection</h3>
-              <span class="muted">2020</span>
-            </header>
-            <p>
-              Detection of glaucoma from retinal fundus images using region growing and SVM. Published at ICCSP 2020.
-            </p>
-            <p class="stack">Stack: MATLAB, Image Processing, SVM</p>
-            <div class="actions">
-              <a class="btn small" href="https://ieeexplore.ieee.org/document/9182388" target="_blank" rel="noopener">Paper</a>
-            </div>
-          </article></a>
+        <div class="bar">
+          <h2 id="projects-title">Projects</h2>
+          <button id="toggle-projects" class="btn ghost" aria-expanded="false" aria-controls="project-list">Show more</button>
         </div>
+        <div id="project-list" class="cards"></div>
       </div>
     </section>
 
@@ -210,27 +168,9 @@
     <section id="contact" class="section alt" aria-labelledby="contact-title" data-animate>
       <div class="container">
         <h2 id="contact-title">Contact</h2>
-        <form class="contact-form" name="contact" data-netlify="true">
-          <input type="hidden" name="form-name" value="contact" />
-          <div class="grid-2">
-            <label>
-              Name
-              <input type="text" name="name" required />
-            </label>
-            <label>
-              Email
-              <input type="email" name="email" required />
-            </label>
-          </div>
-          <label>
-            Message
-            <textarea name="message" rows="5" required></textarea>
-          </label>
-          <div class="actions">
-            <button type="submit" class="btn">Send</button>
-            <a class="btn ghost" href="mailto:rahulkrishnan1105@gmail.com">Or email me</a>
-          </div>
-        </form>
+        <div class="actions">
+          <a class="btn" href="mailto:rahulkrishnan1105@gmail.com" aria-label="Email Rahul">Email me</a>
+        </div>
       </div>
     </section>
   </main>
