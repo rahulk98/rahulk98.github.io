@@ -29,6 +29,7 @@
       </div>
     </div>
   </footer>
+  <script src="assets/js/main.js" defer></script>
   <script>
   (function(){
     const root=document.documentElement;
@@ -47,8 +48,7 @@
       md = md.replace(/\*(.*?)\*/g,'<em>$1<\/em>');
       md = md.replace(/`([^`]+)`/g,'<code>$1<\/code>');
       md = md.replace(/\[(.*?)\]\((.*?)\)/g,'<a href="$2" target="_blank" rel="noopener">$1<\/a>');
-      md = md.replace(/\n{2,}/g,'</p><p>');
-      return '<p>'+md+'</p>';
+      return md.split(/\n{2,}/).map(par => `<p>${par}</p>`).join('');
     }
 
     const params = new URLSearchParams(location.search);
