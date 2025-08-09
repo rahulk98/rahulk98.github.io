@@ -1,11 +1,12 @@
-name: Build projects manifest
+name: Build data files
 on:
   push:
     branches: [ main ]
     paths:
       - "projects/**"
-      - "scripts/build_projects.py"
-      - ".github/workflows/build-projects.yml"
+      - "experience/**"
+      - "scripts/build_data.py"
+      - ".github/workflows/build-data.yml"
   workflow_dispatch:
 
 jobs:
@@ -21,11 +22,11 @@ jobs:
         with:
           python-version: "3.11"
       - run: pip install pyyaml
-      - run: python scripts/build_projects.py
-      - name: Commit projects.json
+      - run: python scripts/build_data.py
+      - name: Commit data files
         run: |
           git config user.name "github-actions"
           git config user.email "actions@users.noreply.github.com"
-          git add assets/data/projects.json
-          git commit -m "chore: update projects.json" || echo "No changes"
+          git add assets/data/*.json
+          git diff --staged --quiet || git commit -m "chore: update data files"
           git push

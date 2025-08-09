@@ -90,6 +90,41 @@ function cardHTML(p) {
 
 document.addEventListener("DOMContentLoaded", loadProjectsJSON);
 
+// Experience: load from generated JSON
+async function loadExperienceJSON() {
+  const list = document.getElementById("experience-list");
+  if (!list) return;
+
+  try {
+    const res = await fetch("assets/data/experience.json", { cache: "no-cache" });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const items = await res.json();
+    list.innerHTML = items.map(experienceHTML).join("");
+  } catch (e) {
+    console.error("Experience load failed", e);
+    list.innerHTML = `<p class="muted">Failed to load experience.</p>`;
+  }
+}
+
+function experienceHTML(job) {
+  const points = (job.points || [])
+    .map(point => `<li>${point}</li>`)
+    .join("");
+  return `
+    <article class="experience">
+      <header>
+        <h3>${job.title}</h3>
+        <span class="company">${job.company}</span>
+        <span class="muted">${job.dates} &bull; ${job.location}</span>
+      </header>
+      <ul>${points}</ul>
+    </article>
+  `;
+}
+
+document.addEventListener("DOMContentLoaded", loadExperienceJSON);
+
+
 // Make project cards clickable without breaking inner buttons/links
 function handleCardClick(e) {
   const card = e.target.closest('article.card[data-href]');
