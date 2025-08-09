@@ -31,7 +31,6 @@
         <li><a href="#experience">Experience</a></li>
         <li><a href="#education">Education</a></li>
         <li><a href="#publications">Publications</a></li>
-        <li><a href="#blog">Blog</a></li>
         <li><a href="#contact">Contact</a></li>
       </ul>
     </nav>
@@ -51,8 +50,8 @@
             <a class="btn" href="mailto:rahulkrishnan1105@gmail.com">Email</a>
           </div>
         </div>
-        <div class="photo-wrap">
-          <img src="assets/img/profile.jpg" alt="Portrait of Rahul Krishnan" class="photo" />
+        <div class="photo-wrap" aria-hidden="false">
+          <img src="assets/img/profile.jpg" alt="Portrait of Rahul Krishnan" class="photo" loading="eager" />
         </div>
       </div>
     </section>
@@ -114,7 +113,7 @@
         <h2 id="projects-title">Projects</h2>
         <div class="cards">
           <!-- Project 1 -->
-          <article class="card">
+          <a class="card-link" href="project.html?id=sentiment-bert" aria-label="View details: Sentiment Analysis (YouTube Comments)"><article class="card" tabindex="0">
             <header>
               <h3>Sentiment Analysis (YouTube Comments)</h3>
               <span class="muted">2024</span>
@@ -126,10 +125,10 @@
             <div class="actions">
               <a class="btn small" href="https://github.com/rahulk98/Sentiment-Analysis-with-BERT-Model" target="_blank" rel="noopener">GitHub</a>
             </div>
-          </article>
+          </article></a>
 
           <!-- Project 2 -->
-          <article class="card">
+          <a class="card-link" href="project.html?id=gaze-clip" aria-label="View details: Gaze-Guided Retrieval using CLIP"><article class="card" tabindex="0">
             <header>
               <h3>Gaze-Guided Retrieval using CLIP</h3>
               <span class="muted">2024</span>
@@ -141,10 +140,10 @@
             <div class="actions">
               <a class="btn small" href="#" aria-disabled="true">Demo (coming soon)</a>
             </div>
-          </article>
+          </article></a>
 
           <!-- Project 3 -->
-          <article class="card">
+          <a class="card-link" href="project.html?id=glaucoma" aria-label="View details: Glaucoma Detection"><article class="card" tabindex="0">
             <header>
               <h3>Glaucoma Detection</h3>
               <span class="muted">2020</span>
@@ -156,7 +155,7 @@
             <div class="actions">
               <a class="btn small" href="https://ieeexplore.ieee.org/document/9182388" target="_blank" rel="noopener">Paper</a>
             </div>
-          </article>
+          </article></a>
         </div>
       </div>
     </section>
@@ -204,14 +203,6 @@
             <a class="link" href="https://ieeexplore.ieee.org/document/9182388" target="_blank" rel="noopener">Read</a>
           </li>
         </ul>
-      </div>
-    </section>
-
-    <!-- Blog (optional) -->
-    <section id="blog" class="section" aria-labelledby="blog-title" data-animate>
-      <div class="container">
-        <h2 id="blog-title">Blog</h2>
-        <p>Writing coming soon. This section will list posts from Markdown files.</p>
       </div>
     </section>
 
