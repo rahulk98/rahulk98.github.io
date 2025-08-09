@@ -48,9 +48,7 @@ img{max-width:100%;height:auto;border-radius:12px}
 .tl-content h3{margin:0 0 4px;font-size:1.05rem}
 
 /* Skills */
-.skills-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
-@media (max-width:1024px){.skills-grid{grid-template-columns:repeat(3,1fr)}}
-@media (max-width:720px){.skills-grid{grid-template-columns:repeat(2,1fr)}}
+.skills-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:16px}
 .skill-card{background:var(--card);border:1px solid var(--border);padding:14px;border-radius:12px}
 .skill-card h3{margin:0 0 8px;font-size:1rem}
 
