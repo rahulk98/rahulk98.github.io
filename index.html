@@ -1,188 +1,185 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="Portfolio of Rahul Krishnan – Data Science Master's Student and ex-SAP Developer. Turning data into insights and engineering scalable ML solutions." />
-  <meta name="author" content="Rahul Krishnan" />
-  <meta property="og:title" content="Rahul Krishnan – Portfolio" />
-  <meta property="og:description" content="Turning data into insights. Engineering scalable ML solutions." />
-  <meta property="og:type" content="website" />
-  <meta property="og:image" content="assets/img/og-image.png" />
-  <meta property="og:url" content="https://rahulk98.github.io" />
-  <title>Rahul Krishnan – Portfolio</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/styles.css" />
-  <link rel="icon" href="assets/img/favicon.ico" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rahul Krishnan | Portfolio</title>
+    <link rel="stylesheet" href="assets/css/styles.css">
 </head>
 <body>
-  <a class="skip-link" href="#main">Skip to content</a>
-  <header class="site-header">
-    <nav class="nav" aria-label="Primary">
-      <a class="logo" href="#home" aria-label="Rahul Krishnan home">RK</a>
-      <button id="theme-toggle" class="icon-btn" aria-label="Toggle dark mode" title="Toggle theme">🌓</button>
-      <button id="menu-toggle" class="icon-btn" aria-label="Toggle menu" aria-expanded="false" aria-controls="menu">☰</button>
-      <ul id="menu" class="menu">
-        <li><a href="#about">About</a></li>
-        <li><a href="#skills">Skills</a></li>
-        <li><a href="#projects">Projects</a></li>
-        <li><a href="#experience">Experience</a></li>
-        <li><a href="#education">Education</a></li>
-        <li><a href="#publications">Publications</a></li>
-        <li><a href="#contact">Contact</a></li>
-      </ul>
-    </nav>
-  </header>
-
-  <main id="main">
-    <!-- Hero / Home -->
-    <section id="home" class="section hero" aria-label="Homepage" data-animate>
-      <div class="container grid-2 hero-content">
-        <div>
-          <h1 class="title">Rahul Krishnan</h1>
-          <p class="tagline">"Turning data into insights. Engineering scalable ML solutions."</p>
-          <p class="role">Data Science Master's Student | Ex-SAP Developer • Trier, Germany</p>
-          <div class="quick-links">
-            <a class="btn" href="https://github.com/rahulk98" target="_blank" rel="noopener">GitHub</a>
-            <a class="btn" href="https://linkedin.com/in/rahulk98" target="_blank" rel="noopener">LinkedIn</a>
-            <a class="btn" href="mailto:rahulkrishnan1105@gmail.com">Email</a>
-          </div>
-        </div>
-        <div class="photo-wrap" aria-hidden="false">
-          <img src="assets/img/profile.jpg" alt="Portrait of Rahul Krishnan" class="photo" loading="eager" />
-        </div>
-      </div>
-    </section>
-
-    <!-- About -->
-    <section id="about" class="section" aria-labelledby="about-title" data-animate>
-      <div class="container">
-        <h2 id="about-title">About Me</h2>
-        <p>
-          I am a Master's student in Data Science at Universität Trier with prior experience as a Software Developer at SAP Labs (4+ years).
-          My interests span Machine Learning, NLP, gaze-based interaction, and health AI. Previously, I completed my BTech in Computer Science at Amrita Vishwa Vidyapeetham.
-        </p>
-        <div class="timeline" aria-label="Career and education timeline">
-          <div class="tl-item">
-            <div class="tl-dot" aria-hidden="true"></div>
-            <div class="tl-content">
-              <h3>Universität Trier – MSc Data Science</h3>
-              <span class="muted">Grade: 1.7</span>
+    <div class="container">
+        <aside class="sidebar">
+            <div class="profile">
+                <img src="assets/img/profile.jpg" alt="Rahul Krishnan">
+                <h1>Rahul Krishnan</h1>
+                <p>Data Science Master's Student | Ex-SAP Developer</p>
             </div>
-          </div>
-          <div class="tl-item">
-            <div class="tl-dot" aria-hidden="true"></div>
-            <div class="tl-content">
-              <h3>Amrita Vishwa Vidyapeetham – BTech CSE</h3>
-              <span class="muted">Top 10%, Grade: 1.37</span>
+            <nav>
+                <ul>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#experience">Experience</a></li>
+                    <li><a href="#projects">Projects</a></li>
+                    <li><a href="#skills">Skills</a></li>
+                    <li><a href="#education">Education</a></li>
+                    <li><a href="#publications">Publications</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </nav>
+            <div class="theme-switcher">
+                <button id="theme-toggle">Toggle Theme</button>
             </div>
-          </div>
-          <div class="tl-item">
-            <div class="tl-dot" aria-hidden="true"></div>
-            <div class="tl-content">
-              <h3>SAP Labs – Software Developer</h3>
-              <span class="muted">4+ years</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Skills -->
-    <section id="skills" class="section alt" aria-labelledby="skills-title" data-animate>
-      <div class="container">
-        <h2 id="skills-title">Skills</h2>
-        <div class="skills-grid">
-          <div class="skill-card"><h3>Programming</h3><p>Python, Java, R, MATLAB</p></div>
-          <div class="skill-card"><h3>Libraries</h3><p>Pandas, SciPy, Scikit-Learn, Matplotlib</p></div>
-          <div class="skill-card"><h3>ML/DL</h3><p>PyTorch, TensorFlow, Keras, Hugging Face, Transformers, Gradio</p></div>
-          <div class="skill-card"><h3>Frameworks</h3><p>Flask, FastAPI, Docker, GitHub Actions</p></div>
-          <div class="skill-card"><h3>Big Data</h3><p>Spark, Hadoop, SAP HANA</p></div>
-          <div class="skill-card"><h3>Databases</h3><p>MySQL, PostgreSQL</p></div>
-          <div class="skill-card"><h3>Version Control</h3><p>Git, GitLab</p></div>
-          <div class="skill-card"><h3>Languages</h3><p>English (Fluent), German (Intermediate)</p></div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Projects -->
-    <section id="projects" class="section" aria-labelledby="projects-title" data-animate>
-      <div class="container">
-        <div class="bar">
-          <h2 id="projects-title">Projects</h2>
-          <button id="toggle-projects" class="btn ghost" aria-expanded="false" aria-controls="project-list">Show more</button>
-        </div>
-        <div id="project-list" class="cards"></div>
-      </div>
-    </section>
-
-    <!-- Experience -->
-    <section id="experience" class="section alt" aria-labelledby="experience-title" data-animate>
-      <div class="container">
-        <h2 id="experience-title">Experience</h2>
-        <div id="experience-list">
-          <!-- Experience items will be loaded here by JavaScript -->
-        </div>
-      </div>
-    </section>
-
-    <!-- Education -->
-    <section id="education" class="section" aria-labelledby="education-title" data-animate>
-      <div class="container">
-        <h2 id="education-title">Education</h2>
-        <ul class="edu-list">
-          <li>
-            <strong>Universität Trier</strong> — MSc Data Science
-            <span class="muted">Grade: 1.7</span>
-          </li>
-          <li>
-            <strong>Amrita Vishwa Vidyapeetham</strong> — BTech CSE
-            <span class="muted">Top 10%, Grade: 1.37</span>
-          </li>
-        </ul>
-      </div>
-    </section>
-
-    <!-- Publications -->
-    <section id="publications" class="section alt" aria-labelledby="pubs-title" data-animate>
-      <div class="container">
-        <h2 id="pubs-title">Publications</h2>
-        <ul>
-          <li>
-            <strong>Glaucoma Detection from Retinal Fundus Images</strong> — ICCSP 2020
-            <a class="link" href="https://ieeexplore.ieee.org/document/9182388" target="_blank" rel="noopener">Read</a>
-          </li>
-        </ul>
-      </div>
-    </section>
-
-    <!-- Contact -->
-    <section id="contact" class="section alt" aria-labelledby="contact-title" data-animate>
-      <div class="container">
-        <h2 id="contact-title">Contact</h2>
-        <div class="actions">
-          <a class="btn" href="mailto:rahulkrishnan1105@gmail.com" aria-label="Email Rahul">Email me</a>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <footer class="site-footer">
-    <div class="container footer-grid">
-      <div>
-        <strong>Rahul Krishnan</strong>
-        <p class="muted">Built with ❤️ using HTML/CSS/JS</p>
-      </div>
-      <div class="social">
-        <a href="mailto:rahulkrishnan1105@gmail.com" aria-label="Email">✉️</a>
-        <a href="https://github.com/rahulk98" target="_blank" rel="noopener" aria-label="GitHub">🐙</a>
-        <a href="https://linkedin.com/in/rahulk98" target="_blank" rel="noopener" aria-label="LinkedIn">in</a>
-      </div>
+        </aside>
+        <main class="content">
+            <section id="about">
+                <h2>About Me</h2>
+                <p>
+                  I am a Master's student in Data Science at Universität Trier with prior experience as a Software Developer at SAP Labs (4+ years).
+                  My interests span Machine Learning, NLP, gaze-based interaction, and health AI. Previously, I completed my BTech in Computer Science at Amrita Vishwa Vidyapeetham.
+                </p>
+            </section>
+            <section id="experience">
+                <h2>Experience</h2>
+                <div id="experience-list"></div>
+            </section>
+            <section id="projects">
+                <h2>Projects</h2>
+                <div id="project-list" class="cards"></div>
+            </section>
+            <section id="skills">
+                <h2>Skills</h2>
+                <div class="skills-grid">
+                  <div class="skill-card"><h3>Programming</h3><p>Python, Java, R, MATLAB</p></div>
+                  <div class="skill-card"><h3>Libraries</h3><p>Pandas, SciPy, Scikit-Learn, Matplotlib</p></div>
+                  <div class="skill-card"><h3>ML/DL</h3><p>PyTorch, TensorFlow, Keras, Hugging Face, Transformers, Gradio</p></div>
+                  <div class="skill-card"><h3>Frameworks</h3><p>Flask, FastAPI, Docker, GitHub Actions</p></div>
+                  <div class="skill-card"><h3>Big Data</h3><p>Spark, Hadoop, SAP HANA</p></div>
+                  <div class="skill-card"><h3>Databases</h3><p>MySQL, PostgreSQL</p></div>
+                  <div class="skill-card"><h3>Version Control</h3><p>Git, GitLab</p></div>
+                  <div class="skill-card"><h3>Languages</h3><p>English (Fluent), German (Intermediate)</p></div>
+                </div>
+            </section>
+            <section id="education">
+                <h2>Education</h2>
+                <ul class="edu-list">
+                  <li>
+                    <strong>Universität Trier</strong> — MSc Data Science
+                    <span class="muted">Grade: 1.7</span>
+                  </li>
+                  <li>
+                    <strong>Amrita Vishwa Vidyapeetham</strong> — BTech CSE
+                    <span class="muted">Top 10%, Grade: 1.37</span>
+                  </li>
+                </ul>
+            </section>
+            <section id="publications">
+                <h2>Publications</h2>
+                <ul>
+                  <li>
+                    <strong>Glaucoma Detection from Retinal Fundus Images</strong> — ICCSP 2020
+                    <a class="link" href="https://ieeexplore.ieee.org/document/9182388" target="_blank" rel="noopener">Read</a>
+                  </li>
+                </ul>
+            </section>
+            <section id="contact">
+                <h2>Contact</h2>
+                <div class="social-links">
+                    <a href="mailto:rahulkrishnan1105@gmail.com">Email</a>
+                    <a href="https://github.com/rahulk98" target="_blank" rel="noopener">GitHub</a>
+                    <a href="https://linkedin.com/in/rahulk98" target="_blank" rel="noopener">LinkedIn</a>
+                </div>
+            </section>
+        </main>
     </div>
-  </footer>
 
-  <script src="assets/js/main.js" defer></script>
+    <div id="project-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h2 id="modal-title"></h2>
+            <p id="modal-summary"></p>
+            <p id="modal-description"></p>
+            <div id="modal-stack" class="tags"></div>
+            <div id="modal-links" class="actions"></div>
+        </div>
+    </div>
+
+    <script id="projects-data" type="application/json">
+[
+  {
+    "title": "Gaze-Guided Retrieval using CLIP",
+    "date": "2024-08-01",
+    "year": "2024",
+    "slug": "gaze-clip",
+    "stack": [
+      "Python",
+      "PyTorch",
+      "CLIP",
+      "Gradio"
+    ],
+    "links": {},
+    "summary": "Eye-gaze driven image retrieval leveraging CLIP (ViT-B/32) with an interactive Gradio interface."
+  },
+  {
+    "title": "Sentiment Analysis (YouTube Comments)",
+    "date": "2024-04-15",
+    "year": "2024",
+    "slug": "sentiment-bert",
+    "stack": [
+      "Python",
+      "BERT",
+      "Flask",
+      "Docker",
+      "GitHub Actions"
+    ],
+    "links": {
+      "github": "https://github.com/rahulk98/Sentiment-Analysis-with-BERT-Model"
+    },
+    "summary": "End-to-end sentiment classification using BERT with a Flask API, containerized with Docker, and deployed with CI/CD."
+  },
+  {
+    "title": "Glaucoma Detection",
+    "date": "2020-03-01",
+    "year": "2020",
+    "slug": "glaucoma",
+    "stack": [
+      "MATLAB",
+      "Image Processing",
+      "SVM"
+    ],
+    "links": {
+      "paper": "https://ieeexplore.ieee.org/document/9182388"
+    },
+    "summary": "Detection of glaucoma from retinal fundus images using region growing and SVM (ICCSP 2020)."
+  }
+]
+    </script>
+    <script id="experience-data" type="application/json">
+[
+  {
+    "title": "Software Developer",
+    "company": "SAP Labs India Pvt. Ltd",
+    "location": "Bengaluru, India",
+    "dates": "Mar 2024 - Sep 2024",
+    "order": 1,
+    "points": [
+      "Designed a rule-based content-matching framework for eInvoices, reducing country-specific implementation efforts by 70%.",
+      "Developed a pagination-based data retrieval algorithm that improved system efficiency by reducing SAP queries from 10,000 eInvoices per request to just 1."
+    ]
+  },
+  {
+    "title": "Associate Software Developer",
+    "company": "SAP Labs India Pvt. Ltd",
+    "location": "Bengaluru, India",
+    "dates": "July 2020 - Mar 2024",
+    "order": 2,
+    "points": [
+      "Led critical legal and feature updates for Document Compliance tax solutions from design to development.",
+      "Overhauled the error-handling capabilities of SAP DRC solution for Turkey, reducing customer incidents by 80% and improving customer satisfaction by 66%.",
+      "Spearheaded the integration of Data Protection and Privacy (DPP) protocols into the SAP Document Consistency solution, ensuring secure data handling and full compliance with global privacy regulations."
+    ]
+  }
+]
+    </script>
+
+    <script src="assets/js/main.js"></script>
 </body>
 </html>

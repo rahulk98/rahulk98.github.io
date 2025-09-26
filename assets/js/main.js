@@ -1,154 +1,112 @@
-(function(){
-  const root = document.documentElement;
-  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-  const saved = localStorage.getItem('theme');
-  const initial = saved || (prefersDark ? 'dark' : 'light');
-  if(initial === 'light') root.classList.add('light');
+document.addEventListener('DOMContentLoaded', () => {
+    loadExperience();
+    loadProjects();
+    setupThemeToggle();
+    setupModal();
+});
 
-  const themeBtn = document.getElementById('theme-toggle');
-  themeBtn?.addEventListener('click', ()=>{
-    root.classList.toggle('light');
-    const now = root.classList.contains('light') ? 'light' : 'dark';
-    localStorage.setItem('theme', now);
-  });
+function setupThemeToggle() {
+    const themeToggle = document.getElementById('theme-toggle');
+    const root = document.documentElement;
 
-  const menuBtn = document.getElementById('menu-toggle');
-  const menu = document.getElementById('menu');
-  menuBtn?.addEventListener('click', ()=>{
-    const open = menu?.classList.toggle('show');
-    if(menuBtn) menuBtn.setAttribute('aria-expanded', String(!!open));
-  });
+    const applyTheme = (theme) => {
+        root.classList.remove('light', 'dark'); // Remove both to ensure clean state
+        if (theme === 'light') {
+            root.classList.add('light');
+        } else {
+            // 'dark' is the default if 'light' is not present
+        }
+        localStorage.setItem('theme', theme);
+    };
 
-  // AOS-lite
-  const observer = new IntersectionObserver((entries)=>{
-    for(const e of entries){
-      if(e.isIntersecting){
-        e.target.classList.add('in');
-        observer.unobserve(e.target);
-      }
-    }
-  },{threshold:0.08});
-
-  document.querySelectorAll('[data-animate]')?.forEach(el=>observer.observe(el));
-
-  // Projects: load from generated JSON
-async function loadProjectsJSON() {
-  const list = document.getElementById("project-list");
-  const toggleBtn = document.getElementById("toggle-projects");
-  if (!list) return;
-
-  try {
-    const res = await fetch("assets/data/projects.json", { cache: "no-cache" });
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    const items = await res.json();
-
-    let expanded = false;
-    function render() {
-      const toShow = expanded ? items : items.slice(0, 3);
-      list.innerHTML = toShow.map(cardHTML).join("");
-      if (toggleBtn) {
-        toggleBtn.style.display = items.length > 3 ? "inline-flex" : "none";
-        toggleBtn.textContent = expanded ? "Show less" : "Show more";
-        toggleBtn.setAttribute("aria-expanded", String(expanded));
-      }
+    // Initial theme setup
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme) {
+        applyTheme(savedTheme);
+    } else if (window.matchMedia('(prefers-color-scheme: light)').matches) {
+        applyTheme('light');
+    } else {
+        applyTheme('dark'); // Default to dark if no preference and system is not light
     }
 
-    if (toggleBtn) {
-        toggleBtn.addEventListener("click", () => {
-          expanded = !expanded;
-          render();
-        });
+    themeToggle.addEventListener('click', () => {
+        const currentTheme = root.classList.contains('light') ? 'light' : 'dark';
+        const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+        applyTheme(newTheme);
+    });
+}
+
+function loadExperience() {
+    const list = document.getElementById('experience-list');
+    if (!list) return;
+
+    try {
+        const items = JSON.parse(document.getElementById('experience-data').textContent);
+        list.innerHTML = items.map(job => `
+            <div class="experience-item">
+                <h3>${job.title}</h3>
+                <p><strong>${job.company}</strong> | ${job.dates}</p>
+                <ul>
+                    ${job.points.map(point => `<li>${point}</li>`).join('')}
+                </ul>
+            </div>
+        `).join('');
+    } catch (e) {
+        list.innerHTML = '<p>Failed to load experience.</p>';
     }
-
-    render();
-  } catch (e) {
-    console.error("Projects load failed", e);
-    list.innerHTML = `<p class="muted">Failed to load projects.</p>`;
-    if (toggleBtn) toggleBtn.style.display = "none";
-  }
 }
 
-function cardHTML(p) {
-  const links = Object.entries(p.links || {})
-    .map(([key, val]) => `<a class="btn small" href="${val}" target="_blank" rel="noopener">${key.charAt(0).toUpperCase() + key.slice(1)}</a>`)
-    .join("");
-  const tags = (p.stack || [])
-    .map((tag) => `<span class="tag">${tag}</span>`)
-    .join("");
-  return `
-    <article class="card" tabindex="0" role="link" data-href="project.html?id=${p.slug}">
-      <header>
-        <h3>${p.title}</h3>
-        <span class="muted">${p.year}</span>
-      </header>
-      <p>${p.summary}</p>
-      <div class="tags">${tags}</div>
-      <div class="actions">${links}</div>
-    </article>
-  `;
+function loadProjects() {
+    const list = document.getElementById('project-list');
+    if (!list) return;
+
+    try {
+        const projects = JSON.parse(document.getElementById('projects-data').textContent);
+        list.innerHTML = projects.map((p, index) => `
+            <div class="card" data-index="${index}">
+                <h3>${p.title}</h3>
+                <p>${p.summary}</p>
+                <div class="tags">${p.stack.map(tag => `<span class="tag">${tag}</span>`).join('')}</div>
+            </div>
+        `).join('');
+    } catch (e) {
+        list.innerHTML = '<p>Failed to load projects.</p>';
+    }
 }
 
-document.addEventListener("DOMContentLoaded", loadProjectsJSON);
+function setupModal() {
+    const modal = document.getElementById('project-modal');
+    const closeButton = document.querySelector('.close-button');
 
-// Experience: load from generated JSON
-async function loadExperienceJSON() {
-  const list = document.getElementById("experience-list");
-  if (!list) return;
+    document.getElementById('project-list').addEventListener('click', (e) => {
+        const card = e.target.closest('.card');
+        if (card) {
+            const projects = JSON.parse(document.getElementById('projects-data').textContent);
+            const project = projects[card.dataset.index];
+            
+            document.getElementById('modal-title').textContent = project.title;
+            document.getElementById('modal-summary').textContent = project.summary;
+            document.getElementById('modal-description').textContent = project.description;
+            
+            const stackContainer = document.getElementById('modal-stack');
+            stackContainer.innerHTML = project.stack.map(tag => `<span class="tag">${tag}</span>`).join('');
 
-  try {
-    const res = await fetch("assets/data/experience.json", { cache: "no-cache" });
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    const items = await res.json();
-    list.innerHTML = items.map(experienceHTML).join("");
-  } catch (e) {
-    console.error("Experience load failed", e);
-    list.innerHTML = `<p class="muted">Failed to load experience.</p>`;
-  }
+            const linksContainer = document.getElementById('modal-links');
+            linksContainer.innerHTML = Object.entries(project.links).map(([key, value]) => 
+                `<a href="${value}" target="_blank">${key.charAt(0).toUpperCase() + key.slice(1)}</a>`
+            ).join('');
+
+            modal.style.display = 'block';
+        }
+    });
+
+    closeButton.addEventListener('click', () => {
+        modal.style.display = 'none';
+    });
+
+    window.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            modal.style.display = 'none';
+        }
+    });
 }
-
-function experienceHTML(job) {
-  const points = (job.points || [])
-    .map(point => `<li>${point}</li>`)
-    .join("");
-  return `
-    <article class="experience">
-      <header>
-        <h3>${job.title}</h3>
-        <span class="company">${job.company}</span>
-        <span class="muted">${job.dates} &bull; ${job.location}</span>
-      </header>
-      <ul>${points}</ul>
-    </article>
-  `;
-}
-
-document.addEventListener("DOMContentLoaded", loadExperienceJSON);
-
-
-// Make project cards clickable without breaking inner buttons/links
-function handleCardClick(e) {
-  const card = e.target.closest('article.card[data-href]');
-  if (!card) return;
-  
-  // Prevent click action if an interactive element inside the card was clicked
-  const isInteractive = e.target.closest('a, button, [role="button"], input, textarea, select');
-  if (isInteractive) return;
-
-  const href = card.getAttribute('data-href');
-  if (href) window.location.href = href;
-}
-
-function handleCardKeydown(e) {
-  if (e.key !== 'Enter' && e.key !== ' ') return;
-  const card = e.target.closest('article.card[data-href]');
-  if (!card) return;
-  
-  e.preventDefault(); // Prevent space from scrolling
-  const href = card.getAttribute('data-href');
-  if (href) window.location.href = href;
-}
-
-document.addEventListener('click', handleCardClick);
-document.addEventListener('keydown', handleCardKeydown);
-
-})(); // End of main IIFE
