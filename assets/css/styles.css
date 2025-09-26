@@ -54,13 +54,14 @@ body {
 
 .profile img {
     display: block;
-    margin: 0 auto 10px auto;
+    margin: 0 auto 15px auto;
     width: 150px;
     height: 150px;
     border-radius: 50%;
     object-fit: cover;
-    object-position: center center;
+    object-position: center 20%;
     border: 3px solid var(--accent);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .profile h1 {
