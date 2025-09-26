@@ -55,11 +55,11 @@ body {
 .profile img {
     display: block;
     margin: 0 auto 10px auto;
-    background: url('../img/profile.jpg') no-repeat center center/cover;
     width: 150px;
     height: 150px;
     border-radius: 50%;
     object-fit: cover;
+    object-position: center center;
     border: 3px solid var(--accent);
 }
 
