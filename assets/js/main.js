@@ -27,7 +27,7 @@ async function initializeApp() {
     setupModal();
     setupNavigation();
     setupMobileMenu();
-    setupProjectFiltering();
+    // setupProjectFiltering() is called from generateFilterButtons() after projects load
     setupSmoothScrolling();
     setupIntersectionObserver();
     optimizeImages();
@@ -177,6 +177,12 @@ function setupSmoothScrolling() {
 
 // Project filtering
 function setupProjectFiltering() {
+    // Remove existing event listeners to prevent duplicates
+    const existingButtons = document.querySelectorAll('.filter-btn');
+    existingButtons.forEach(button => {
+        button.replaceWith(button.cloneNode(true));
+    });
+
     const filterButtons = document.querySelectorAll('.filter-btn');
     const projectCards = document.querySelectorAll('.project-card');
 
@@ -528,15 +534,8 @@ function loadNavigation() {
             </li>
         `).join('');
         
-        // Load project filters
-        const filtersContainer = document.querySelector('.project-filters');
-        if (filtersContainer) {
-            filtersContainer.innerHTML = navigation.projectFilters.map(filter => `
-                <button class="filter-btn ${filter.active ? 'active' : ''}" data-filter="${filter.id}">
-                    ${filter.title}
-                </button>
-            `).join('');
-        }
+        // Project filters are now dynamically generated from projects.json
+        // See generateFilterButtons() function
     } catch (e) {
         console.error('Failed to load navigation:', e);
     }
@@ -624,10 +623,62 @@ function loadProjects() {
                 </div>
             </div>
         `).join('');
+
+        // Generate filter buttons after projects are loaded
+        console.log('🎯 About to generate filter buttons...');
+        generateFilterButtons();
     } catch (e) {
         console.error('Failed to load projects:', e);
         list.innerHTML = '<p>Failed to load project data.</p>';
     }
+}
+
+function generateFilterButtons() {
+    console.log('🔍 generateFilterButtons called');
+    const filterContainer = document.getElementById('project-filters');
+    if (!filterContainer) {
+        console.error('❌ Filter container not found');
+        return;
+    }
+    if (!window.projectsData) {
+        console.error('❌ Projects data not loaded');
+        return;
+    }
+
+    // Get unique categories from projects
+    const categories = [...new Set(window.projectsData.map(project => project.category))];
+    console.log('📊 Found categories:', categories);
+    
+    // Create category display mapping
+    const categoryDisplayNames = {
+        'ml': 'ML',
+        'nlp': 'NLP', 
+        'recommender': 'Recommender',
+        'recommender systems': 'Recommender Systems',
+        'computer vision': 'Computer Vision',
+        'deployment': 'Deployment',
+        'ai': 'AI',
+        'data-science': 'Data Science',
+        'web': 'Web',
+        'mobile': 'Mobile'
+    };
+
+    // Generate filter buttons
+    const filterButtons = [
+        '<button class="filter-btn active" data-filter="all">All</button>',
+        ...categories.map(category => {
+            // Use lowercase for lookup
+            const displayName = categoryDisplayNames[category.toLowerCase()] || category;
+            return `<button class="filter-btn" data-filter="${category}">${displayName}</button>`;
+        })
+    ].join('');
+
+    console.log('🎯 Generated filter buttons:', filterButtons);
+    filterContainer.innerHTML = filterButtons;
+    console.log('✅ Filter buttons inserted into DOM');
+
+    // Re-setup filtering with new buttons
+    setupProjectFiltering();
 }
 
 // Initialize projects when data is loaded

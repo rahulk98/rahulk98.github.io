@@ -4,7 +4,7 @@
     "date": "2025-09-01",
     "year": "2025",
     "slug": "amazon-electronics-recommender",
-    "category": "recommender",
+    "category": "Recommender Systems",
     "thumbnail": "assets/img/projects/recommender-thumb.jpg",
     "stack": [
       "Python",
@@ -35,7 +35,7 @@
     "date": "2025-06-01",
     "year": "2025",
     "slug": "sentiment-bert",
-    "category": "nlp",
+    "category": "NLP",
     "thumbnail": "assets/img/projects/sentiment-bert-thumb.jpg",
     "stack": [
       "Python",
@@ -62,7 +62,7 @@
     "date": "2020-03-01",
     "year": "2020",
     "slug": "glaucoma",
-    "category": "ml",
+    "category": "Computer Vision",
     "thumbnail": "assets/img/projects/glaucoma-thumb.jpg",
     "stack": [
       "MATLAB",
