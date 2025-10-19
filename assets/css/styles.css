@@ -298,6 +298,11 @@ a:hover {
     box-shadow: var(--shadow-lg);
 }
 
+/* CTA group for multiple hero buttons */
+.cta-group { display: flex; gap: 1rem; flex-wrap: wrap; align-items: center; }
+.cta-secondary { background: transparent; color: var(--text-primary); border: 1px solid var(--border); }
+.cta-secondary:hover { background: var(--bg-secondary); color: var(--text-primary); border-color: var(--accent); }
+
 /* Sections */
 .section {
     padding: var(--section-padding-desktop) 0;

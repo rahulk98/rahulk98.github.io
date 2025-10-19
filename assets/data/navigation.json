@@ -35,6 +35,13 @@
       "title": "Contact",
       "url": "#contact"
     }
+    ,
+    {
+      "id": "resume",
+      "title": "Resume",
+      "url": "assets/resume/Rahul_Krishnan_Resume.pdf",
+      "download": true
+    }
   ],
   "projectFilters": [
     {

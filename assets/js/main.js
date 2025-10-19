@@ -524,10 +524,10 @@ function loadNavigation() {
         const navigation = window.navigationData;
         navList.innerHTML = navigation.menu.map(item => `
             <li role="menuitem">
-                <a href="${item.url}">${item.title}</a>
+                <a href="${item.url}" ${item.download ? 'download' : ''} ${/^https?:\/\//.test(item.url) ? 'target="_blank" rel="noopener"' : ''}>${item.title}</a>
             </li>
         `).join('');
-
+        
         // Load project filters
         const filtersContainer = document.querySelector('.project-filters');
         if (filtersContainer) {
