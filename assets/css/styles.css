@@ -490,6 +490,7 @@ a:hover {
     flex-wrap: wrap;
     gap: 0.5rem;
     margin-top: 1rem;
+    margin-bottom: 1rem; /* Add space below tags */
 }
 
 .tag {
@@ -499,6 +500,33 @@ a:hover {
     border-radius: 1rem;
     font-size: 0.8rem;
     font-weight: var(--font-weight-normal);
+}
+
+/* Project card actions */
+.actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 1rem; /* Space above action links */
+}
+
+.actions a {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.75rem;
+    border: 1px solid var(--border);
+    border-radius: 1rem;
+    transition: var(--transition);
+    font-weight: var(--font-weight-semibold);
+    font-size: 0.8rem;
+    text-decoration: none;
+    color: var(--text-primary);
+}
+
+.actions a:hover {
+    border-color: var(--accent);
+    background-color: var(--accent);
+    color: white;
 }
 
 /* Skills grid */
@@ -634,6 +662,11 @@ a:hover {
 }
 
 /* Modal content spacing and layout for tags and action links */
+.modal #modal-title { 
+    margin-top: 0; 
+    margin-right: 3rem; /* Space for close button */
+    padding-right: 1rem; /* Extra padding to prevent text overlap */
+}
 .modal #modal-summary { margin-top: 0.25rem; }
 .modal #modal-description { margin-top: 0.75rem; }
 .modal .tags {
@@ -671,7 +704,7 @@ a:hover {
 .close-button {
     color: var(--text-muted);
     position: absolute;
-    top: 1rem;
+    top: 1.5rem;
     right: 1.5rem;
     font-size: 2rem;
     font-weight: bold;
@@ -683,6 +716,7 @@ a:hover {
     justify-content: center;
     border-radius: 0.5rem;
     transition: var(--transition);
+    z-index: 10;
 }
 
 .close-button:hover {
