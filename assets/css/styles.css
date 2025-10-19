@@ -333,6 +333,7 @@ a:hover {
     gap: 1rem;
     margin-bottom: 3rem;
     flex-wrap: wrap;
+    width: 100%;
 }
 
 /* New Education Glass Cards */
@@ -791,9 +792,22 @@ a:hover {
     }
 
     .hero-content {
-        grid-template-columns: 1fr;
+        flex-direction: column;
         text-align: center;
         gap: 2rem;
+        align-items: center;
+    }
+
+    .hero-image img {
+        width: 200px;
+        height: 200px;
+    }
+
+    .hero-text {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
     }
 
     .hero-text h1 {
@@ -802,12 +816,24 @@ a:hover {
 
     .hero-subtitle {
         font-size: 1.1rem;
+        max-width: 100%;
+    }
+
+    .cta-group {
+        justify-content: center;
+        width: 100%;
     }
     
     /* Project grid */
     .project-grid {
         grid-template-columns: 1fr;
     }
+    
+    /* Center project card internals on mobile */
+    .project-content { text-align: center; }
+    .project-tags { justify-content: center; }
+    .actions { justify-content: center; }
+    .project-filters { justify-content: center; width: 100%; }
     
     /* Skills grid */
     .skills-grid {
@@ -832,8 +858,22 @@ a:hover {
         padding: 0 0.75rem;
     }
     
+    .hero-image img {
+        width: 180px;
+        height: 180px;
+    }
+    
     .hero-text h1 {
         font-size: 2rem;
+    }
+
+    .hero-subtitle {
+        font-size: 1rem;
+    }
+
+    .cta-button {
+        padding: 0.875rem 1.5rem;
+        font-size: 1rem;
     }
     
     .project-grid {
