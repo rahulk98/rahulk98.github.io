@@ -1,40 +1,69 @@
 [
   {
-    "title": "Gaze-Guided Retrieval using CLIP",
-    "date": "2024-08-01",
-    "year": "2024",
-    "slug": "gaze-clip",
+    "title": "Amazon Electronics Recommender System",
+    "date": "2025-09-01",
+    "year": "2025",
+    "slug": "amazon-electronics-recommender",
+    "category": "recommender",
+    "thumbnail": "assets/img/projects/recommender-thumb.jpg",
     "stack": [
       "Python",
       "PyTorch",
-      "CLIP",
-      "Gradio"
+      "SBERT",
+      "FAISS",
+      "Two-Tower MLP",
+      "FastAPI",
+      "Docker",
+      "Azure Container Apps",
+      "MLOps"
     ],
-    "links": {},
-    "summary": "Eye-gaze driven image retrieval leveraging CLIP (ViT-B/32) with an interactive Gradio interface."
+    "links": {
+      "github": "https://github.com/rahulk98/Amazon-Product-Recommendation-System?tab=readme-ov-file",
+      "demo": "https://recommender-api-app.calmsea-6aa29b51.germanywestcentral.azurecontainerapps.io/recommendation/demo"
+    },
+    "summary": "Built and deployed an end-to-end recommendation system on the Amazon Reviews 2023 Electronics dataset (≈391k interactions, 41k users, 137k items). Implemented collaborative filtering, hybrid metadata+SBERT models and a two-tower MLP; used FAISS for retrieval and an MLP re-ranker for production-grade recommendations.",
+    "highlights": [
+      "Improved NDCG@10 from 0.305 to 0.334 using a Two-Tower MLP with text features (multi-seed validation).",
+      "Increased cold-start hit rate by ~50% with SBERT text embeddings and hybrid features.",
+      "Two-stage serving pipeline (FAISS retrieval + MLP re-rank) achieving sub-100ms inference latency on CPU after warm start.",
+      "Deployed as a FastAPI REST API, containerized with Docker and hosted on Azure Container Apps (scale-to-zero)."
+    ],
+    "note": "Live demo may cold-start from scale-to-zero. The first request can take up to ~30s; subsequent requests respond quickly."
   },
   {
-    "title": "Sentiment Analysis (YouTube Comments)",
-    "date": "2024-04-15",
-    "year": "2024",
+    "title": "Transformer-Based Sentiment Analysis (YouTube Comments)",
+    "date": "2025-06-01",
+    "year": "2025",
     "slug": "sentiment-bert",
+    "category": "nlp",
+    "thumbnail": "assets/img/projects/sentiment-bert-thumb.jpg",
     "stack": [
       "Python",
       "BERT",
+      "PyTorch",
       "Flask",
       "Docker",
-      "GitHub Actions"
+      "GitHub Actions",
+      "Hugging Face",
+      "Gradio"
     ],
     "links": {
       "github": "https://github.com/rahulk98/Sentiment-Analysis-with-BERT-Model"
     },
-    "summary": "End-to-end sentiment classification using BERT with a Flask API, containerized with Docker, and deployed with CI/CD."
+    "summary": "End-to-end sentiment classification for YouTube comments using a fine-tuned BERT model, served via a Flask REST API and containerized with Docker. CI/CD pipeline automates Docker image builds and pushes to Docker Hub.",
+    "highlights": [
+      "Achieved F1 = 0.81 on an imbalanced dataset of 10k+ comments.",
+      "Deployed an interactive Gradio demo on Hugging Face Spaces and an API endpoint for integrations.",
+      "Automated builds and publishing using GitHub Actions."
+    ]
   },
   {
-    "title": "Glaucoma Detection",
+    "title": "Glaucoma Detection from Retinal Fundus Images",
     "date": "2020-03-01",
     "year": "2020",
     "slug": "glaucoma",
+    "category": "ml",
+    "thumbnail": "assets/img/projects/glaucoma-thumb.jpg",
     "stack": [
       "MATLAB",
       "Image Processing",
@@ -43,6 +72,10 @@
     "links": {
       "paper": "https://ieeexplore.ieee.org/document/9182388"
     },
-    "summary": "Detection of glaucoma from retinal fundus images using region growing and SVM (ICCSP 2020)."
+    "summary": "Detection of glaucoma using optic disc/cup segmentation and SVM classification. Presented at ICCSP 2020.",
+    "highlights": [
+      "Led a 4-member team and published the work at ICCSP 2020.",
+      "Proposed a region-growing segmentation pipeline with SVM classification."
+    ]
   }
 ]

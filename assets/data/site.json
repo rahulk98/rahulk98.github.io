@@ -1,0 +1,71 @@
+{
+    "title": "Rahul Krishnan | Data Science & ML Portfolio",
+    "description": "Rahul Krishnan — Data Science Master's student & ex-SAP developer specializing in Machine Learning, Deep Learning, Recommender Systems, MLOps and Cloud Deployment. View projects, skills and publications.",
+    "url": "https://rahulk98.github.io/",
+    "author": "Rahul Krishnan",
+    "email": "rahulkrishnan1105@gmail.com",
+    "googleAnalyticsId": "G-2C109RKXQE",
+    "profileImage": "assets/img/profile.jpg",
+    "favicon": "assets/img/favicon.ico",
+    "theme": {
+        "default": "dark",
+        "colors": {
+            "primary": "#007acc",
+            "secondary": "#6c757d",
+            "background": "#1a1a1a",
+            "surface": "#2d2d2d",
+            "text": "#ffffff",
+            "textMuted": "#b3b3b3"
+        }
+    },
+    "social": {
+        "github": "https://github.com/rahulk98",
+        "linkedin": "https://linkedin.com/in/rahulk98",
+        "email": "rahulkrishnan1105@gmail.com"
+    },
+    "meta": {
+        "ogType": "website",
+        "ogImage": "https://rahulk98.github.io/assets/img/profile.jpg",
+        "twitterCard": "summary_large_image",
+        "twitterImage": "https://rahulk98.github.io/assets/img/profile.jpg",
+        "keywords": [
+            "Machine Learning",
+            "Deep Learning",
+            "Recommender Systems",
+            "MLOps",
+            "Data Science",
+            "Python",
+            "FAISS",
+            "FastAPI",
+            "Azure"
+        ]
+    },
+    "structuredData": {
+        "context": "https://schema.org/",
+        "type": "Person",
+        "name": "Rahul Krishnan",
+        "jobTitle": "Data Science Master's Student (Former SAP Software Developer)",
+        "alumniOf": [
+            {
+                "type": "EducationalOrganization",
+                "name": "Amrita Vishwa Vidyapeetham"
+            },
+            {
+                "type": "EducationalOrganization",
+                "name": "Universität Trier"
+            }
+        ],
+        "affiliation": {
+            "type": "EducationalOrganization",
+            "name": "Universität Trier"
+        },
+        "hasOccupation": {
+            "type": "Occupation",
+            "name": "Former Software Developer",
+            "occupationLocation": {
+                "type": "Organization",
+                "name": "SAP Labs India"
+            }
+        }
+    }
+}

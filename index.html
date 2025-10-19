@@ -1,95 +1,178 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-2C109RKXQE"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-2C109RKXQE');
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rahul Krishnan | Portfolio</title>
+    <title>Rahul Krishnan | Data Science & ML Portfolio</title>
+    <meta name="description" content="Rahul Krishnan - Data Science Master's student and ex-SAP Developer specializing in Machine Learning, NLP, and AI solutions. View my projects and experience.">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://rahulk98.github.io/">
+    <meta property="og:title" content="Rahul Krishnan | Data Science & ML Portfolio">
+    <meta property="og:description" content="Data Science Master's student and ex-SAP Developer specializing in Machine Learning, NLP, and AI solutions.">
+    <meta property="og:image" content="https://rahulk98.github.io/assets/img/profile.jpg">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://rahulk98.github.io/">
+    <meta property="twitter:title" content="Rahul Krishnan | Data Science & ML Portfolio">
+    <meta property="twitter:description" content="Data Science Master's student and ex-SAP Developer specializing in Machine Learning, NLP, and AI solutions.">
+    <meta property="twitter:image" content="https://rahulk98.github.io/assets/img/profile.jpg">
+    
+    <!-- Preload critical resources -->
+    <link rel="preload" href="assets/css/styles.css" as="style">
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" as="style">
+    
     <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap">
+    
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org/",
+      "@type": "Person",
+      "name": "Rahul Krishnan",
+      "jobTitle": "Data Science Master's Student (Former SAP Software Developer)",
+      "url": "https://rahulk98.github.io/",
+      "sameAs": [
+        "https://github.com/rahulk98",
+        "https://linkedin.com/in/rahulk98"
+      ],
+      "email": "rahulkrishnan1105@gmail.com",
+      "alumniOf": [
+        {
+          "@type": "EducationalOrganization", 
+          "name": "Amrita Vishwa Vidyapeetham"
+        }
+      ],
+      "affiliation": {
+        "@type": "EducationalOrganization",
+        "name": "Universität Trier"
+      },
+      "hasOccupation": {
+        "@type": "Occupation",
+        "name": "Former Software Developer",
+        "occupationLocation": {
+          "@type": "Organization",
+          "name": "SAP Labs India"
+        }
+      }
+    }
+    </script>
 </head>
 <body>
-    <div class="container">
-        <aside class="sidebar">
-            <div class="profile">
-                <img src="assets/img/profile.jpg" alt="Rahul Krishnan">
-                <h1>Rahul Krishnan</h1>
-                <p>Data Science Master's Student | Ex-SAP Developer</p>
-            </div>
-            <nav>
-                <ul>
-                    <li><a href="#about">About</a></li>
-                    <li><a href="#experience">Experience</a></li>
-                    <li><a href="#projects">Projects</a></li>
-                    <li><a href="#skills">Skills</a></li>
-                    <li><a href="#education">Education</a></li>
-                    <li><a href="#publications">Publications</a></li>
-                    <li><a href="#contact">Contact</a></li>
+    <header class="header">
+        <div class="container">
+            <nav class="nav">
+                <button class="mobile-menu-toggle" aria-expanded="false" aria-label="Toggle navigation menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+                <ul class="nav-list" role="menu">
+                    <li role="menuitem"><a href="#hero">Home</a></li>
+                    <li role="menuitem"><a href="#about">About</a></li>
+                    <li role="menuitem"><a href="#experience">Experience</a></li>
+                    <li role="menuitem"><a href="#projects">Projects</a></li>
+                    <li role="menuitem"><a href="#skills">Skills</a></li>
+                    <li role="menuitem"><a href="#education">Education</a></li>
+                    <li role="menuitem"><a href="#contact">Contact</a></li>
                 </ul>
+                <div class="theme-switcher">
+                    <button id="theme-toggle" aria-label="Toggle light/dark theme">🌓</button>
+                </div>
             </nav>
-            <div class="theme-switcher">
-                <button id="theme-toggle">Toggle Theme</button>
+        </div>
+    </header>
+
+    <main class="main">
+        <section id="hero" class="hero">
+            <div class="container">
+                <div class="hero-content">
+                    <div class="hero-image">
+                        <img src="assets/img/profile.jpg" alt="Rahul Krishnan - Data Science Master's Student and Software Developer" 
+                             width="300" height="300" loading="eager">
+                    </div>
+                    <div class="hero-text">
+                        <h1 id="hero-name">Rahul Krishnan</h1>
+                        <p class="hero-subtitle" id="hero-subtitle">Former SAP Developer now pursuing Data Science Master's at University of Trier. I build AI solutions that solve real-world problems through machine learning and data science.</p>
+                        <a href="#projects" class="cta-button" id="hero-cta" aria-label="View my projects">View My Work</a>
+                    </div>
+                </div>
             </div>
-        </aside>
-        <main class="content">
-            <section id="about">
+        </section>
+        <div class="container">
+            <section id="about" class="section">
                 <h2>About Me</h2>
-                <p>
-                  I am a Master's student in Data Science at Universität Trier with prior experience as a Software Developer at SAP Labs (4+ years).
-                  My interests span Machine Learning, NLP, gaze-based interaction, and health AI. Previously, I completed my BTech in Computer Science at Amrita Vishwa Vidyapeetham.
-                </p>
+                <!-- Paragraphs will be injected from assets/data/personal.json by assets/js/main.js -->
             </section>
-            <section id="experience">
+
+            <section id="experience" class="section">
                 <h2>Experience</h2>
                 <div id="experience-list"></div>
             </section>
-            <section id="projects">
+
+            <section id="projects" class="section">
                 <h2>Projects</h2>
-                <div id="project-list" class="cards"></div>
+                <div class="project-filters">
+                    <button class="filter-btn active" data-filter="all">All</button>
+                    <button class="filter-btn" data-filter="ml">ML</button>
+                    <button class="filter-btn" data-filter="nlp">NLP</button>
+                    <button class="filter-btn" data-filter="deployment">Deployment</button>
+                </div>
+                <div id="project-list" class="project-grid"></div>
             </section>
-            <section id="skills">
+
+            <section id="skills" class="section">
                 <h2>Skills</h2>
-                <div class="skills-grid">
-                  <div class="skill-card"><h3>Programming</h3><p>Python, Java, R, MATLAB</p></div>
-                  <div class="skill-card"><h3>Libraries</h3><p>Pandas, SciPy, Scikit-Learn, Matplotlib</p></div>
-                  <div class="skill-card"><h3>ML/DL</h3><p>PyTorch, TensorFlow, Keras, Hugging Face, Transformers, Gradio</p></div>
-                  <div class="skill-card"><h3>Frameworks</h3><p>Flask, FastAPI, Docker, GitHub Actions</p></div>
-                  <div class="skill-card"><h3>Big Data</h3><p>Spark, Hadoop, SAP HANA</p></div>
-                  <div class="skill-card"><h3>Databases</h3><p>MySQL, PostgreSQL</p></div>
-                  <div class="skill-card"><h3>Version Control</h3><p>Git, GitLab</p></div>
-                  <div class="skill-card"><h3>Languages</h3><p>English (Fluent), German (Intermediate)</p></div>
+                <div class="skills-grid" id="skills-container">
+                  <!-- Skills will be loaded from JSON data -->
                 </div>
             </section>
-            <section id="education">
-                <h2>Education</h2>
-                <ul class="edu-list">
-                  <li>
-                    <strong>Universität Trier</strong> — MSc Data Science
-                    <span class="muted">Grade: 1.7</span>
-                  </li>
-                  <li>
-                    <strong>Amrita Vishwa Vidyapeetham</strong> — BTech CSE
-                    <span class="muted">Top 10%, Grade: 1.37</span>
-                  </li>
-                </ul>
+
+            <section id="education" class="section education" aria-labelledby="education-title">
+                <div class="education__inner">
+                    <h2 id="education-title" class="education__title">Education</h2>
+                    <div class="education__list" id="education-list" role="list">
+                        <!-- Education entries injected as <article class='edu-card' role='listitem'> -->
+                    </div>
+                </div>
             </section>
-            <section id="publications">
+
+            <section id="publications" class="section">
                 <h2>Publications</h2>
-                <ul>
-                  <li>
-                    <strong>Glaucoma Detection from Retinal Fundus Images</strong> — ICCSP 2020
-                    <a class="link" href="https://ieeexplore.ieee.org/document/9182388" target="_blank" rel="noopener">Read</a>
-                  </li>
+                <ul id="publications-list">
+                  <!-- Publications will be loaded from JSON data -->
                 </ul>
             </section>
-            <section id="contact">
-                <h2>Contact</h2>
+
+            <section id="contact" class="section">
+                <h2>Get In Touch</h2>
+                <p>Interested in collaboration or have a project in mind? Let's connect!</p>
                 <div class="social-links">
-                    <a href="mailto:rahulkrishnan1105@gmail.com">Email</a>
-                    <a href="https://github.com/rahulk98" target="_blank" rel="noopener">GitHub</a>
-                    <a href="https://linkedin.com/in/rahulk98" target="_blank" rel="noopener">LinkedIn</a>
+                    <a href="mailto:rahulkrishnan1105@gmail.com" aria-label="Email Rahul Krishnan">Email</a>
+                    <a href="https://github.com/rahulk98" target="_blank" rel="noopener" aria-label="View Rahul's GitHub profile">GitHub</a>
+                    <a href="https://linkedin.com/in/rahulk98" target="_blank" rel="noopener" aria-label="Connect with Rahul on LinkedIn">LinkedIn</a>
                 </div>
             </section>
-        </main>
-    </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p id="footer-content">&copy; 2024 Rahul Krishnan. All rights reserved. | <a href="privacy.html">Privacy Policy</a></p>
+        </div>
+    </footer>
 
     <div id="project-modal" class="modal">
         <div class="modal-content">
@@ -102,82 +185,31 @@
         </div>
     </div>
 
-    <script id="projects-data" type="application/json">
-[
-  {
-    "title": "Gaze-Guided Retrieval using CLIP",
-    "date": "2024-08-01",
-    "year": "2024",
-    "slug": "gaze-clip",
-    "stack": [
-      "Python",
-      "PyTorch",
-      "CLIP",
-      "Gradio"
-    ],
-    "links": {},
-    "summary": "Eye-gaze driven image retrieval leveraging CLIP (ViT-B/32) with an interactive Gradio interface."
-  },
-  {
-    "title": "Sentiment Analysis (YouTube Comments)",
-    "date": "2024-04-15",
-    "year": "2024",
-    "slug": "sentiment-bert",
-    "stack": [
-      "Python",
-      "BERT",
-      "Flask",
-      "Docker",
-      "GitHub Actions"
-    ],
-    "links": {
-      "github": "https://github.com/rahulk98/Sentiment-Analysis-with-BERT-Model"
-    },
-    "summary": "End-to-end sentiment classification using BERT with a Flask API, containerized with Docker, and deployed with CI/CD."
-  },
-  {
-    "title": "Glaucoma Detection",
-    "date": "2020-03-01",
-    "year": "2020",
-    "slug": "glaucoma",
-    "stack": [
-      "MATLAB",
-      "Image Processing",
-      "SVM"
-    ],
-    "links": {
-      "paper": "https://ieeexplore.ieee.org/document/9182388"
-    },
-    "summary": "Detection of glaucoma from retinal fundus images using region growing and SVM (ICCSP 2020)."
-  }
-]
-    </script>
-    <script id="experience-data" type="application/json">
-[
-  {
-    "title": "Software Developer",
-    "company": "SAP Labs India Pvt. Ltd",
-    "location": "Bengaluru, India",
-    "dates": "Mar 2024 - Sep 2024",
-    "order": 1,
-    "points": [
-      "Designed a rule-based content-matching framework for eInvoices, reducing country-specific implementation efforts by 70%.",
-      "Developed a pagination-based data retrieval algorithm that improved system efficiency by reducing SAP queries from 10,000 eInvoices per request to just 1."
-    ]
-  },
-  {
-    "title": "Associate Software Developer",
-    "company": "SAP Labs India Pvt. Ltd",
-    "location": "Bengaluru, India",
-    "dates": "July 2020 - Mar 2024",
-    "order": 2,
-    "points": [
-      "Led critical legal and feature updates for Document Compliance tax solutions from design to development.",
-      "Overhauled the error-handling capabilities of SAP DRC solution for Turkey, reducing customer incidents by 80% and improving customer satisfaction by 66%.",
-      "Spearheaded the integration of Data Protection and Privacy (DPP) protocols into the SAP Document Consistency solution, ensuring secure data handling and full compliance with global privacy regulations."
-    ]
-  }
-]
+
+    <script>
+        // Load projects data from JSON file
+        fetch('assets/data/projects.json')
+            .then(response => response.json())
+            .then(data => {
+                window.projectsData = data;
+                // Initialize projects after data is loaded
+                if (window.initializeProjects) {
+                    window.initializeProjects();
+                }
+            })
+            .catch(error => console.error('Error loading projects data:', error));
+
+        // Load experience data from JSON file
+        fetch('assets/data/experience.json')
+            .then(response => response.json())
+            .then(data => {
+                window.experienceData = data;
+                // Initialize experience after data is loaded
+                if (window.initializeExperience) {
+                    window.initializeExperience();
+                }
+            })
+            .catch(error => console.error('Error loading experience data:', error));
     </script>
 
     <script src="assets/js/main.js"></script>

@@ -1,0 +1,27 @@
+{
+  "dataFiles": {
+    "site": "assets/data/site.json",
+    "personal": "assets/data/personal.json",
+    "projects": "assets/data/projects.json",
+    "experience": "assets/data/experience.json",
+    "skills": "assets/data/skills.json",
+    "education": "assets/data/education.json",
+    "publications": "assets/data/publications.json",
+    "navigation": "assets/data/navigation.json",
+    "privacy": "assets/data/privacy.json",
+    "footer": "assets/data/footer.json",
+    "error": "assets/data/error.json"
+  },
+  "sections": [
+    "hero",
+    "about",
+    "experience",
+    "projects",
+    "skills",
+    "education",
+    "publications",
+    "contact"
+  ],
+  "version": "1.0.0",
+  "lastUpdated": "2024-09-27"
+}

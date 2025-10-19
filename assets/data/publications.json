@@ -1,0 +1,11 @@
+{
+    "publications": [
+        {
+            "title": "Glaucoma Detection from Retinal Fundus Images",
+            "conference": "ICCSP",
+            "year": 2020,
+            "url": "https://ieeexplore.ieee.org/document/9182388",
+            "description": "Detection of glaucoma from retinal fundus images using region growing and SVM"
+        }
+    ]
+}

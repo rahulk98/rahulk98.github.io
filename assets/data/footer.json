@@ -1,0 +1,16 @@
+{
+  "copyright": {
+    "year": 2024,
+    "text": "Rahul Krishnan. All rights reserved."
+  },
+  "links": [
+    {
+      "text": "Privacy Policy",
+      "url": "privacy.html"
+    }
+  ],
+  "projectFooter": {
+    "name": "Rahul Krishnan",
+    "tagline": "Built with ❤️ using HTML/CSS/JS"
+  }
+}

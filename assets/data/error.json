@@ -1,0 +1,11 @@
+{
+  "404": {
+    "icon": "🛸",
+    "title": "404",
+    "message": "Sorry, that page doesn't exist.",
+    "action": {
+      "text": "Go home",
+      "url": "/"
+    }
+  }
+}

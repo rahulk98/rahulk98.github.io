@@ -1,7 +1,16 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-2C109RKXQE"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-2C109RKXQE');
+    </script>
+    <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Page not found</title>
   <link rel="stylesheet" href="assets/css/styles.css" />
@@ -9,10 +18,10 @@
 <body>
   <main>
     <section class="not-found">
-      <div class="icon" aria-hidden="true">🛸</div>
-      <h1>404</h1>
-      <p>Sorry, that page doesn’t exist.</p>
-      <p><a class="btn" href="/">Go home</a></p>
+      <div class="icon" aria-hidden="true" id="error-icon">🛸</div>
+      <h1 id="error-title">404</h1>
+      <p id="error-message">Sorry, that page doesn't exist.</p>
+      <p><a class="btn" href="/" id="error-action">Go home</a></p>
     </section>
   </main>
 </body>

@@ -1,0 +1,35 @@
+{
+    "name": "Rahul Krishnan",
+    "title": "Data Science Master's Student",
+    "subtitle": "Data Science Master's student specializing in Machine Learning, Deep Learning, Recommender Systems and MLOps, with professional software engineering experience at SAP Labs.",
+    "currentRole": "MSc Data Science at Universität Trier",
+    "previousRole": "Former SAP Software Developer",
+    "location": "Trier, Germany",
+    "bio": {
+        "paragraphs": [
+            "I’m Rahul Krishnan, a Data Science student at Universität Trier, Germany, with a background in Computer Science and over three years of software development experience at SAP Labs India. My work bridges data-driven machine learning solutions and scalable deployment practices.",
+            "I enjoy building end-to-end AI systems—from model training to production deployment. Recently, I developed and deployed an Amazon Electronics Recommender System using FAISS and a Two-Tower MLP, served via FastAPI and Azure Container Apps. I’ve also worked on a Transformer-based sentiment analysis API using BERT, Docker, and CI/CD pipelines on GitHub Actions.",
+            "My interests include recommender systems, natural language processing, and MLOps. I’m passionate about building reliable, well-documented, and reproducible machine learning solutions that can scale beyond experimentation."
+        ]
+    },
+    "interests": [
+        "Machine Learning",
+        "Deep Learning",
+        "Recommender Systems",
+        "MLOps",
+        "Cloud Deployment",
+        "Natural Language Processing",
+        "Computer Vision",
+        "Accessible Technology"
+    ],
+    "ctaButton": {
+        "text": "View My Work",
+        "ariaLabel": "View my projects"
+    },
+    "profileImage": {
+        "src": "assets/img/profile.jpg",
+        "alt": "Rahul Krishnan - Data Science Master's Student",
+        "width": 300,
+        "height": 300
+    }
+}

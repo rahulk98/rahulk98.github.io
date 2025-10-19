@@ -1,0 +1,26 @@
+{
+  "title": "Privacy Policy",
+  "lastUpdated": "2024-09-26",
+  "sections": [
+    {
+      "title": "Information Collection",
+      "content": "This website uses Google Analytics to collect anonymous usage statistics. Google Analytics collects information such as pages visited, time spent on the site, and referral sources. This data helps improve the website experience. We do not collect any personal information from visitors through Google Analytics, and all data is anonymized. You can opt out of Google Analytics tracking by using the Google Analytics Opt-out Browser Add-on."
+    },
+    {
+      "title": "External Links",
+      "content": "This website contains links to external services such as GitHub and LinkedIn. These services have their own privacy policies and terms of service."
+    },
+    {
+      "title": "Contact Information",
+      "content": "If you have any questions about this privacy policy, you can contact me at rahulkrishnan1105@gmail.com"
+    },
+    {
+      "title": "Changes to This Policy",
+      "content": "This privacy policy may be updated from time to time. Any changes will be posted on this page with an updated date."
+    }
+  ],
+  "backButton": {
+    "text": "← Back to Portfolio",
+    "url": "/"
+  }
+}

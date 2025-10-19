@@ -1,0 +1,21 @@
+{
+    "education": [
+        {
+            "institution": "Universität Trier",
+            "degree": "MSc Data Science",
+            "grade": "1.7",
+            "status": "current",
+            "from": "2024",
+            "to": "Present"
+        },
+        {
+            "institution": "Amrita Vishwa Vidyapeetham",
+            "degree": "BTech CSE",
+            "grade": "1.37",
+            "status": "completed",
+            "achievement": "Ranked Top 10 in Cohort",
+            "from": "2016",
+            "to": "2020"
+        }
+    ]
+}

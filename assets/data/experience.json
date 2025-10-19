@@ -7,7 +7,7 @@
     "order": 1,
     "points": [
       "Designed a rule-based content-matching framework for eInvoices, reducing country-specific implementation efforts by 70%.",
-      "Developed a pagination-based data retrieval algorithm that improved system efficiency by reducing SAP queries from 10,000 eInvoices per request to just 1."
+      "Developed a pagination-based data retrieval algorithm that improved system efficiency by reducing SAP queries from 10,000 eInvoices per request to a single aggregated request."
     ]
   },
   {
@@ -18,8 +18,8 @@
     "order": 2,
     "points": [
       "Led critical legal and feature updates for Document Compliance tax solutions from design to development.",
-      "Overhauled the error-handling capabilities of SAP DRC solution for Turkey, reducing customer incidents by 80% and improving customer satisfaction by 66%.",
-      "Spearheaded the integration of Data Protection and Privacy (DPP) protocols into the SAP Document Consistency solution, ensuring secure data handling and full compliance with global privacy regulations."
+      "Overhauled error-handling in the SAP DRC solution for Turkey, reducing customer incidents by 80% and improving customer satisfaction by 66%.",
+      "Spearheaded the integration of Data Protection and Privacy (DPP) protocols into the SAP Document Consistency solution to ensure secure data handling and compliance."
     ]
   }
 ]

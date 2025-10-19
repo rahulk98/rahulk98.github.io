@@ -1,0 +1,80 @@
+{
+    "categories": [
+        {
+            "title": "Programming & Data Analysis",
+            "skills": [
+                "Python",
+                "SQL",
+                "R",
+                "Java",
+                "MATLAB",
+                "Pandas",
+                "SciPy"
+            ]
+        },
+        {
+            "title": "Machine Learning & Deep Learning",
+            "skills": [
+                "PyTorch",
+                "TensorFlow",
+                "Scikit-Learn",
+                "Transformers (Hugging Face)",
+                "BERT",
+                "SBERT",
+                "Two-Tower Models",
+                "Feature Engineering",
+                "Model Evaluation"
+            ]
+        },
+        {
+            "title": "Recommender Systems & Retrieval",
+            "skills": [
+                "Collaborative Filtering",
+                "Hybrid Models",
+                "FAISS",
+                "Ranking & Re-ranking",
+                "NDCG / Ranking Metrics"
+            ]
+        },
+        {
+            "title": "Deployment & MLOps",
+            "skills": [
+                "Docker",
+                "FastAPI",
+                "Flask",
+                "GitHub Actions",
+                "MLOps",
+                "Azure Container Apps",
+                "Cloud Deployment",
+                "CI/CD"
+            ]
+        },
+        {
+            "title": "Big Data & Databases",
+            "skills": [
+                "Spark",
+                "Hadoop",
+                "MySQL",
+                "PostgreSQL",
+                "SAP HANA"
+            ]
+        },
+        {
+            "title": "Other Tools & Practices",
+            "skills": [
+                "Git",
+                "GitHub Workflows",
+                "Agile (Scrum)",
+                "Technical Documentation",
+                "Cross-functional Collaboration"
+            ]
+        },
+        {
+            "title": "Languages",
+            "skills": [
+                "English (Fluent)",
+                "German (Intermediate)"
+            ]
+        }
+    ]
+}

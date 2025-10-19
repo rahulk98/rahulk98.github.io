@@ -1,7 +1,16 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-2C109RKXQE"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-2C109RKXQE');
+    </script>
+    <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Project • Rahul Krishnan</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -43,7 +52,7 @@
              .replace(/^##\s+(.*)$/gm,'<h2>$1</h2>')
              .replace(/^#\s+(.*)$/gm,'<h1>$1</h1>');
       md = md.replace(/^-\s+(.*)$/gm,'<li>$1</li>');
-      md = md.replace(/(<li>.*</li>\n?)+/g, m => '<ul>'+m.replace(/\n/g,'')+'</ul>');
+      md = md.replace(/(<li>.*<\/li>\n?)+/g, m => '<ul>'+m.replace(/\n/g,'')+'<\/ul>');
       md = md.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>');
       md = md.replace(/\*(.*?)\*/g,'<em>$1</em>');
       md = md.replace(/`([^`]+)`/g,'<code>$1</code>');
@@ -61,7 +70,11 @@
     const file = map[id];
     const target = document.getElementById('content');
     if(!file){
-      target.innerHTML = '<p class="muted">Project not found.</p>';
+      if (window.errorData && window.errorData[404]) {
+        target.innerHTML = `<p class="muted">${window.errorData[404].message}</p>`;
+      } else {
+        target.innerHTML = '<p class="muted">Project not found.</p>';
+      }
       return;
     }
     fetch(file).then(r=>r.text()).then(md=>{
