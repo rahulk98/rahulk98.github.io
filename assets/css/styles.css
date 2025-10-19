@@ -742,10 +742,13 @@ a:hover {
     }
     
     /* Mobile navigation */
-    .mobile-menu-toggle { display: flex; position: relative; left: 0; }
-    .nav { justify-content: flex-start; }
+    .mobile-menu-toggle { display: flex; position: relative; left: 0; align-self: center; }
+    .nav { justify-content: flex-start; align-items: center; padding: 0 1rem; height: 100%; }
     /* Reset theme switcher for mobile so it participates in flow */
-    .theme-switcher { position: relative; right: auto; top: auto; transform: none; margin-left: auto; }
+    .theme-switcher { position: relative; right: auto; top: auto; transform: none; margin-left: auto; display: flex; align-items: center; }
+    /* Ensure controls have perfectly centered glyphs within square tap targets */
+    #theme-toggle { line-height: 1; }
+    .mobile-menu-toggle { width: 44px; height: 44px; }
     .nav-list {
         position: absolute;
         top: 100%;
