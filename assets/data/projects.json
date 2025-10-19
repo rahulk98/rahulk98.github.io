@@ -11,7 +11,7 @@
       "PyTorch",
       "SBERT",
       "FAISS",
-      "Two-Tower MLP",
+      "MLP",
       "FastAPI",
       "Docker",
       "Azure Container Apps",

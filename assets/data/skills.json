@@ -7,9 +7,7 @@
                 "SQL",
                 "R",
                 "Java",
-                "MATLAB",
-                "Pandas",
-                "SciPy"
+                "MATLAB"
             ]
         },
         {
@@ -18,22 +16,22 @@
                 "PyTorch",
                 "TensorFlow",
                 "Scikit-Learn",
-                "Transformers (Hugging Face)",
-                "BERT",
-                "SBERT",
-                "Two-Tower Models",
-                "Feature Engineering",
-                "Model Evaluation"
+                "Transformers",
+                "Keras",
+                "Hugging Face",
+                "Recommender Systems"
             ]
         },
         {
-            "title": "Recommender Systems & Retrieval",
+            "title": "Concepts",
             "skills": [
-                "Collaborative Filtering",
-                "Hybrid Models",
-                "FAISS",
-                "Ranking & Re-ranking",
-                "NDCG / Ranking Metrics"
+                "Natural Language Processing",
+                "Computer Vision",
+                "MLOps",
+                "Feature Engineering",
+                "Probability & Statistics",
+                "Supervised Learning",
+                "Unsupervised Learning"
             ]
         },
         {
@@ -72,8 +70,8 @@
         {
             "title": "Languages",
             "skills": [
-                "English (Fluent)",
-                "German (Intermediate)"
+                "English (C2)",
+                "German (A2)"
             ]
         }
     ]
