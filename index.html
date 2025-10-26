@@ -105,13 +105,54 @@
                     <div class="hero-image">
                         <img src="assets/img/profile.jpg" alt="Rahul Krishnan - Data Science Master's Student and Software Developer" 
                              width="300" height="300" loading="eager">
+                        <div class="hero-text">
+                            <h1 id="hero-name">Rahul Krishnan</h1>
+                            <p class="hero-subtitle" id="hero-subtitle">Former SAP Developer now pursuing Data Science Master's at University of Trier. I build AI solutions that solve real-world problems through machine learning and data science.</p>
+                            <div class="cta-group">
+                                <a href="#projects" class="cta-button" id="hero-cta" aria-label="View my projects">View My Work</a>
+                                <a href="assets/resume/Rahul_Krishnan_Resume.pdf" class="cta-button cta-secondary" target="_blank" rel="noopener" aria-label="View my resume">View My Resume</a>
+                            </div>
+                        </div>
                     </div>
-                    <div class="hero-text">
-                        <h1 id="hero-name">Rahul Krishnan</h1>
-                        <p class="hero-subtitle" id="hero-subtitle">Former SAP Developer now pursuing Data Science Master's at University of Trier. I build AI solutions that solve real-world problems through machine learning and data science.</p>
-                        <div class="cta-group">
-                            <a href="#projects" class="cta-button" id="hero-cta" aria-label="View my projects">View My Work</a>
-                            <a href="assets/resume/Rahul_Krishnan_Resume.pdf" class="cta-button cta-secondary" target="_blank" rel="noopener" aria-label="View my resume">View My Resume</a>
+                    <div id="rag-pane" class="rag-pane" aria-live="polite">
+                        <!-- RAG Header -->
+                        <div class="rag-header">
+                            <div class="rag-title-row">
+                                <h3 class="rag-title">AI-Powered Q&A</h3>
+                                <span class="rag-chip">RAG</span>
+                                <button id="rag-info-btn" class="rag-info-btn" aria-label="How it works" title="How it works">ℹ️</button>
+                            </div>
+                            <p class="rag-subtitle">Context-aware answers sourced from Rahul's resume, projects, and notes.</p>
+                        </div>
+
+                        
+
+                        
+                        
+                        <!-- Enhanced thinking states -->
+                        <div id="rag-thinking" class="rag-thinking" hidden>
+                            <div class="thinking-stage" id="thinking-retrieval">
+                                <div class="thinking-icon">🔍</div>
+                                <span class="thinking-text">Retrieving context...</span>
+                            </div>
+                            <div class="thinking-stage" id="thinking-generation">
+                                <div class="thinking-icon">🧠</div>
+                                <span class="thinking-text">Generating answer...</span>
+                            </div>
+                        </div>
+                        
+                        <div class="rag-bg-title">Ask anything about Rahul</div>
+                        <div id="rag-output" class="rag-output"></div>
+                        
+                        <form id="rag-form" class="rag-form">
+                            <label class="sr-only" for="rag-input">Ask a question</label>
+                            <input id="rag-input" type="text" placeholder="Ask a question about Rahul" autocomplete="off">
+                            <button id="rag-send" type="submit" aria-label="Send">Send</button>
+                        </form>
+                        
+                        <!-- Powered by section -->
+                        <div class="rag-credits">
+                            <span class="credits-text">Powered by <span class="credits-link" id="gemini-link">Gemini</span> and <span class="credits-link" id="tech-stack-link">LlamaIndex</span></span>
                         </div>
                     </div>
                 </div>
@@ -183,8 +224,46 @@
             <h2 id="modal-title"></h2>
             <p id="modal-summary"></p>
             <p id="modal-description"></p>
+            <div id="modal-highlights-container" class="highlights" hidden>
+                <h3>Highlights</h3>
+                <ul id="modal-highlights"></ul>
+            </div>
             <div id="modal-stack" class="tags"></div>
             <div id="modal-links" class="actions"></div>
+        </div>
+    </div>
+
+    <!-- RAG How It Works Modal -->
+    <div id="rag-info-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" id="rag-modal-close">&times;</span>
+            <h2>How this AI works</h2>
+            <div class="rag-explanation">
+                <div class="explanation-item">
+                    <div class="explanation-icon">🔍</div>
+                    <div class="explanation-content">
+                        <h4>Finds relevant passages</h4>
+                        <p>Embeds your query and searches a vector index of Rahul's documents to find the most relevant information.</p>
+                    </div>
+                </div>
+                <div class="explanation-item">
+                    <div class="explanation-icon">📚</div>
+                    <div class="explanation-content">
+                        <h4>Retrieves context</h4>
+                        <p>Gathers relevant passages from Rahul's resume, projects, and notes to provide accurate context.</p>
+                    </div>
+                </div>
+                <div class="explanation-item">
+                    <div class="explanation-icon">🧠</div>
+                    <div class="explanation-content">
+                        <h4>Generates grounded answers</h4>
+                        <p>Uses Google Gemini to craft responses that cite the retrieved passages, ensuring answers are verifiable.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <p class="tech-stack-info">Built with <strong>LlamaIndex</strong> • <strong>Gemini (Google)</strong> • <strong>Local indexed documents</strong></p>
+            </div>
         </div>
     </div>
 

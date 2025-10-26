@@ -29,8 +29,13 @@ async function initializeApp() {
     setupMobileMenu();
     // setupProjectFiltering() is called from generateFilterButtons() after projects load
     setupSmoothScrolling();
+    setupDemoLinkScrollToTop();
     setupIntersectionObserver();
     optimizeImages();
+
+        // Initialize RAG panel (non-blocking)
+        initializeRag();
+        setupRagModal();
 
     console.log('✅ initializeApp() completed');
 }
@@ -173,6 +178,50 @@ function setupSmoothScrolling() {
             }
         });
     });
+}
+
+// Intercept "Demo" links to scroll to top when they point to this site
+function setupDemoLinkScrollToTop() {
+    // Use capture to run before project-card click handler
+    document.addEventListener('click', (e) => {
+        const anchor = e.target && e.target.closest && e.target.closest('a');
+        if (!anchor) return;
+
+        const label = (anchor.textContent || '').trim().toLowerCase();
+        if (label !== 'demo') return;
+
+        const href = anchor.getAttribute('href') || '';
+        try {
+            const url = new URL(href, window.location.href);
+            const isSameOrigin = url.origin === window.location.origin;
+            const isOwnDomainAlias = /(^|\.)is-a\.dev$/i.test(url.hostname) && /rahul-krishnan/i.test(url.hostname);
+
+            if (isSameOrigin || isOwnDomainAlias) {
+                e.preventDefault();
+                e.stopPropagation();
+
+                // Close project modal if open
+                const modal = document.getElementById('project-modal');
+                if (modal && modal.style.display === 'block') {
+                    modal.style.display = 'none';
+                    modal.setAttribute('aria-hidden', 'true');
+                }
+
+                // Prefer hero section if available, else scroll to very top
+                const header = document.querySelector('.header');
+                const hero = document.getElementById('hero');
+                if (hero) {
+                    const headerHeight = header ? header.offsetHeight : 0;
+                    const targetTop = Math.max(0, hero.offsetTop - headerHeight - 20);
+                    window.scrollTo({ top: targetTop, behavior: 'smooth' });
+                } else {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
+            }
+        } catch (_) {
+            // If URL parsing fails, do nothing
+        }
+    }, true);
 }
 
 // Project filtering
@@ -706,8 +755,18 @@ function setupModal() {
                 const project = projects[card.dataset.index];
 
                 document.getElementById('modal-title').textContent = project.title;
-                document.getElementById('modal-summary').textContent = project.summary;
-                document.getElementById('modal-description').textContent = project.description || project.summary;
+                const modalSummary = document.getElementById('modal-summary');
+                const modalDescription = document.getElementById('modal-description');
+                const descriptionText = project.description || '';
+                modalSummary.textContent = project.summary || '';
+                // Show description only if it exists and is not a duplicate of summary
+                if (descriptionText && descriptionText.trim() !== (project.summary || '').trim()) {
+                    modalDescription.textContent = descriptionText;
+                    modalDescription.style.display = '';
+                } else {
+                    modalDescription.textContent = '';
+                    modalDescription.style.display = 'none';
+                }
 
                 const stackContainer = document.getElementById('modal-stack');
                 if (stackContainer) {
@@ -719,6 +778,24 @@ function setupModal() {
                     linksContainer.innerHTML = Object.entries(project.links || {}).map(([key, value]) =>
                         `<a href="${value}" target="_blank" rel="noopener">${key.charAt(0).toUpperCase() + key.slice(1)}</a>`
                     ).join('');
+                }
+
+                // Render highlights
+                const highlightsWrap = document.getElementById('modal-highlights-container');
+                const highlightsList = document.getElementById('modal-highlights');
+                if (highlightsWrap && highlightsList) {
+                    if (Array.isArray(project.highlights) && project.highlights.length) {
+                        highlightsList.innerHTML = '';
+                        project.highlights.forEach(text => {
+                            const li = document.createElement('li');
+                            li.textContent = text;
+                            highlightsList.appendChild(li);
+                        });
+                        highlightsWrap.hidden = false;
+                    } else {
+                        highlightsWrap.hidden = true;
+                        highlightsList.innerHTML = '';
+                    }
                 }
 
                 modal.style.display = 'block';
@@ -790,3 +867,390 @@ style.textContent = `
     }
 `;
 document.head.appendChild(style);
+
+// =============================
+// RAG Integration
+// =============================
+function initializeRag() {
+    try {
+        if (window.__ragInitialized) return; // idempotent guard
+        const pane = document.getElementById('rag-pane');
+        if (!pane) return; // Not on this page
+        window.__ragInitialized = true;
+
+        const loadingEl = pane.querySelector('.rag-loading');
+        const bgTitleEl = pane.querySelector('.rag-bg-title');
+        const outputEl = pane.querySelector('#rag-output');
+        const formEl = pane.querySelector('#rag-form');
+        const inputEl = pane.querySelector('#rag-input');
+        const sendBtn = pane.querySelector('#rag-send');
+
+        const QUERY_URL = 'https://resume-rag-system-312008307798.europe-west1.run.app/query';
+
+        // Immediately reveal UI without any health checks
+        if (loadingEl) loadingEl.style.display = 'none';
+        if (formEl) formEl.hidden = false;
+        if (bgTitleEl) bgTitleEl.hidden = false;
+
+        // Ensure thinking state is hidden until a submission occurs
+        const thinkingEl = pane.querySelector('#rag-thinking');
+        if (thinkingEl) {
+            thinkingEl.hidden = true;
+            thinkingEl.style.display = 'none';
+        }
+
+        if (inputEl) inputEl.focus();
+
+        // Prepare a one-time cold-start note (shown only on first submit)
+        let ragNoteEl = pane.querySelector('.rag-note');
+        if (!ragNoteEl) {
+            ragNoteEl = document.createElement('div');
+            ragNoteEl.className = 'rag-note';
+            ragNoteEl.hidden = true;
+            if (formEl) {
+                formEl.insertAdjacentElement('afterend', ragNoteEl);
+            }
+        }
+
+        // Submit handler with enhanced animations
+        if (formEl && inputEl && outputEl && sendBtn) {
+            formEl.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const query = (inputEl.value || '').trim();
+                if (!query) {
+                    inputEl.focus();
+                    return;
+                }
+
+                // Hide background title after first interaction
+                if (bgTitleEl) bgTitleEl.hidden = true;
+
+                // Disable controls while sending
+                inputEl.disabled = true;
+                sendBtn.disabled = true;
+                const originalBtnText = sendBtn.textContent;
+                sendBtn.textContent = 'Sending…';
+
+                // Show a one-time cold-start note for the first request this session
+                if (sessionStorage.getItem('ragColdStartShown') !== '1') {
+                    if (ragNoteEl) {
+                        ragNoteEl.textContent = 'Note: First request may take a few seconds while the API cold starts.';
+                        ragNoteEl.hidden = false;
+                    }
+                }
+
+                // Start enhanced thinking states and pipeline animation (in parallel)
+                showEnhancedThinkingStates(pane); // Remove await - let it run in parallel
+
+                try {
+                    const resp = await requestWithTimeout(QUERY_URL, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ query, top_k: 5 })
+                    }, 20000);
+
+                    if (!resp.ok) {
+                        throw new Error(`HTTP ${resp.status}`);
+                    }
+                    const data = await resp.json().catch(() => ({}));
+                    const answer = data && (data.answer || data.result || '');
+                    
+                    // Immediately hide thinking states before rendering answer
+                    hideEnhancedThinkingStates(pane, true);
+                    resetPipelineAnimation(pane);
+
+                    // Show answer with reveal animation
+                    await revealAnswer(outputEl, answer || 'No answer returned.');
+                } catch (err) {
+                    console.error('RAG query failed:', err);
+                    // Hide thinking states before rendering error message
+                    hideEnhancedThinkingStates(pane, true);
+                    resetPipelineAnimation(pane);
+                    await revealAnswer(outputEl, 'Something went wrong while fetching the answer. Please try again.');
+                } finally {
+                    // Ensure controls are re-enabled
+                    inputEl.disabled = false;
+                    sendBtn.disabled = false;
+                    sendBtn.textContent = originalBtnText;
+                    inputEl.value = ''; // Clear the input box
+                    
+                    // Mark the cold-start note as shown and hide it
+                    try { sessionStorage.setItem('ragColdStartShown', '1'); } catch (_) {}
+                    if (ragNoteEl) ragNoteEl.hidden = true;
+
+                    // Keep background title hidden since we now have a response
+                    if (bgTitleEl) {
+                        bgTitleEl.hidden = true;
+                    }
+                    
+                    inputEl.focus();
+                }
+            });
+
+            // Esc to clear and reset
+            inputEl.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    inputEl.value = '';
+                    // Reset to initial state
+                    if (outputEl) {
+                        outputEl.textContent = '';
+                        outputEl.style.opacity = '0';
+                    }
+                    if (bgTitleEl) {
+                        bgTitleEl.hidden = false; // Show "Ask anything about Rahul" again
+                    }
+                }
+            });
+        }
+    } catch (e) {
+        console.error('initializeRag failed:', e);
+    }
+}
+
+async function pollRagHealth(url) {
+    const maxAttempts = 8; // ~ up to ~2m with backoff
+    let delay = 2000;
+    for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+        try {
+            const resp = await requestWithTimeout(url, { method: 'GET' }, 12000);
+            if (resp.ok) {
+                const data = await resp.json().catch(() => ({}));
+                if (data && (data.status === 'ok' || data.status === 'OK')) {
+                    return true;
+                }
+            }
+        } catch (e) {
+            // ignore and retry
+        }
+        await new Promise(r => setTimeout(r, delay));
+        delay = Math.min(delay * 2, 10000);
+    }
+    return false;
+}
+
+function requestWithTimeout(resource, options = {}, timeoutMs = 10000) {
+    const controller = new AbortController();
+    const { signal: _ignored, ...rest } = options || {};
+    const timerId = setTimeout(() => controller.abort(), timeoutMs);
+    return fetch(resource, { ...rest, signal: controller.signal })
+        .finally(() => clearTimeout(timerId))
+        .catch((err) => {
+            if (err && err.name === 'AbortError') {
+                throw new Error('Request timed out');
+            }
+            throw err;
+        });
+}
+
+// =============================
+// Enhanced RAG Animation Functions
+// =============================
+
+async function showEnhancedThinkingStates(pane) {
+    const thinkingEl = pane.querySelector('#rag-thinking');
+    const pipelineEl = pane.querySelector('.rag-pipeline');
+    const bgTitleEl = pane.querySelector('.rag-bg-title');
+
+    // Proceed even if pipeline UI is not present
+    if (!thinkingEl) return;
+
+    // Ensure the helper title is hidden during processing
+    if (bgTitleEl) bgTitleEl.hidden = true;
+
+    // Show thinking states (robust toggle)
+    thinkingEl.hidden = false;
+    thinkingEl.style.display = 'flex';
+    thinkingEl.style.opacity = '0';
+    thinkingEl.style.transform = 'translateY(10px)';
+
+    // Animate in
+    requestAnimationFrame(() => {
+        thinkingEl.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+        thinkingEl.style.opacity = '1';
+        thinkingEl.style.transform = 'translateY(0)';
+    });
+
+    // Start pipeline animation if present
+    if (pipelineEl) startPipelineAnimation(pipelineEl);
+    
+    // Stage 1: Retrieval (1.5s)
+    const retrievalStage = thinkingEl.querySelector('#thinking-retrieval');
+    if (retrievalStage) {
+        retrievalStage.classList.add('active');
+    if (pipelineEl) activatePipelineNode(pipelineEl, 'retrieval');
+    }
+    
+    await new Promise(resolve => setTimeout(resolve, 1500));
+    
+    // Stage 2: Generation (2s)
+    if (retrievalStage) retrievalStage.classList.remove('active');
+    const generationStage = thinkingEl.querySelector('#thinking-generation');
+    if (generationStage) {
+        generationStage.classList.add('active');
+    if (pipelineEl) activatePipelineNode(pipelineEl, 'llm');
+    }
+    
+    await new Promise(resolve => setTimeout(resolve, 2000));
+    
+    // Clean up stages
+    if (generationStage) generationStage.classList.remove('active');
+    if (pipelineEl) activatePipelineNode(pipelineEl, 'answer');
+}
+
+function hideEnhancedThinkingStates(pane, immediate = false) {
+    const thinkingEl = pane.querySelector('#rag-thinking');
+    if (!thinkingEl) return;
+    
+    if (immediate) {
+        thinkingEl.hidden = true;
+        thinkingEl.style.display = 'none';
+        thinkingEl.style.opacity = '0';
+        thinkingEl.style.transform = 'translateY(0)';
+        const stages = thinkingEl.querySelectorAll('.thinking-stage');
+        stages.forEach(stage => stage.classList.remove('active'));
+        return;
+    }
+
+    thinkingEl.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+    thinkingEl.style.opacity = '0';
+    thinkingEl.style.transform = 'translateY(-10px)';
+    
+    setTimeout(() => {
+        thinkingEl.hidden = true;
+        thinkingEl.style.display = 'none';
+        // Reset all stages
+        const stages = thinkingEl.querySelectorAll('.thinking-stage');
+        stages.forEach(stage => stage.classList.remove('active'));
+    }, 300);
+}
+
+function startPipelineAnimation(pipelineEl) {
+    if (!pipelineEl) return;
+    
+    // Add subtle pulse to query node
+    const queryNode = pipelineEl.querySelector('[data-stage="query"]');
+    if (queryNode) {
+        queryNode.classList.add('active');
+    }
+}
+
+function activatePipelineNode(pipelineEl, stage) {
+    if (!pipelineEl) return;
+    
+    // Remove all active states
+    const nodes = pipelineEl.querySelectorAll('.pipeline-node');
+    nodes.forEach(node => {
+        node.classList.remove('active', 'processing');
+    });
+    
+    // Activate current stage
+    const activeNode = pipelineEl.querySelector(`[data-stage="${stage}"]`);
+    if (activeNode) {
+        activeNode.classList.add('processing');
+    }
+}
+
+function resetPipelineAnimation(pane) {
+    const pipelineEl = pane.querySelector('.rag-pipeline');
+    if (!pipelineEl) return;
+    
+    const nodes = pipelineEl.querySelectorAll('.pipeline-node');
+    nodes.forEach(node => {
+        node.classList.remove('active', 'processing');
+    });
+}
+
+async function revealAnswer(outputEl, answer) {
+    if (!outputEl) return;
+    
+    // Clear and prepare for animation
+    outputEl.textContent = '';
+    outputEl.style.opacity = '0';
+    outputEl.style.transform = 'translateY(20px)';
+    
+    // Set the answer
+    outputEl.textContent = answer;
+    
+    // Animate in
+    requestAnimationFrame(() => {
+        outputEl.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+        outputEl.style.opacity = '1';
+        outputEl.style.transform = 'translateY(0)';
+    });
+    
+    // Small delay for the animation
+    await new Promise(resolve => setTimeout(resolve, 500));
+}
+
+// =============================
+// RAG Modal Functions
+// =============================
+
+function setupRagModal() {
+    try {
+        const infoBtn = document.getElementById('rag-info-btn');
+        const modal = document.getElementById('rag-info-modal');
+        const closeBtn = document.getElementById('rag-modal-close');
+        const geminiLink = document.getElementById('gemini-link');
+        const techStackLink = document.getElementById('tech-stack-link');
+        
+        // Info button click
+        if (infoBtn && modal) {
+            infoBtn.addEventListener('click', () => {
+                modal.style.display = 'block';
+                modal.setAttribute('aria-hidden', 'false');
+                if (closeBtn) closeBtn.focus();
+            });
+        }
+        
+        // Close modal
+        const closeModal = () => {
+            if (modal) {
+                modal.style.display = 'none';
+                modal.setAttribute('aria-hidden', 'true');
+            }
+        };
+        
+        if (closeBtn) {
+            closeBtn.addEventListener('click', closeModal);
+        }
+        
+        // Close on outside click
+        if (modal) {
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) closeModal();
+            });
+        }
+        
+        // Close on Escape
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && modal && modal.style.display === 'block') {
+                closeModal();
+            }
+        });
+        
+        // Interactive credits
+        if (geminiLink) {
+            geminiLink.addEventListener('click', () => {
+                if (modal) {
+                    modal.style.display = 'block';
+                    modal.setAttribute('aria-hidden', 'false');
+                    if (closeBtn) closeBtn.focus();
+                }
+            });
+        }
+        
+        if (techStackLink) {
+            techStackLink.addEventListener('click', () => {
+                if (modal) {
+                    modal.style.display = 'block';
+                    modal.setAttribute('aria-hidden', 'false');
+                    if (closeBtn) closeBtn.focus();
+                }
+            });
+        }
+        
+    } catch (e) {
+        console.error('Failed to setup RAG modal:', e);
+    }
+}

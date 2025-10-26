@@ -1,5 +1,33 @@
 [
   {
+  "title": "RAG Resume API",
+  "date": "2025-10-20",
+  "year": "2025",
+  "slug": "rag-resume-api",
+  "category": "NLP",
+  "thumbnail": "assets/img/projects/rag-resume-api-thumb.jpg",
+  "stack": [
+    "LlamaIndex",
+    "FastAPI",
+    "Docker",
+    "Google Cloud",
+    "Gemini",
+    "RAG"
+  ],
+  "links": {
+    "demo": "https://rahul-krishnan.is-a.dev",
+    "github": "https://github.com/rahulk98"
+  },
+  "summary": "A Retrieval-Augmented Generation (RAG) system integrated into my personal website, allowing visitors to query my resume and personal documents. Built with LlamaIndex, FastAPI, Google Gemini, and deployed as a Dockerized API on Google Cloud Platform (Free Tier).",
+  "highlights": [
+    "Integrated a live AI assistant on my personal website for interactive querying of resume and documents.",
+    "Implemented a RAG pipeline using LlamaIndex for indexing and Google GenAI for embeddings.",
+    "Used Google Gemini (gemini-2.5-flash) for context-aware answer generation.",
+    "Deployed the FastAPI backend on Google Cloud Run with Docker containerization."
+  ]
+},
+
+  {
     "title": "Amazon Electronics Recommender System",
     "date": "2025-09-01",
     "year": "2025",
