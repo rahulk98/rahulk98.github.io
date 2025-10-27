@@ -1077,24 +1077,20 @@ async function showEnhancedThinkingStates(pane) {
     const retrievalStage = thinkingEl.querySelector('#thinking-retrieval');
     if (retrievalStage) {
         retrievalStage.classList.add('active');
-    if (pipelineEl) activatePipelineNode(pipelineEl, 'retrieval');
+        if (pipelineEl) activatePipelineNode(pipelineEl, 'retrieval');
     }
-    
+
     await new Promise(resolve => setTimeout(resolve, 1500));
-    
-    // Stage 2: Generation (2s)
+
+    // Stage 2: Generation — keep highlighted until response completes
     if (retrievalStage) retrievalStage.classList.remove('active');
     const generationStage = thinkingEl.querySelector('#thinking-generation');
     if (generationStage) {
         generationStage.classList.add('active');
-    if (pipelineEl) activatePipelineNode(pipelineEl, 'llm');
+        if (pipelineEl) activatePipelineNode(pipelineEl, 'llm');
     }
-    
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    
-    // Clean up stages
-    if (generationStage) generationStage.classList.remove('active');
-    if (pipelineEl) activatePipelineNode(pipelineEl, 'answer');
+    // Do not auto-clear the generation highlight here; it will be cleared
+    // when hideEnhancedThinkingStates() is called after the response arrives.
 }
 
 function hideEnhancedThinkingStates(pane, immediate = false) {
