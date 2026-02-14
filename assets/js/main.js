@@ -912,67 +912,106 @@ function initializeRag() {
             }
         }
 
-        // Submit handler with enhanced animations
+        // Submit handler with conversation history, auto-scroll, stop & retry
         if (formEl && inputEl && outputEl && sendBtn) {
-            formEl.addEventListener('submit', async (e) => {
-                e.preventDefault();
-                const query = (inputEl.value || '').trim();
-                if (!query) {
-                    inputEl.focus();
-                    return;
-                }
+            let currentController = null;
+            let isStreaming = false;
+            let lastQuery = '';
+            let userHasScrolled = false;
 
-                // Hide background title after first interaction
+            // Track manual scrolling to pause auto-scroll
+            outputEl.addEventListener('scroll', () => {
+                if (!isStreaming) return;
+                const atBottom = outputEl.scrollHeight - outputEl.scrollTop - outputEl.clientHeight < 40;
+                userHasScrolled = !atBottom;
+            });
+
+            function autoScroll() {
+                if (!userHasScrolled) {
+                    outputEl.scrollTop = outputEl.scrollHeight;
+                }
+            }
+
+            function setStopMode(on) {
+                if (on) {
+                    sendBtn.textContent = 'Stop';
+                    sendBtn.classList.add('rag-stop');
+                    sendBtn.disabled = false;
+                    inputEl.disabled = true;
+                } else {
+                    sendBtn.textContent = 'Send';
+                    sendBtn.classList.remove('rag-stop');
+                    sendBtn.disabled = false;
+                    inputEl.disabled = false;
+                }
+            }
+
+            async function submitQuery(query) {
+                lastQuery = query;
+                isStreaming = true;
+                userHasScrolled = false;
+
+                // Hide background title
                 if (bgTitleEl) bgTitleEl.hidden = true;
+                outputEl.style.opacity = '1';
+                outputEl.style.transform = 'translateY(0)';
 
-                // Disable controls while sending
-                inputEl.disabled = true;
-                sendBtn.disabled = true;
-                const originalBtnText = sendBtn.textContent;
-                sendBtn.textContent = 'Sending…';
+                // Append user bubble
+                const userBubble = document.createElement('div');
+                userBubble.className = 'rag-msg rag-msg-user';
+                userBubble.textContent = query;
+                outputEl.appendChild(userBubble);
+                autoScroll();
 
-                // Show a one-time cold-start note for the first request this session
-                if (sessionStorage.getItem('ragColdStartShown') !== '1') {
-                    if (ragNoteEl) {
-                        ragNoteEl.textContent = 'Note: First request may take a few seconds while the API cold starts.';
-                        ragNoteEl.hidden = false;
-                    }
+                // Create AI bubble with typing dots
+                const aiBubble = document.createElement('div');
+                aiBubble.className = 'rag-msg rag-msg-ai';
+                const typingIndicator = document.createElement('div');
+                typingIndicator.className = 'rag-typing';
+                typingIndicator.innerHTML = '<span class="rag-typing-dot"></span><span class="rag-typing-dot"></span><span class="rag-typing-dot"></span>';
+                aiBubble.appendChild(typingIndicator);
+                outputEl.appendChild(aiBubble);
+                autoScroll();
+
+                let accumulated = '';
+                let userAborted = false;
+
+                // Cold-start note: show after 5s if still loading on first use
+                let coldStartTimer = null;
+                if (sessionStorage.getItem('ragColdStartShown') !== '1' && ragNoteEl) {
+                    coldStartTimer = setTimeout(() => {
+                        if (isStreaming && !accumulated) {
+                            ragNoteEl.textContent = 'The instance is cold starting — this may take a moment.';
+                            ragNoteEl.hidden = false;
+                        }
+                    }, 5000);
                 }
 
-                // Start enhanced thinking states and pipeline animation (in parallel)
-                showEnhancedThinkingStates(pane); // Remove await - let it run in parallel
+                setStopMode(true);
 
                 try {
-                    const controller = new AbortController();
-                    const timeoutId = setTimeout(() => controller.abort(), 30000);
+                    currentController = new AbortController();
+                    const timeoutId = setTimeout(() => currentController.abort(), 30000);
 
                     const resp = await fetch(QUERY_URL, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ query, top_k: 5 }),
-                        signal: controller.signal
+                        signal: currentController.signal
                     });
                     clearTimeout(timeoutId);
 
-                    if (!resp.ok) {
-                        throw new Error(`HTTP ${resp.status}`);
-                    }
+                    if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
 
-                    // Prepare output for streaming
-                    outputEl.innerHTML = '';
-                    outputEl.style.opacity = '1';
-                    outputEl.style.transform = 'translateY(0)';
-                    let accumulated = '';
-                    let firstToken = true;
-
-                    // Add blinking cursor
+                    // Add cursor
                     const cursor = document.createElement('span');
                     cursor.className = 'rag-cursor';
-                    outputEl.appendChild(cursor);
+                    aiBubble.appendChild(cursor);
 
                     const reader = resp.body.getReader();
                     const decoder = new TextDecoder();
                     let buffer = '';
+                    let firstToken = true;
 
                     while (true) {
                         const { done, value } = await reader.read();
@@ -980,7 +1019,7 @@ function initializeRag() {
 
                         buffer += decoder.decode(value, { stream: true });
                         const lines = buffer.split('\n');
-                        buffer = lines.pop(); // keep incomplete line
+                        buffer = lines.pop();
 
                         for (const line of lines) {
                             const trimmed = line.trim();
@@ -993,65 +1032,86 @@ function initializeRag() {
                                 if (parsed.token != null) {
                                     if (firstToken) {
                                         firstToken = false;
-                                        hideEnhancedThinkingStates(pane, true);
-                                        resetPipelineAnimation(pane);
+                                        // Remove typing dots
+                                        if (typingIndicator.parentNode) typingIndicator.remove();
                                     }
                                     accumulated += parsed.token;
-                                    outputEl.innerHTML = renderMarkdown(accumulated);
-                                    // Re-append cursor
-                                    outputEl.appendChild(cursor);
+                                    aiBubble.innerHTML = renderMarkdown(accumulated);
+                                    aiBubble.appendChild(cursor);
+                                    autoScroll();
                                 }
                             } catch (_) { /* skip malformed JSON */ }
                         }
                     }
 
-                    // Remove cursor when done
                     if (cursor.parentNode) cursor.remove();
 
-                    // Final render
                     if (!accumulated) {
-                        outputEl.innerHTML = renderMarkdown('No answer returned.');
+                        aiBubble.innerHTML = renderMarkdown('No answer returned.');
                     }
                 } catch (err) {
-                    console.error('RAG query failed:', err);
-                    hideEnhancedThinkingStates(pane, true);
-                    resetPipelineAnimation(pane);
-                    outputEl.innerHTML = '';
-                    outputEl.style.opacity = '1';
-                    outputEl.style.transform = 'translateY(0)';
-                    outputEl.innerHTML = renderMarkdown('Something went wrong while fetching the answer. Please try again.');
+                    userAborted = err.name === 'AbortError';
+                    if (typingIndicator.parentNode) typingIndicator.remove();
+
+                    if (userAborted) {
+                        // Keep partial answer if any, or show stopped message
+                        if (!accumulated) {
+                            aiBubble.innerHTML = renderMarkdown('*Generation stopped.*');
+                        }
+                    } else {
+                        console.error('RAG query failed:', err);
+                        aiBubble.innerHTML = renderMarkdown('Something went wrong while fetching the answer.');
+                        // Add retry button
+                        const retryBtn = document.createElement('button');
+                        retryBtn.className = 'rag-retry';
+                        retryBtn.textContent = 'Retry';
+                        retryBtn.addEventListener('click', () => {
+                            // Remove the error bubble
+                            aiBubble.remove();
+                            // Re-submit
+                            submitQuery(lastQuery);
+                        });
+                        aiBubble.appendChild(retryBtn);
+                    }
                 } finally {
-                    // Ensure controls are re-enabled
-                    inputEl.disabled = false;
-                    sendBtn.disabled = false;
-                    sendBtn.textContent = originalBtnText;
-                    inputEl.value = ''; // Clear the input box
-                    
-                    // Mark the cold-start note as shown and hide it
+                    isStreaming = false;
+                    currentController = null;
+                    setStopMode(false);
+                    inputEl.value = '';
+                    if (coldStartTimer) clearTimeout(coldStartTimer);
                     try { sessionStorage.setItem('ragColdStartShown', '1'); } catch (_) {}
                     if (ragNoteEl) ragNoteEl.hidden = true;
-
-                    // Keep background title hidden since we now have a response
-                    if (bgTitleEl) {
-                        bgTitleEl.hidden = true;
-                    }
-                    
                     inputEl.focus();
+                    autoScroll();
                 }
+            }
+
+            formEl.addEventListener('submit', (e) => {
+                e.preventDefault();
+                // If streaming, treat submit as stop
+                if (isStreaming && currentController) {
+                    currentController.abort();
+                    return;
+                }
+                const query = (inputEl.value || '').trim();
+                if (!query) {
+                    inputEl.focus();
+                    return;
+                }
+                submitQuery(query);
             });
 
             // Esc to clear and reset
             inputEl.addEventListener('keydown', (e) => {
                 if (e.key === 'Escape') {
+                    // If streaming, stop first
+                    if (isStreaming && currentController) {
+                        currentController.abort();
+                    }
                     inputEl.value = '';
-                    // Reset to initial state
-                    if (outputEl) {
-                        outputEl.innerHTML = '';
-                        outputEl.style.opacity = '0';
-                    }
-                    if (bgTitleEl) {
-                        bgTitleEl.hidden = false; // Show "Ask anything about Rahul" again
-                    }
+                    outputEl.innerHTML = '';
+                    outputEl.style.opacity = '0';
+                    if (bgTitleEl) bgTitleEl.hidden = false;
                 }
             });
         }
