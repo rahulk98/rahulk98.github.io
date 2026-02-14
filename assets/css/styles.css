@@ -540,8 +540,43 @@ a:hover {
     overflow-y: auto;
     color: var(--text-secondary);
     padding: 0.5rem 0.25rem 0.75rem;
-    white-space: pre-wrap;
+    line-height: 1.6;
+    font-size: 0.925rem;
 }
+
+.rag-output strong { color: var(--text-primary); font-weight: var(--font-weight-semibold); }
+.rag-output em { font-style: italic; }
+.rag-output code {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-light);
+    border-radius: 0.25rem;
+    padding: 0.1em 0.35em;
+    font-size: 0.85em;
+    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+}
+.rag-output pre {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: 0.5rem;
+    padding: 0.75rem 1rem;
+    overflow-x: auto;
+    margin: 0.5rem 0;
+}
+.rag-output pre code { background: none; border: none; padding: 0; font-size: 0.85em; }
+.rag-output ul { margin: 0.5rem 0; padding-left: 1.25rem; }
+.rag-output li { margin-bottom: 0.25rem; }
+
+/* Blinking cursor during streaming */
+.rag-cursor {
+    display: inline-block;
+    width: 2px;
+    height: 1em;
+    background: var(--accent);
+    margin-left: 2px;
+    vertical-align: text-bottom;
+    animation: rag-blink 0.7s step-end infinite;
+}
+@keyframes rag-blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
 
 .rag-form {
     margin-top: auto;

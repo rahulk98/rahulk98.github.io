@@ -885,7 +885,7 @@ function initializeRag() {
         const inputEl = pane.querySelector('#rag-input');
         const sendBtn = pane.querySelector('#rag-send');
 
-        const QUERY_URL = 'https://resume-rag-system-312008307798.europe-west1.run.app/query';
+        const QUERY_URL = 'https://resume-rag-system-312008307798.europe-west1.run.app/query/stream';
 
         // Immediately reveal UI without any health checks
         if (loadingEl) loadingEl.style.display = 'none';
@@ -943,30 +943,83 @@ function initializeRag() {
                 showEnhancedThinkingStates(pane); // Remove await - let it run in parallel
 
                 try {
-                    const resp = await requestWithTimeout(QUERY_URL, {
+                    const controller = new AbortController();
+                    const timeoutId = setTimeout(() => controller.abort(), 30000);
+
+                    const resp = await fetch(QUERY_URL, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ query, top_k: 5 })
-                    }, 20000);
+                        body: JSON.stringify({ query, top_k: 5 }),
+                        signal: controller.signal
+                    });
+                    clearTimeout(timeoutId);
 
                     if (!resp.ok) {
                         throw new Error(`HTTP ${resp.status}`);
                     }
-                    const data = await resp.json().catch(() => ({}));
-                    const answer = data && (data.answer || data.result || '');
-                    
-                    // Immediately hide thinking states before rendering answer
-                    hideEnhancedThinkingStates(pane, true);
-                    resetPipelineAnimation(pane);
 
-                    // Show answer with reveal animation
-                    await revealAnswer(outputEl, answer || 'No answer returned.');
+                    // Prepare output for streaming
+                    outputEl.innerHTML = '';
+                    outputEl.style.opacity = '1';
+                    outputEl.style.transform = 'translateY(0)';
+                    let accumulated = '';
+                    let firstToken = true;
+
+                    // Add blinking cursor
+                    const cursor = document.createElement('span');
+                    cursor.className = 'rag-cursor';
+                    outputEl.appendChild(cursor);
+
+                    const reader = resp.body.getReader();
+                    const decoder = new TextDecoder();
+                    let buffer = '';
+
+                    while (true) {
+                        const { done, value } = await reader.read();
+                        if (done) break;
+
+                        buffer += decoder.decode(value, { stream: true });
+                        const lines = buffer.split('\n');
+                        buffer = lines.pop(); // keep incomplete line
+
+                        for (const line of lines) {
+                            const trimmed = line.trim();
+                            if (!trimmed.startsWith('data:')) continue;
+                            const payload = trimmed.slice(5).trim();
+                            if (payload === '[DONE]') continue;
+
+                            try {
+                                const parsed = JSON.parse(payload);
+                                if (parsed.token != null) {
+                                    if (firstToken) {
+                                        firstToken = false;
+                                        hideEnhancedThinkingStates(pane, true);
+                                        resetPipelineAnimation(pane);
+                                    }
+                                    accumulated += parsed.token;
+                                    outputEl.innerHTML = renderMarkdown(accumulated);
+                                    // Re-append cursor
+                                    outputEl.appendChild(cursor);
+                                }
+                            } catch (_) { /* skip malformed JSON */ }
+                        }
+                    }
+
+                    // Remove cursor when done
+                    if (cursor.parentNode) cursor.remove();
+
+                    // Final render
+                    if (!accumulated) {
+                        outputEl.innerHTML = renderMarkdown('No answer returned.');
+                    }
                 } catch (err) {
                     console.error('RAG query failed:', err);
-                    // Hide thinking states before rendering error message
                     hideEnhancedThinkingStates(pane, true);
                     resetPipelineAnimation(pane);
-                    await revealAnswer(outputEl, 'Something went wrong while fetching the answer. Please try again.');
+                    outputEl.innerHTML = '';
+                    outputEl.style.opacity = '1';
+                    outputEl.style.transform = 'translateY(0)';
+                    outputEl.innerHTML = renderMarkdown('Something went wrong while fetching the answer. Please try again.');
                 } finally {
                     // Ensure controls are re-enabled
                     inputEl.disabled = false;
@@ -993,7 +1046,7 @@ function initializeRag() {
                     inputEl.value = '';
                     // Reset to initial state
                     if (outputEl) {
-                        outputEl.textContent = '';
+                        outputEl.innerHTML = '';
                         outputEl.style.opacity = '0';
                     }
                     if (bgTitleEl) {
@@ -1156,26 +1209,36 @@ function resetPipelineAnimation(pane) {
     });
 }
 
-async function revealAnswer(outputEl, answer) {
-    if (!outputEl) return;
-    
-    // Clear and prepare for animation
-    outputEl.textContent = '';
-    outputEl.style.opacity = '0';
-    outputEl.style.transform = 'translateY(20px)';
-    
-    // Set the answer
-    outputEl.textContent = answer;
-    
-    // Animate in
-    requestAnimationFrame(() => {
-        outputEl.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
-        outputEl.style.opacity = '1';
-        outputEl.style.transform = 'translateY(0)';
+function renderMarkdown(text) {
+    // Escape HTML
+    let html = text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+    // Code blocks (```)
+    html = html.replace(/```([\s\S]*?)```/g, '<pre><code>$1</code></pre>');
+    // Inline code
+    html = html.replace(/`([^`]+)`/g, '<code>$1</code>');
+    // Bold
+    html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+    // Italic
+    html = html.replace(/\*(.+?)\*/g, '<em>$1</em>');
+
+    // Bullet lists: consecutive lines starting with "- "
+    html = html.replace(/(^|\n)(- .+(?:\n- .+)*)/g, (_, before, block) => {
+        const items = block.split('\n').map(line =>
+            '<li>' + line.replace(/^- /, '') + '</li>'
+        ).join('');
+        return before + '<ul>' + items + '</ul>';
     });
-    
-    // Small delay for the animation
-    await new Promise(resolve => setTimeout(resolve, 500));
+
+    // Line breaks (but not inside <ul> or <pre>)
+    html = html.replace(/\n/g, '<br>');
+    // Clean up extra <br> around block elements
+    html = html.replace(/<br>\s*<ul>/g, '<ul>');
+    html = html.replace(/<\/ul>\s*<br>/g, '</ul>');
+    html = html.replace(/<br>\s*<pre>/g, '<pre>');
+    html = html.replace(/<\/pre>\s*<br>/g, '</pre>');
+
+    return html;
 }
 
 // =============================
