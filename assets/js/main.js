@@ -19,6 +19,7 @@ async function initializeApp() {
     loadPersonalInfo();
     loadSkills();
     loadEducation();
+    loadCertifications();
     loadPublications();
     loadNavigation();
     loadFooter();
@@ -524,6 +525,36 @@ function loadEducation() {
   listRoot.appendChild(fragment);
 }
 
+function loadCertifications() {
+  const listRoot = document.getElementById('certifications-list');
+  if (!listRoot || !window.certificationsData) return;
+
+  const entries = window.certificationsData.certifications || [];
+  const fragment = document.createDocumentFragment();
+
+  entries.forEach(cert => {
+    const article = document.createElement('article');
+    article.className = 'cert-card';
+    article.setAttribute('role', 'listitem');
+
+    article.innerHTML = `
+      <a class="cert-card__link" href="${cert.link}" target="_blank" rel="noopener noreferrer"
+         aria-label="${cert.title} by ${cert.issuer}">
+        <div class="cert-card__body">
+          <span class="cert-card__issuer">${cert.issuer}</span>
+          <h3 class="cert-card__title">${cert.title}</h3>
+          <span class="cert-card__date">${cert.date}</span>
+        </div>
+        <div class="cert-card__arrow" aria-hidden="true">↗</div>
+      </a>`;
+
+    fragment.appendChild(article);
+  });
+
+  listRoot.innerHTML = '';
+  listRoot.appendChild(fragment);
+}
+
 // Load publications
 function loadPublications() {
     console.log('=== LOADING PUBLICATIONS ===');
@@ -912,6 +943,30 @@ function initializeRag() {
             }
         }
 
+        const SUGGESTED_QUESTIONS = [
+            "What is Rahul's work experience?",
+            "What projects has Rahul built?",
+            "What are Rahul's technical skills?",
+            "Where did Rahul study?",
+        ];
+
+        function showSuggestions() {
+            const wrapper = document.createElement('div');
+            wrapper.className = 'rag-suggestions';
+            wrapper.id = 'rag-suggestions';
+            SUGGESTED_QUESTIONS.forEach(q => {
+                const pill = document.createElement('button');
+                pill.type = 'button';
+                pill.className = 'rag-suggestion-pill';
+                pill.textContent = q;
+                pill.addEventListener('click', () => {
+                    submitQuery(q);
+                });
+                wrapper.appendChild(pill);
+            });
+            outputEl.appendChild(wrapper);
+        }
+
         // Submit handler with conversation history, auto-scroll, stop & retry
         if (formEl && inputEl && outputEl && sendBtn) {
             let currentController = null;
@@ -946,7 +1001,11 @@ function initializeRag() {
                 }
             }
 
+            showSuggestions();
+
             async function submitQuery(query) {
+                const suggestionsEl = document.getElementById('rag-suggestions');
+                if (suggestionsEl) suggestionsEl.remove();
                 lastQuery = query;
                 isStreaming = true;
                 userHasScrolled = false;
@@ -1112,6 +1171,7 @@ function initializeRag() {
                     outputEl.innerHTML = '';
                     outputEl.style.opacity = '0';
                     if (bgTitleEl) bgTitleEl.hidden = false;
+                    showSuggestions();
                 }
             });
         }

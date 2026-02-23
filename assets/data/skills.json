@@ -1,78 +1,63 @@
 {
-    "categories": [
-        {
-            "title": "Programming & Data Analysis",
-            "skills": [
-                "Python",
-                "SQL",
-                "R",
-                "Java",
-                "MATLAB"
-            ]
-        },
-        {
-            "title": "Machine Learning & Deep Learning",
-            "skills": [
-                "PyTorch",
-                "TensorFlow",
-                "Scikit-Learn",
-                "Transformers",
-                "Keras",
-                "Hugging Face",
-                "Recommender Systems"
-            ]
-        },
-        {
-            "title": "Concepts",
-            "skills": [
-                "Natural Language Processing",
-                "Computer Vision",
-                "MLOps",
-                "Feature Engineering",
-                "Probability & Statistics",
-                "Supervised Learning",
-                "Unsupervised Learning"
-            ]
-        },
-        {
-            "title": "Deployment & MLOps",
-            "skills": [
-                "Docker",
-                "FastAPI",
-                "Flask",
-                "GitHub Actions",
-                "MLOps",
-                "Azure Container Apps",
-                "Cloud Deployment",
-                "CI/CD"
-            ]
-        },
-        {
-            "title": "Big Data & Databases",
-            "skills": [
-                "Spark",
-                "Hadoop",
-                "MySQL",
-                "PostgreSQL",
-                "SAP HANA"
-            ]
-        },
-        {
-            "title": "Other Tools & Practices",
-            "skills": [
-                "Git",
-                "GitHub Workflows",
-                "Agile (Scrum)",
-                "Technical Documentation",
-                "Cross-functional Collaboration"
-            ]
-        },
-        {
-            "title": "Languages",
-            "skills": [
-                "English (C2)",
-                "German (A2)"
-            ]
-        }
-    ]
+  "categories": [
+    {
+      "title": "Programming & Data Analysis",
+      "skills": ["Python", "SQL", "R", "Java", "MATLAB", "Rust"]
+    },
+    {
+      "title": "Machine Learning & Deep Learning",
+      "skills": [
+        "PyTorch",
+        "TensorFlow",
+        "Scikit-Learn",
+        "Transformers",
+        "Keras",
+        "Hugging Face",
+        "Recommender Systems"
+      ]
+    },
+    {
+      "title": "Concepts",
+      "skills": [
+        "Natural Language Processing",
+        "Computer Vision",
+        "MLOps",
+        "Feature Engineering",
+        "Probability & Statistics",
+        "Supervised Learning",
+        "Unsupervised Learning"
+      ]
+    },
+    {
+      "title": "Deployment & MLOps",
+      "skills": [
+        "Docker",
+        "FastAPI",
+        "Flask",
+        "GitHub Actions",
+        "MLOps",
+        "Azure Container Apps",
+        "Cloud Deployment",
+        "CI/CD"
+      ]
+    },
+    {
+      "title": "Big Data & Databases",
+      "skills": ["Spark", "Hadoop", "MySQL", "PostgreSQL", "SAP HANA"]
+    },
+    {
+      "title": "Other Tools & Practices",
+      "skills": [
+        "Git",
+        "GitHub Workflows",
+        "Agile (Scrum)",
+        "Technical Documentation",
+        "Cross-functional Collaboration"
+      ]
+    },
+    {
+      "title": "Languages",
+      "skills": ["English (C2)", "German (A2)"]
+    }
+  ]
 }
