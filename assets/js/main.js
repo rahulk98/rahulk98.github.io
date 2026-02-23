@@ -334,7 +334,10 @@ function loadExperience() {
         list.innerHTML = items.map(job => `
             <div class="experience-item">
                 <h3>${job.title}</h3>
-                <p><strong>${job.company}</strong> • ${job.location} • ${job.dates}</p>
+                <div class="experience-meta">
+                    <span class="experience-company">${job.company}</span>
+                    <span class="experience-dates">${job.dates}</span>
+                </div>
                 <ul>
                     ${job.points.map(point => `<li>${point}</li>`).join('')}
                 </ul>
@@ -469,20 +472,16 @@ function loadSkills() {
         const html = skills.categories.map(category => `
             <div class="skill-card">
                 <h3>${category.title}</h3>
-                <p>${category.skills.join(', ')}</p>
+                <div class="skill-tags">
+                    ${category.skills.map(skill => `<span class="skill-tag">${skill}</span>`).join('')}
+                </div>
             </div>
         `).join('');
 
         console.log('Generated HTML length:', html.length);
         skillsSection.innerHTML = html;
 
-        // Ensure elements are visible
         const skillCards = skillsSection.querySelectorAll('.skill-card');
-        skillCards.forEach(card => {
-            card.style.opacity = '1';
-            card.style.transform = 'translateY(0)';
-        });
-
         console.log('Skills loaded successfully, elements visible:', skillCards.length);
     } catch (e) {
         console.error('Failed to load skills:', e);
