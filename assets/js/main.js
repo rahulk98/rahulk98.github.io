@@ -949,23 +949,6 @@ function initializeRag() {
             "Where did Rahul study?",
         ];
 
-        function showSuggestions() {
-            const wrapper = document.createElement('div');
-            wrapper.className = 'rag-suggestions';
-            wrapper.id = 'rag-suggestions';
-            SUGGESTED_QUESTIONS.forEach(q => {
-                const pill = document.createElement('button');
-                pill.type = 'button';
-                pill.className = 'rag-suggestion-pill';
-                pill.textContent = q;
-                pill.addEventListener('click', () => {
-                    submitQuery(q);
-                });
-                wrapper.appendChild(pill);
-            });
-            outputEl.appendChild(wrapper);
-        }
-
         // Submit handler with conversation history, auto-scroll, stop & retry
         if (formEl && inputEl && outputEl && sendBtn) {
             let currentController = null;
@@ -1000,11 +983,29 @@ function initializeRag() {
                 }
             }
 
+            function showSuggestions() {
+                const wrapper = document.createElement('div');
+                wrapper.className = 'rag-suggestions';
+                wrapper.id = 'rag-suggestions';
+                SUGGESTED_QUESTIONS.forEach(q => {
+                    const pill = document.createElement('button');
+                    pill.type = 'button';
+                    pill.className = 'rag-suggestion-pill';
+                    pill.textContent = q;
+                    pill.addEventListener('click', () => {
+                        submitQuery(q);
+                    });
+                    wrapper.appendChild(pill);
+                });
+                outputEl.appendChild(wrapper);
+            }
+
             showSuggestions();
 
             async function submitQuery(query) {
                 const suggestionsEl = document.getElementById('rag-suggestions');
                 if (suggestionsEl) suggestionsEl.remove();
+                inputEl.value = '';
                 lastQuery = query;
                 isStreaming = true;
                 userHasScrolled = false;
