@@ -21,6 +21,7 @@ async function initializeApp() {
     loadEducation();
     loadCertifications();
     loadPublications();
+    loadBlogTeaser();
     loadNavigation();
     loadFooter();
     loadErrorPage();
@@ -597,6 +598,36 @@ function loadPublications() {
         console.log('Publications loaded successfully, elements visible:', pubItems.length);
     } catch (e) {
         console.error('Failed to load publications:', e);
+    }
+}
+
+// Load blog teaser (fetches Jekyll-generated feed.json; silent on failure)
+async function loadBlogTeaser() {
+    try {
+        const res = await fetch('/blog/feed.json', { cache: 'no-store' });
+        if (!res.ok) return;
+        const posts = await res.json();
+        if (!Array.isArray(posts) || posts.length === 0) return;
+
+        const list = document.getElementById('blog-teaser-list');
+        const section = document.getElementById('blog-teaser');
+        if (!list || !section) return;
+
+        const escape = (s) => String(s ?? '').replace(/[&<>"']/g, c => ({
+            '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+        }[c]));
+
+        list.innerHTML = posts.slice(0, 3).map(p => `
+            <a class="blog-teaser-card" href="${escape(p.url)}">
+                <h3>${escape(p.title)}</h3>
+                <time datetime="${escape(p.date)}">${new Date(p.date).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' })}</time>
+                <p>${escape(p.description || '')}</p>
+            </a>
+        `).join('');
+
+        section.hidden = false;
+    } catch (e) {
+        console.warn('Blog teaser unavailable:', e);
     }
 }
 

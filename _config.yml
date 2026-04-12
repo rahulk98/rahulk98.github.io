@@ -1,0 +1,22 @@
+title: Rahul Krishnan
+description: Technical writing on machine learning, data science, and software engineering.
+url: https://rahul-krishnan.is-a.dev
+baseurl: ""
+
+permalink: /blog/:year/:month/:slug/
+
+plugins:
+  - jekyll-feed
+
+exclude:
+  - generate_thumbnails.py
+  - README.md
+  - AGENTS.md
+  - CLAUDE.md
+  - LICENSE
+  - vendor
+  - .jekyll-cache
+  - node_modules
+  - .venv
+  - Gemfile
+  - Gemfile.lock

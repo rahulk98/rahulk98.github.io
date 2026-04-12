@@ -37,6 +37,12 @@
     }
     ,
     {
+      "id": "blog",
+      "title": "Blog",
+      "url": "/blog/"
+    }
+    ,
+    {
       "id": "resume",
       "title": "Resume",
       "url": "assets/resume/Rahul_Krishnan_Resume.pdf",

@@ -1,0 +1,290 @@
+/* ============================================================
+   Blog styles (used by Jekyll-generated pages and homepage teaser)
+   ============================================================ */
+
+/* ---------- Blog index (post list) ---------- */
+.blog-index {
+    padding-top: 2rem;
+}
+
+.blog-index h1 {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 4vw, 3rem);
+    margin-bottom: 0.5rem;
+    color: var(--text-primary);
+}
+
+.blog-index-subtitle {
+    color: var(--text-secondary);
+    font-size: 1.05rem;
+    margin-bottom: 2.5rem;
+    max-width: 60ch;
+}
+
+.blog-empty {
+    padding: 3rem 1rem;
+    text-align: center;
+    color: var(--text-muted);
+    background: var(--glass-surface);
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    border: 1px solid var(--glass-border);
+    border-radius: var(--glass-radius);
+}
+
+.blog-post-list {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+}
+
+.blog-post-card {
+    display: block;
+    padding: 1.5rem 1.75rem;
+    background: var(--glass-surface);
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    border: 1px solid var(--glass-border);
+    border-radius: var(--glass-radius);
+    box-shadow: var(--glass-shadow);
+    color: var(--text-primary);
+    text-decoration: none;
+    transition: var(--glass-transition);
+}
+
+.blog-post-card:hover {
+    transform: translateY(-2px);
+    border-color: var(--glass-border-strong);
+}
+
+.blog-post-card-title {
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    margin: 0 0 0.35rem 0;
+    color: var(--text-primary);
+}
+
+.blog-post-card-date {
+    display: block;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-bottom: 0.65rem;
+}
+
+.blog-post-card-description {
+    color: var(--text-secondary);
+    margin: 0 0 0.75rem 0;
+    line-height: 1.55;
+}
+
+.blog-post-card-readmore {
+    font-size: 0.9rem;
+    color: var(--accent);
+    font-weight: var(--font-weight-medium);
+}
+
+/* ---------- Single post ---------- */
+.blog-post {
+    max-width: 720px;
+    margin: 2rem auto 4rem;
+}
+
+.blog-post-header {
+    margin-bottom: 2rem;
+    padding-bottom: 1.25rem;
+    border-bottom: 1px solid var(--border-light);
+}
+
+.blog-post-title {
+    font-family: var(--font-display);
+    font-size: clamp(1.9rem, 4vw, 2.75rem);
+    line-height: 1.15;
+    margin: 0 0 0.5rem 0;
+    color: var(--text-primary);
+}
+
+.blog-post-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    align-items: center;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    margin-bottom: 0.75rem;
+}
+
+.blog-post-tags {
+    display: inline-flex;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+}
+
+.blog-tag {
+    font-size: 0.8rem;
+    color: var(--accent);
+    background: var(--accent-subtle);
+    padding: 0.15rem 0.55rem;
+    border-radius: 999px;
+}
+
+.blog-post-description {
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+    line-height: 1.55;
+    margin: 0;
+}
+
+/* ---------- Prose typography for post body ---------- */
+.prose {
+    color: var(--text-primary);
+    font-size: 1.05rem;
+    line-height: 1.75;
+}
+
+.prose h2 {
+    font-family: var(--font-display);
+    font-size: 1.65rem;
+    margin-top: 2.25rem;
+    margin-bottom: 0.75rem;
+    color: var(--text-primary);
+}
+
+.prose h3 {
+    font-family: var(--font-display);
+    font-size: 1.3rem;
+    margin-top: 1.75rem;
+    margin-bottom: 0.5rem;
+    color: var(--text-primary);
+}
+
+.prose p {
+    margin: 0 0 1.1rem 0;
+}
+
+.prose a {
+    color: var(--accent);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+.prose a:hover {
+    color: var(--accent-hover);
+}
+
+.prose ul,
+.prose ol {
+    margin: 0 0 1.1rem 1.4rem;
+    padding: 0;
+}
+
+.prose li {
+    margin-bottom: 0.35rem;
+}
+
+.prose blockquote {
+    margin: 1.25rem 0;
+    padding: 0.5rem 1.1rem;
+    border-left: 3px solid var(--accent);
+    background: var(--accent-subtle);
+    color: var(--text-secondary);
+    border-radius: 0 var(--glass-radius) var(--glass-radius) 0;
+}
+
+.prose code {
+    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+    font-size: 0.92em;
+    background: var(--bg-secondary);
+    padding: 0.12em 0.4em;
+    border-radius: 4px;
+}
+
+.prose pre {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-light);
+    border-radius: var(--glass-radius);
+    padding: 1rem 1.15rem;
+    overflow-x: auto;
+    margin: 1.25rem 0;
+    font-size: 0.92rem;
+    line-height: 1.55;
+}
+
+.prose pre code {
+    background: transparent;
+    padding: 0;
+    font-size: inherit;
+}
+
+.prose img {
+    max-width: 100%;
+    height: auto;
+    border-radius: var(--glass-radius);
+    margin: 1.25rem 0;
+}
+
+.prose hr {
+    border: 0;
+    border-top: 1px solid var(--border-light);
+    margin: 2rem 0;
+}
+
+.blog-post-footer {
+    margin-top: 2.5rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--border-light);
+}
+
+/* ---------- Homepage teaser ---------- */
+.blog-teaser-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.25rem;
+    margin-bottom: 1.5rem;
+}
+
+.blog-teaser-card {
+    display: block;
+    padding: 1.25rem 1.5rem;
+    background: var(--glass-surface);
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    border: 1px solid var(--glass-border);
+    border-radius: var(--glass-radius);
+    box-shadow: var(--glass-shadow);
+    color: var(--text-primary);
+    text-decoration: none;
+    transition: var(--glass-transition);
+}
+
+.blog-teaser-card:hover {
+    transform: translateY(-2px);
+    border-color: var(--glass-border-strong);
+}
+
+.blog-teaser-card h3 {
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    margin: 0 0 0.35rem 0;
+    color: var(--text-primary);
+}
+
+.blog-teaser-card time {
+    display: block;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-bottom: 0.5rem;
+}
+
+.blog-teaser-card p {
+    color: var(--text-secondary);
+    margin: 0;
+    font-size: 0.92rem;
+    line-height: 1.5;
+}
+
+/* ---------- Blog body spacing override ---------- */
+.blog-body .header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
