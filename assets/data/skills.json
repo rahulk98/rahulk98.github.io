@@ -2,18 +2,20 @@
   "categories": [
     {
       "title": "Programming & Data Analysis",
-      "skills": ["Python", "SQL", "R", "Java", "MATLAB", "Rust"]
+      "skills": ["Python", "SQL", "R", "Java", "MATLAB", "Rust", "TypeScript (basic)", "C++ (basic)"]
     },
     {
       "title": "Machine Learning & Deep Learning",
       "skills": [
         "PyTorch",
+        "PyTorch Geometric",
         "TensorFlow",
         "Scikit-Learn",
         "Transformers",
         "Keras",
         "Hugging Face",
-        "Recommender Systems"
+        "Recommender Systems",
+        "Graph Neural Networks"
       ]
     },
     {
@@ -25,7 +27,11 @@
         "Feature Engineering",
         "Probability & Statistics",
         "Supervised Learning",
-        "Unsupervised Learning"
+        "Unsupervised Learning",
+        "LLM Evaluation",
+        "Chain-of-Thought Prompting",
+        "Interpretability",
+        "Neuro-Symbolic Methods"
       ]
     },
     {
@@ -37,6 +43,7 @@
         "GitHub Actions",
         "MLOps",
         "Azure Container Apps",
+        "Google Cloud Run",
         "Cloud Deployment",
         "CI/CD"
       ]
@@ -44,6 +51,10 @@
     {
       "title": "Big Data & Databases",
       "skills": ["Spark", "Hadoop", "MySQL", "PostgreSQL", "SAP HANA"]
+    },
+    {
+      "title": "BI Tools",
+      "skills": ["Power BI (basic)"]
     },
     {
       "title": "Other Tools & Practices",
@@ -57,7 +68,7 @@
     },
     {
       "title": "Languages",
-      "skills": ["English (C2)", "German (A2)"]
+      "skills": ["English (C2)", "German (B1)"]
     }
   ]
 }

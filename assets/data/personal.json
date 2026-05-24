@@ -1,21 +1,23 @@
 {
     "name": "Rahul Krishnan",
     "title": "Data Science Master's Student",
-    "subtitle": "Data Science Master's student specializing in Machine Learning, Deep Learning, Recommender Systems and MLOps, with professional software engineering experience at SAP Labs.",
+    "subtitle": "MSc Data Science student at Universität Trier with approximately 4 years of software engineering experience at SAP Labs. Working across LLMs, recommender systems, graph ML, and MLOps.",
     "currentRole": "MSc Data Science at Universität Trier",
     "previousRole": "Former SAP Software Developer",
     "location": "Trier, Germany",
     "bio": {
         "paragraphs": [
-            "I’m Rahul Krishnan, a Data Science student at Universität Trier, Germany, with a background in Computer Science and over three years of software development experience at SAP Labs India. My work bridges data-driven machine learning solutions and scalable deployment practices.",
-            "I enjoy building end-to-end AI systems—from model training to production deployment. Recently, I developed and deployed an Amazon Electronics Recommender System using FAISS and a Two-Tower MLP, served via FastAPI and Azure Container Apps. I’ve also worked on a Transformer-based sentiment analysis API using BERT, Docker, and CI/CD pipelines on GitHub Actions.",
-            "My interests include recommender systems, natural language processing, and MLOps. I’m passionate about building reliable, well-documented, and reproducible machine learning solutions that can scale beyond experimentation."
+            "I'm Rahul Krishnan, a Data Science master's student at Universität Trier, Germany, with a Computer Science background and approximately 4 years of professional software engineering experience at SAP Labs India. My work bridges data-driven machine learning research and the engineering discipline needed to ship it.",
+            "I build end-to-end AI systems, from training and evaluation to containerised deployment. Recent work includes a RAG resume assistant on Google Cloud Run, an Amazon Electronics recommender with a Two-Tower MLP on Azure, a HeteroGNN model for cross-lingual narrative similarity, and a study of reflective chain-of-thought faithfulness on BIG-Bench Hard.",
+            "My MSc thesis at Trier compresses the runtime KV cache of large language models as a 3rd-order tensor (Tucker, CP, TT, t-SVD), framing per-layer rank allocation as constrained optimisation under a global memory budget. My broader interests sit at the intersection of LLM inference efficiency, alignment and evaluation, recommender systems, and reliable MLOps."
         ]
     },
     "interests": [
         "Machine Learning",
         "Deep Learning",
+        "Large Language Models",
         "Recommender Systems",
+        "Graph Neural Networks",
         "MLOps",
         "Cloud Deployment",
         "Natural Language Processing",

@@ -3,14 +3,35 @@
         {
             "institution": "Universität Trier",
             "degree": "MSc Data Science",
-            "grade": "1.6",
+            "grade": "1.5",
             "status": "current",
             "from": "2024",
-            "to": "Present"
+            "to": "Present",
+            "specialization": "Data and Knowledge Systems (Schwerpunkt, 15.0 credits)",
+            "creditsCompleted": "85.0",
+            "thesis": {
+                "title": "Optimal KV Cache Compression via Low-Rank Tensor Decomposition and Constrained Optimization",
+                "status": "In progress",
+                "summary": "Treats each transformer layer's KV cache as a 3rd-order tensor and applies Tucker, CP, TT, and t-SVD decompositions to runtime cache activations. Per-layer rank allocation is framed as constrained optimisation under a global memory budget."
+            },
+            "coursework": [
+                { "course": "Elements of Mathematics", "code": "MA4DSC1001", "grade": "3.0", "credits": "10.0" },
+                { "course": "Elements of Computer Science", "code": "MA4DSC1002", "grade": "1.0", "credits": "10.0" },
+                { "course": "Elements of Statistics", "code": "MA4DSC1003", "grade": "1.3", "credits": "5.0" },
+                { "course": "Statistical Programming with R", "code": "MA4DSC1004", "grade": "1.0", "credits": "5.0" },
+                { "course": "Numerical Optimization for Data Science", "code": "MA4DSC1005", "grade": "1.3", "credits": "10.0" },
+                { "course": "Statistical Methods of Data Science", "code": "MA4DSC1006", "grade": "2.7", "credits": "10.0" },
+                { "course": "Data Mining", "code": "MA4DSC1007", "grade": "1.7", "credits": "5.0" },
+                { "course": "Big Data Analytics", "code": "MA4DSC1008", "grade": "1.0", "credits": "5.0" },
+                { "course": "Research Case Studies", "code": "MA4DSC1009", "grade": "1.0", "credits": "10.0" },
+                { "course": "Digital Libraries and Foundations of Information Retrieval", "code": "MA4DSC1017", "grade": "1.0", "credits": "5.0" },
+                { "course": "Distributed Databases", "code": "MA4DSC1018", "grade": "1.0", "credits": "5.0" },
+                { "course": "Machine Learning", "code": "MA4DSC1023", "grade": "1.0", "credits": "5.0" }
+            ]
         },
         {
             "institution": "Amrita Vishwa Vidyapeetham",
-            "degree": "BTech CSE",
+            "degree": "BTech Computer Science and Engineering",
             "grade": "1.37",
             "status": "completed",
             "achievement": "Ranked Top 10 in Cohort",

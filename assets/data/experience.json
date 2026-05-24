@@ -1,5 +1,16 @@
 [
   {
+    "title": "Student Assistant (Hilfskraft)",
+    "company": "Universität Trier, Department of Mathematics",
+    "location": "Trier, Germany",
+    "dates": "Apr 2026 - Jul 2026",
+    "order": 0,
+    "points": [
+      "Grading weekly exercise sheets for the Numerical Optimization lecture (Prof. Dr. Volker Schulz) during the summer semester 2026.",
+      "Reviewing student work on unconstrained and constrained optimisation, line-search and trust-region methods, KKT conditions, and numerical linear algebra for optimisation, with written feedback."
+    ]
+  },
+  {
     "title": "Software Developer",
     "company": "SAP Labs India Pvt. Ltd",
     "location": "Bengaluru, India",
@@ -7,7 +18,8 @@
     "order": 1,
     "points": [
       "Designed a rule-based content-matching framework for eInvoices, reducing country-specific implementation efforts by 70%.",
-      "Developed a pagination-based data retrieval algorithm that improved system efficiency by reducing SAP queries from 10,000 eInvoices per request to all eInvoices in a single request."
+      "Developed a pagination-based data retrieval algorithm that improved system efficiency by reducing SAP queries from processing 10,000 eInvoices per request to all eInvoices in a single request, cutting report generation time by 30%.",
+      "Designed the ML-driven document-consistency-check result processing framework and ideated a self-correcting error-analysis ML system on top of it."
     ]
   },
   {

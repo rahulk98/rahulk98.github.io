@@ -506,17 +506,44 @@ function loadEducation() {
     article.setAttribute('tabindex','0');
     article.setAttribute('aria-label', `${edu.institution}, ${edu.degree}, ${range}${isCurrent ? ' (In Progress)' : ''}`);
 
+    const hasDetails = edu.specialization || edu.thesis || (Array.isArray(edu.coursework) && edu.coursework.length);
+    const courseworkRows = Array.isArray(edu.coursework)
+      ? edu.coursework.map(c => `<tr><td>${c.course}${c.code ? ` <span class="edu-card__code">(${c.code})</span>` : ''}</td><td class="num">${c.grade ?? ''}</td><td class="num">${c.credits ?? ''}</td></tr>`).join('')
+      : '';
+    const courseworkCount = Array.isArray(edu.coursework) ? edu.coursework.length : 0;
+
     article.innerHTML = `
-      <div class="edu-card__left">
-        <div class="edu-card__school">${edu.institution}</div>
-        <div class="edu-card__degree">${edu.degree}</div>
+      <div class="edu-card__header">
+        <div class="edu-card__left">
+          <div class="edu-card__school">${edu.institution}</div>
+          <div class="edu-card__degree">${edu.degree}</div>
+        </div>
+        <div class="edu-card__right">
+          <span class="edu-card__range">${range}</span>
+          ${edu.grade ? `<span class="edu-card__grade" aria-label="Grade ${edu.grade}">${edu.grade}</span>` : ''}
+          ${edu.achievement ? `<span class="edu-card__note" aria-label="Achievement ${edu.achievement}">${edu.achievement}</span>` : ''}
+          ${isCurrent ? '<span class="edu-card__note" aria-label="Status In Progress">In Progress</span>' : ''}
+        </div>
       </div>
-      <div class="edu-card__right">
-        <span class="edu-card__range">${range}</span>
-        ${edu.grade ? `<span class="edu-card__grade" aria-label="Grade ${edu.grade}">${edu.grade}</span>` : ''}
-        ${edu.achievement ? `<span class="edu-card__note" aria-label="Achievement ${edu.achievement}">${edu.achievement}</span>` : ''}
-        ${isCurrent ? '<span class="edu-card__note" aria-label="Status In Progress">In Progress</span>' : ''}
-      </div>`;
+      ${hasDetails ? `
+        <div class="edu-card__details">
+          ${edu.specialization ? `<p class="edu-card__specialization"><span class="edu-card__label">Specialization:</span> ${edu.specialization}</p>` : ''}
+          ${edu.creditsCompleted ? `<p class="edu-card__credits"><span class="edu-card__label">Credits completed:</span> ${edu.creditsCompleted}</p>` : ''}
+          ${edu.thesis ? `
+            <div class="edu-card__thesis">
+              <span class="edu-card__label">MSc Thesis${edu.thesis.status ? ` (${edu.thesis.status})` : ''}:</span>
+              <span class="edu-card__thesis-title">${edu.thesis.title}</span>
+              ${edu.thesis.summary ? `<p class="edu-card__thesis-summary">${edu.thesis.summary}</p>` : ''}
+            </div>` : ''}
+          ${courseworkRows ? `
+            <details class="edu-card__coursework">
+              <summary>Completed coursework (${courseworkCount} courses)</summary>
+              <table class="edu-card__coursework-table">
+                <thead><tr><th>Course</th><th class="num">Grade</th><th class="num">Credits</th></tr></thead>
+                <tbody>${courseworkRows}</tbody>
+              </table>
+            </details>` : ''}
+        </div>` : ''}`;
 
     fragment.appendChild(article);
   });

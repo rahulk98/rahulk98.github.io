@@ -1,35 +1,157 @@
 [
   {
-  "title": "RAG Resume API",
-  "date": "2025-10-20",
-  "year": "2025",
-  "slug": "rag-resume-api",
-  "category": "NLP",
-  "thumbnail": "assets/img/projects/rag-resume-api-thumb.jpg",
-  "stack": [
-    "LlamaIndex",
-    "FastAPI",
-    "Docker",
-    "Google Cloud",
-    "Gemini",
-    "RAG"
-  ],
-  "links": {
-    "demo": "https://rahul-krishnan.is-a.dev",
-    "github": "https://github.com/rahulk98"
+    "title": "MSc Thesis - KV Cache Compression via Low-Rank Tensor Decomposition",
+    "date": "2026-03-01",
+    "year": "2026",
+    "slug": "kv-cache-tensor",
+    "category": "LLM Research",
+    "thumbnail": "assets/img/projects/kv-cache-tensor-thumb.jpg",
+    "stack": [
+      "Python",
+      "PyTorch",
+      "Tucker / CP / TT / t-SVD",
+      "Constrained Optimization",
+      "Mistral-7B",
+      "LLaMA-2-13B"
+    ],
+    "links": {},
+    "summary": "Master's thesis at Universität Trier on compressing the runtime KV cache of LLMs as a 3rd-order tensor (n_h x T x d_h). Goes beyond prior 2D / weight-matrix approaches (PALU, TPA, xKV) by decomposing the cached activations themselves with Tucker, CP, TT and t-SVD. Per-layer rank allocation is framed as constrained optimisation under a global memory budget M.",
+    "highlights": [
+      "First systematic 3D tensor-decomposition study of runtime KV cache activations on Mistral-7B-v0.3 and LLaMA-2-13B (WikiText-2 calibration, A100 40GB). Tucker dominates CP / TT / t-SVD at every 2x-5x ratio.",
+      "2x compression at ~1.3% relative Frobenius error on K and 0.6-1.5% on V, using Tucker plus a JL-rotated 4-bit residual driven by a joint Lagrangian allocator (~35-40x lower V-cache reconstruction error than xKV at the same ratio).",
+      "End-to-end perplexity on Mistral-7B (WikiText-2 + C4): 2x and 3x compression hold PPL within 0.1% of baseline at ctx up to 2048. GSM8K 8-shot CoT validates that the \"free zone\" carries through to downstream accuracy.",
+      "Identified a structural K/V asymmetry (V is 2-3x harder to compress) that motivates a per-tensor decomposition design instead of a single shared one."
+    ],
+    "note": "Thesis ongoing. Latency optimisation on long-context decode is the next milestone."
   },
-  "summary": "A Retrieval-Augmented Generation (RAG) system integrated into my personal website, allowing visitors to query my resume and personal documents. Built with LlamaIndex, FastAPI, Google Gemini, and deployed as a Dockerized API on Google Cloud Platform (Free Tier).",
-  "highlights": [
-    "Integrated a live AI assistant on my personal website for interactive querying of resume and documents.",
-    "Implemented a RAG pipeline using LlamaIndex for indexing and Google GenAI for embeddings.",
-    "Used Google Gemini (gemini-2.5-flash) for context-aware answer generation.",
-    "Deployed the FastAPI backend on Google Cloud Run with Docker containerization."
-  ]
-},
-
+  {
+    "title": "FEAR - Asymmetric RLVR for LLM Calibration and Abstention",
+    "date": "2026-02-01",
+    "year": "2026",
+    "slug": "fear-rlvr",
+    "category": "LLM Research",
+    "thumbnail": "assets/img/projects/fear-rlvr-thumb.jpg",
+    "stack": [
+      "Python",
+      "PyTorch",
+      "verl (GRPO)",
+      "Unsloth / QLoRA",
+      "Qwen2.5-1.5B",
+      "Qwen3-4B"
+    ],
+    "links": {},
+    "summary": "Shadow research collaborator on a Master's NLP thesis at Universität Trier (PI: Prof. Dr. Achim Rettinger). Investigates whether an asymmetric RLVR reward (R_correct = +alpha, R_abstain = 0, R_incorrect = -beta with alpha << beta) causes LLMs to develop emergent calibration and selective abstention without any explicit IDK token. Contributions are technical co-design, experiment design and reasoning support; this is not my thesis.",
+    "highlights": [
+      "Co-designed the asymmetric reward formulation and the alpha/beta sweep protocol; derived the utility-theoretic threshold p > beta/(alpha + beta) that turns the ratio into a tunable risk-aversion knob.",
+      "Identified the GRPO z-score-normalisation risk: per-step gradients look near-identical across alpha/beta, so any behavioural effect has to emerge from cumulative distribution shift. Flagged it as the central empirical question.",
+      "Surfaced the alpha=0 degenerate fixed point (all-abstention groups give std=0 and divide-by-zero in z-score) and proposed a small-positive-alpha floor / clipping guard.",
+      "Mapped the novelty gap against Zhu et al. NSR (same mechanism, different question) and Wu et al. Behaviorally Calibrated RL (emergent vs engineered abstention); replaced the original JudgeBench choice with PRM800K for domain consistency."
+    ]
+  },
+  {
+    "title": "Neuro-Symbolic Narrative Similarity (HeteroGNN + Text Fusion)",
+    "date": "2026-01-15",
+    "year": "2026",
+    "slug": "neuro-symbolic-narrative",
+    "category": "LLM Research",
+    "thumbnail": "assets/img/projects/neuro-symbolic-narrative-thumb.jpg",
+    "stack": [
+      "Python",
+      "PyTorch Geometric",
+      "HeteroConv",
+      "SAGEConv",
+      "GPT-OSS 20B (Ollama)",
+      "Gemini embeddings",
+      "CORAL domain adaptation"
+    ],
+    "links": {},
+    "summary": "Neuro-symbolic architecture for narrative similarity that fuses a structural graph channel with pretrained text embeddings via element-wise additive averaging. An LLM extracts narrative components (themes, course of action, outcome, plot type) into schema-validated JSON that populates a heterogeneous graph; a HeteroGNN produces a narrative-level embedding that is combined with a Gemini text embedding.",
+    "highlights": [
+      "72.5% accuracy on pairwise narrative similarity (best config); 95% precision on a 500-triple Tell-Me-Again cross-lingual subset across de, en, es, fr, it.",
+      "Trained on 1,900 synthetic story triplets with soft-margin triplet loss, then CORAL domain adaptation and recursive pseudo-labelling with high-confidence triplet mining.",
+      "Heterogeneous graph with 4 node types (narrative, action, theme, outcome); 3-layer HeteroConv + SAGEConv with per-node-type LayerNorm and residuals.",
+      "Interpretability: fused cosine decomposes additively as S_fused = S_GG + S_TT + S_cross with R^2 = 1.0; the cross term is empirically negligible (~0.0015 vs S_GG 0.223 and S_TT 0.133). Principal-angle analysis showed graph and text subspaces are near-orthogonal."
+    ]
+  },
+  {
+    "title": "RAG Resume API",
+    "date": "2025-12-01",
+    "year": "2025",
+    "slug": "rag-resume-api",
+    "category": "NLP",
+    "thumbnail": "assets/img/projects/rag-resume-api-thumb.jpg",
+    "stack": [
+      "LlamaIndex",
+      "FastAPI",
+      "Docker",
+      "Google Cloud Run",
+      "Gemini 2.5 Flash",
+      "RAG"
+    ],
+    "links": {
+      "demo": "https://rahul-krishnan.is-a.dev",
+      "github": "https://github.com/rahulk98"
+    },
+    "summary": "A Retrieval-Augmented Generation system embedded in my portfolio site, letting visitors query my resume and personal documents in natural language. Built with LlamaIndex for indexing and vector search, Google Gemini 2.5 Flash for context-aware answers, and gemini-embedding-001 for embeddings. The FastAPI backend is deployed as a Dockerised container on Google Cloud Run (Free Tier, europe-west1).",
+    "highlights": [
+      "Live AI assistant on the portfolio site for interactive Q&A about my background and projects.",
+      "RAG pipeline using LlamaIndex VectorStoreIndex with Google GenAI embeddings.",
+      "Context-aware answer generation via Google Gemini 2.5 Flash.",
+      "Fully containerised; deployed on Google Cloud Run with scale-to-zero for free-tier hosting."
+    ]
+  },
+  {
+    "title": "Risk-Averse Optimization (CVaR across 3 Domains)",
+    "date": "2026-01-10",
+    "year": "2026",
+    "slug": "risk-averse-cvar",
+    "category": "Optimization",
+    "thumbnail": "assets/img/projects/risk-averse-cvar-thumb.jpg",
+    "stack": [
+      "Python",
+      "CasADi",
+      "IPOPT",
+      "CVXPY",
+      "OSQP",
+      "MPC",
+      "Jupyter"
+    ],
+    "links": {},
+    "summary": "Research case study at Universität Trier on risk-averse decision-making with Conditional Value at Risk (CVaR). Three case studies span static nonlinear optimisation, classification under perturbation, and closed-loop optimal control, with heavy-tailed (Student-t) uncertainty as a stress test.",
+    "highlights": [
+      "Wobbly Rosenbrock: nominal vs CVaR optimisation under parameter uncertainty (CasADi + IPOPT). Tail-risk reduction is largest under heavy-tailed noise.",
+      "Linear SVM on perturbed Cats vs Dogs: CVaR-SVM (CVXPY + OSQP) improves mean accuracy 53% to 58% while shrinking the tail compared to nominal SVM.",
+      "Wine-fermentation MPC: closed-loop receding-horizon control over a 21-day simulation; CVaR scenario-based controller hits 0% constraint violations vs 100% for the nominal controller under severe model mismatch."
+    ]
+  },
+  {
+    "title": "Reflective CoT Faithfulness Study (Think Twice)",
+    "date": "2025-06-15",
+    "year": "2025",
+    "slug": "rcot-faithfulness",
+    "category": "LLM Research",
+    "thumbnail": "assets/img/projects/rcot-faithfulness-thumb.jpg",
+    "stack": [
+      "Python",
+      "Gemini 2.5 Flash Lite",
+      "LLaMA 3.2 3B (Ollama)",
+      "BIG-Bench Hard",
+      "Structured JSON outputs",
+      "LaTeX"
+    ],
+    "links": {},
+    "summary": "Co-built a reproducible evaluation framework testing whether reflective chain-of-thought (RCoT) prompting makes LLM reasoning more faithful to the model's actual decision process. Extends the counterfactual-simulatability approach of Turpin et al. (2023) to a three-stage reflective pipeline (initial CoT, critique, revision).",
+    "highlights": [
+      "Factorial evaluation across 2 models x 3 prompting strategies (No-CoT, CoT, RCoT) x 3 bias types x 2 shot settings: 13 BIG-Bench Hard categories, 650 evaluation instances total.",
+      "RCoT reduced bias susceptibility by ~7 percentage points over standard CoT on average, across both models and all three bias types.",
+      "Quantified a model-level robustness gap: max bias rate 25.6% (Gemini) vs 69.2% (LLaMA); LLaMA CoT accuracy collapsed from 61.7% to 11.7% under the Answer-is-Always-A few-shot bias.",
+      "Qualitative finding (\"doubling down on the lie\"): the revision stage often ignores the critique and reinforces the original fabricated narrative. Structured reflection alone is not enough for faithful reasoning."
+    ],
+    "note": "Two-person team."
+  },
   {
     "title": "Amazon Electronics Recommender System",
-    "date": "2025-09-01",
+    "date": "2025-06-01",
     "year": "2025",
     "slug": "amazon-electronics-recommender",
     "category": "Recommender Systems",
@@ -49,18 +171,41 @@
       "github": "https://github.com/rahulk98/Amazon-Product-Recommendation-System?tab=readme-ov-file",
       "demo": "https://recommender-api-app.calmsea-6aa29b51.germanywestcentral.azurecontainerapps.io/recommendation/demo"
     },
-    "summary": "Built and deployed an end-to-end recommendation system on the Amazon Reviews 2023 Electronics dataset (≈391k interactions, 41k users, 137k items). Implemented collaborative filtering, hybrid metadata+SBERT models and a two-tower MLP; used FAISS for retrieval and an MLP re-ranker for production-grade recommendations.",
+    "summary": "End-to-end recommendation system on the Amazon Reviews 2023 Electronics dataset (~391k interactions, 41k users, 137k items). Implemented collaborative filtering, hybrid SBERT + metadata models, and a Two-Tower MLP; FAISS for candidate retrieval and an MLP re-ranker for production-grade serving.",
     "highlights": [
-      "Improved NDCG@10 from 0.305 to 0.334 using a Two-Tower MLP with text features (multi-seed validation).",
-      "Increased cold-start hit rate by ~50% with SBERT text embeddings and hybrid features.",
-      "Two-stage serving pipeline (FAISS retrieval + MLP re-rank) achieving sub-100ms inference latency on CPU after warm start.",
-      "Deployed as a FastAPI REST API, containerized with Docker and hosted on Azure Container Apps (scale-to-zero)."
+      "Improved NDCG@10 from 0.305 (CF baseline) to 0.334 with the Two-Tower MLP - approximately 9.5% relative gain, validated with paired t-tests and Cohen's d over 5 seeds.",
+      "Increased cold-start hit rate by ~50% via SBERT text embeddings and hybrid features.",
+      "Two-stage serving pipeline (FAISS retrieval + MLP re-rank) with sub-100ms inference on CPU after warm start.",
+      "Deployed as a FastAPI REST API, containerised with Docker, hosted on Azure Container Apps (scale-to-zero). Bundled-checkpoint design cut cold start from 30-45s to 2-3s and memory from ~2GB to ~200MB."
     ],
     "note": "Live demo may cold-start from scale-to-zero. The first request can take up to ~30s; subsequent requests respond quickly."
   },
   {
+    "title": "ML Kaggle Competitions (Top-3 in Three Challenges)",
+    "date": "2026-01-05",
+    "year": "2026",
+    "slug": "ml-kaggle-competitions",
+    "category": "ML Competitions",
+    "thumbnail": "assets/img/projects/ml-kaggle-thumb.jpg",
+    "stack": [
+      "Polars",
+      "Scikit-Learn (HistGBM)",
+      "PyTorch (VGG-style CNN)",
+      "Hugging Face Transformers",
+      "Gemma-3-12B",
+      "Few-shot prompting"
+    ],
+    "links": {},
+    "summary": "Three Kaggle-style ML competitions inside a university Machine Learning course at Universität Trier. Top-3 finish in all three challenges.",
+    "highlights": [
+      "Taxi Tip Prediction (Polars + Scikit-Learn): engineered temporal, behavioural and cost features; final model HistGradientBoostingClassifier with early stopping.",
+      "Image Classification (CNN from scratch in PyTorch): VGG-style CNN (3-32-64-128-256 channels) with BatchNorm, dropout and global average pooling; AdamW + cosine annealing + early stopping. No pretrained weights allowed.",
+      "LLM-based Classification: 4-bit quantised google/gemma-3-12b-it with few-shot retrieval of top-N similar training examples and categorical bucketisation for LLM-readable inputs."
+    ]
+  },
+  {
     "title": "Transformer-Based Sentiment Analysis (YouTube Comments)",
-    "date": "2025-06-01",
+    "date": "2025-01-15",
     "year": "2025",
     "slug": "sentiment-bert",
     "category": "NLP",
@@ -78,11 +223,11 @@
     "links": {
       "github": "https://github.com/rahulk98/Sentiment-Analysis-with-BERT-Model"
     },
-    "summary": "End-to-end sentiment classification for YouTube comments using a fine-tuned BERT model, served via a Flask REST API and containerized with Docker. CI/CD pipeline automates Docker image builds and pushes to Docker Hub.",
+    "summary": "End-to-end sentiment classification for YouTube comments using a fine-tuned BERT model, served via a Flask REST API and containerised with Docker. CI/CD automates Docker image builds and pushes to Docker Hub.",
     "highlights": [
-      "Achieved F1 = 0.81 on an imbalanced dataset of 10k+ comments.",
-      "Deployed an interactive Gradio demo on Hugging Face Spaces and an API endpoint for integrations.",
-      "Automated builds and publishing using GitHub Actions."
+      "Achieved F1 = 0.81 on an imbalanced dataset of 10,000+ YouTube comments.",
+      "Deployed an interactive Gradio demo on Hugging Face Spaces, plus an API endpoint for integrations.",
+      "Automated builds and publishing via GitHub Actions."
     ]
   },
   {
@@ -100,10 +245,10 @@
     "links": {
       "paper": "https://ieeexplore.ieee.org/document/9182388"
     },
-    "summary": "Detection of glaucoma using optic disc/cup segmentation and SVM classification. Presented at ICCSP 2020.",
+    "summary": "Detection of glaucoma from retinal fundus images using optic-disc/cup segmentation and SVM classification. Undergraduate final-year project, presented and published at ICCSP 2020 (IEEE).",
     "highlights": [
-      "Led a 4-member team and published the work at ICCSP 2020.",
-      "Proposed a region-growing segmentation pipeline with SVM classification."
+      "Led a 4-member team and successfully published the work at ICCSP 2020.",
+      "Region-growing segmentation pipeline with SVM classification for automated screening."
     ]
   }
 ]

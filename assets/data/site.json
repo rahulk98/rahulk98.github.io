@@ -31,13 +31,25 @@
         "keywords": [
             "Machine Learning",
             "Deep Learning",
+            "Large Language Models",
+            "LLM Inference",
+            "KV Cache Compression",
+            "Reinforcement Learning from Verifier Rewards",
+            "Retrieval-Augmented Generation",
             "Recommender Systems",
+            "Graph Neural Networks",
+            "Natural Language Processing",
+            "Computer Vision",
             "MLOps",
             "Data Science",
             "Python",
+            "PyTorch",
+            "PyTorch Geometric",
             "FAISS",
             "FastAPI",
-            "Azure"
+            "Docker",
+            "Google Cloud Run",
+            "Azure Container Apps"
         ]
     },
     "structuredData": {
