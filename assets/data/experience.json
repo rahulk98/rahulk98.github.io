@@ -11,27 +11,40 @@
     ]
   },
   {
-    "title": "Software Developer",
+    "title": "Software Developer (SDE II)",
     "company": "SAP Labs India Pvt. Ltd",
     "location": "Bengaluru, India",
     "dates": "Mar 2024 - Sep 2024",
     "order": 1,
     "points": [
-      "Designed a rule-based content-matching framework for eInvoices, reducing country-specific implementation efforts by 70%.",
-      "Developed a pagination-based data retrieval algorithm that improved system efficiency by reducing SAP queries from processing 10,000 eInvoices per request to all eInvoices in a single request, cutting report generation time by 30%.",
-      "Designed the ML-driven document-consistency-check result processing framework and ideated a self-correcting error-analysis ML system on top of it."
+      "Designed a rule-based, declarative content-matching framework for tax-document field comparison over SAP iFlow, letting country teams configure field comparisons with no custom code. Cut new-country onboarding from about 10 days to about 3 (~70%); adopted by the Spain, India, and Chile teams.",
+      "Built an iFlow bulk-retrieval algorithm on the Document Consistency Cockpit (DCC) Spain reporting path, replacing about 100 paginated API calls with a single bulk request and cutting report generation time by about 30%.",
+      "Ideated a per-customer self-correcting ML system for content-matching result processing, designed for in-tenant training to respect GDPR; presented at an internal SAP innovation forum and accepted as a future direction.",
+      "Promoted from SDE I to SDE II on consistent top reviews and selected for SAP Labs India's fast-track architect career-development program, the only person from the area on it at the time."
     ]
   },
   {
-    "title": "Associate Software Developer",
+    "title": "Associate Software Developer (SDE I)",
     "company": "SAP Labs India Pvt. Ltd",
     "location": "Bengaluru, India",
-    "dates": "July 2020 - Mar 2024",
+    "dates": "Jul 2020 - Mar 2024",
     "order": 2,
     "points": [
-      "Led critical legal and feature updates for Document Compliance tax solutions from design to development.",
-      "Overhauled error-handling in the SAP DRC solution for Turkey, reducing customer incidents by 80% and improving customer satisfaction by 66%.",
-      "Spearheaded the integration of Data Protection and Privacy (DPP) protocols into the SAP Document Consistency solution to ensure secure data handling and compliance."
+      "Owned the result-processing pillar of the Document Consistency Cockpit (DCC) end-to-end: architected the schema, decoupling layer, factory-based extensibility for new document types and countries, idempotency, and retry semantics. Load-tested at 10M to 100M document cycles; deployed for Spain and India.",
+      "Initiated and led a Turkey error-handling overhaul on SAP DRC, categorising two years of incidents by root cause and shipping fixes plus clearer messages and FAQs. Incident volume fell about 88% (roughly 50 to 2-3 per month) and the support rating rose from 2-3 to 4-5 (~66%).",
+      "Re-engineered a failing daily Turkey vendor reconciliation job, replacing a timing-out database join with a hash-map lookup keyed on tax ID and eliminating recurring failures as the ~10M-entry registry grew.",
+      "Architected Data Protection and Privacy (DPP / GDPR) compliance across the SAP Document Consistency solution and delivered legal and feature updates across Turkey, Mexico, and Chile. Recognised with the SAP Stellar Award (2023) for the DCC and Turkey work."
+    ]
+  },
+  {
+    "title": "Software Engineering Intern",
+    "company": "SAP Labs India Pvt. Ltd",
+    "location": "Bengaluru, India",
+    "dates": "Jan 2020 - Jul 2020",
+    "order": 3,
+    "points": [
+      "Shipped backlog features on the SAP eDocument solution (now SAP DRC), including Turkey delivery-note support and an XML proxy update for upstream format changes.",
+      "Delivered consistently ahead of deadline with near-zero QA defects, earning a direct full-time offer on the same team."
     ]
   }
 ]

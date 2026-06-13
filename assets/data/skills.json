@@ -2,7 +2,7 @@
   "categories": [
     {
       "title": "Programming & Data Analysis",
-      "skills": ["Python", "SQL", "R", "Java", "MATLAB", "Rust", "TypeScript (basic)", "C++ (basic)"]
+      "skills": ["Python", "SQL", "R", "Java", "ABAP (SAP)", "MATLAB", "Rust", "TypeScript (basic)", "C++ (basic)"]
     },
     {
       "title": "Machine Learning & Deep Learning",
@@ -63,7 +63,9 @@
         "GitHub Workflows",
         "Agile (Scrum)",
         "Technical Documentation",
-        "Cross-functional Collaboration"
+        "Cross-functional Collaboration",
+        "Claude Code",
+        "Codex"
       ]
     },
     {

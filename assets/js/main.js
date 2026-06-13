@@ -21,7 +21,7 @@ async function initializeApp() {
     loadEducation();
     loadCertifications();
     loadPublications();
-    loadBlogTeaser();
+    // loadBlogTeaser(); // Blog section temporarily disabled
     loadNavigation();
     loadFooter();
     loadErrorPage();
