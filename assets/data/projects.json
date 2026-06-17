@@ -66,6 +66,27 @@
     }
   },
   {
+    "title": "FEAR - Asymmetric RLVR for LLM Calibration and Abstention",
+    "slug": "fear-rlvr",
+    "date": "2026-03-01",
+    "year": "2026",
+    "featured": false,
+    "category": "LLM Research",
+    "keywords": ["LLMs & NLP", "Research"],
+    "thumbnail": "assets/img/projects/fear-rlvr-thumb.jpg",
+    "outcome": "Finding O: under GRPO, asymmetric RLVR rewards collapse to one abstention-threshold knob",
+    "summary": "Research testing whether punishment-dominant asymmetric RLVR rewards improve LLM calibration and abstention; built a full GRPO training and calibration pipeline on Qwen 2.5.",
+    "tags": ["GRPO", "RLVR", "Qwen 2.5", "LoRA"],
+    "stack": ["Python", "PyTorch", "GRPO (TRL)", "LoRA / PEFT", "vLLM", "Qwen 2.5", "Hugging Face", "Weights & Biases"],
+    "links": {},
+    "star": {
+      "situation": "Prior work suggested asymmetric, abstention-aware RL rewards (a large penalty for a wrong answer, a small reward for a correct one) could make LLMs better calibrated and more willing to abstain when uncertain, but this had not been tested rigorously.",
+      "task": "Test whether punishment-dominant asymmetric RLVR rewards improve confidence calibration, selective abstention and error detection versus symmetric rewards.",
+      "action": "Built a full GRPO training and calibration-evaluation pipeline on Qwen 2.5 1.5B and 3B, sweeping seven reward conditions across six math and reasoning benchmarks, with from-scratch calibration metrics (ECE, Brier, AUROC, AUACC) and advantage-normalisation ablations; trained and pushed 13+ LoRA adapters to Hugging Face.",
+      "result": "The answer was no: asymmetry only shifted how often the model abstained, not its calibration. The contribution (Finding O) is the mechanistic reason: under GRPO with within-group z-score normalisation the reward design collapses to a single abstention-threshold dial, which explains the field's convergence on simple positive-only rewards. Confirmed at 3B; stopped at that scale on compute limits."
+    }
+  },
+  {
     "title": "Amazon Electronics Recommender System",
     "slug": "amazon-electronics-recommender",
     "date": "2025-06-01",
