@@ -228,34 +228,37 @@ function setupDemoLinkScrollToTop() {
 
 // Project filtering
 function setupProjectFiltering() {
-    // Remove existing event listeners to prevent duplicates
-    const existingButtons = document.querySelectorAll('.filter-btn');
-    existingButtons.forEach(button => {
-        button.replaceWith(button.cloneNode(true));
-    });
+    const filterContainer = document.getElementById('project-filters');
+    if (!filterContainer) return;
 
-    const filterButtons = document.querySelectorAll('.filter-btn');
-    const projectCards = document.querySelectorAll('.project-card');
-
-    filterButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            const filter = button.getAttribute('data-filter');
-            
-            // Update active button
-            filterButtons.forEach(btn => btn.classList.remove('active'));
-            button.classList.add('active');
-            
-            // Filter projects
-            projectCards.forEach(card => {
-                const category = card.getAttribute('data-category');
-                if (filter === 'all' || category === filter) {
-                    card.style.display = 'block';
-                    card.style.animation = 'fadeIn 0.3s ease';
-                } else {
-                    card.style.display = 'none';
-                }
-            });
+    const active = new Set();
+    const applyFilter = () => {
+        document.querySelectorAll('.project-card').forEach(card => {
+            const kws = (card.dataset.keywords || '').split('|').filter(Boolean);
+            const show = active.size === 0 || kws.some(k => active.has(k));
+            card.style.display = show ? '' : 'none';
+            if (show) card.style.animation = 'fadeIn 0.3s ease';
         });
+    };
+
+    // Delegate clicks to the container so re-rendered chips keep working; bind once.
+    if (filterContainer.dataset.bound === 'true') return;
+    filterContainer.dataset.bound = 'true';
+    filterContainer.addEventListener('click', (e) => {
+        const btn = e.target.closest('.filter-btn');
+        if (!btn) return;
+        const f = btn.getAttribute('data-filter');
+        if (f === 'all') active.clear();
+        else if (active.has(f)) active.delete(f);
+        else active.add(f);
+
+        const allBtn = filterContainer.querySelector('[data-filter="all"]');
+        filterContainer.querySelectorAll('.filter-btn').forEach(b => {
+            const on = b === allBtn ? active.size === 0 : active.has(b.getAttribute('data-filter'));
+            b.classList.toggle('active', on);
+            b.setAttribute('aria-pressed', String(on));
+        });
+        applyFilter();
     });
 }
 
@@ -739,18 +742,24 @@ function loadProjects() {
 
     try {
         const projects = window.projectsData;
-        list.innerHTML = projects.map((project, index) => `
-            <div class="project-card" data-index="${index}" data-category="${project.category}">
+
+        const renderCard = (project, index) => {
+            const tags = (project.tags && project.tags.length) ? project.tags : (project.stack || []).slice(0, 4);
+            const keywords = (project.keywords || []).join('|');
+            const linkKeys = Object.keys(project.links || {});
+            return `
+            <div class="project-card" data-index="${index}" data-keywords="${keywords}">
                 <div class="project-thumbnail" data-project="${project.slug}"></div>
                 <div class="project-content">
+                    ${project.outcome ? `<p class="project-card__outcome">${project.outcome}</p>` : ''}
                     <h3>${project.title}</h3>
-                    <p>${project.summary}</p>
+                    <p class="project-card__summary">${project.summary || ''}</p>
 
                     <div class="project-tags">
-                        ${project.stack.map(tech => `<span class="tag">${tech}</span>`).join('')}
+                        ${tags.map(tech => `<span class="tag">${tech}</span>`).join('')}
                     </div>
 
-                    ${Object.keys(project.links).length > 0 ? `
+                    ${linkKeys.length > 0 ? `
                         <div class="actions">
                             ${Object.entries(project.links).map(([key, value]) =>
                                 `<a href="${value}" target="_blank" rel="noopener" aria-label="View ${project.title} ${key}">${key.charAt(0).toUpperCase() + key.slice(1)}</a>`
@@ -758,11 +767,20 @@ function loadProjects() {
                         </div>
                     ` : ''}
                 </div>
-            </div>
-        `).join('');
+            </div>`;
+        };
 
-        // Generate filter buttons after projects are loaded
-        console.log('🎯 About to generate filter buttons...');
+        const featured = [];
+        const secondary = [];
+        projects.forEach((project, index) => {
+            (project.featured ? featured : secondary).push(renderCard(project, index));
+        });
+
+        list.innerHTML =
+            (featured.length ? `<div class="project-grid project-grid--featured">${featured.join('')}</div>` : '') +
+            (secondary.length ? `<div class="project-grid project-grid--secondary">${secondary.join('')}</div>` : '');
+
+        // Generate filter chips after projects are rendered
         generateFilterButtons();
     } catch (e) {
         console.error('Failed to load projects:', e);
@@ -771,50 +789,20 @@ function loadProjects() {
 }
 
 function generateFilterButtons() {
-    console.log('🔍 generateFilterButtons called');
     const filterContainer = document.getElementById('project-filters');
-    if (!filterContainer) {
-        console.error('❌ Filter container not found');
-        return;
-    }
-    if (!window.projectsData) {
-        console.error('❌ Projects data not loaded');
-        return;
-    }
+    if (!filterContainer || !window.projectsData) return;
 
-    // Get unique categories from projects
-    const categories = [...new Set(window.projectsData.map(project => project.category))];
-    console.log('📊 Found categories:', categories);
-    
-    // Create category display mapping
-    const categoryDisplayNames = {
-        'ml': 'ML',
-        'nlp': 'NLP', 
-        'recommender': 'Recommender',
-        'recommender systems': 'Recommender Systems',
-        'computer vision': 'Computer Vision',
-        'deployment': 'Deployment',
-        'ai': 'AI',
-        'data-science': 'Data Science',
-        'web': 'Web',
-        'mobile': 'Mobile'
-    };
+    // Fixed display order for the keyword chips; only show keywords actually used.
+    const order = ['LLMs & NLP', 'Machine Learning', 'Recommender Systems', 'Optimization', 'Computer Vision', 'MLOps & Deployment', 'Research'];
+    const used = new Set(window.projectsData.flatMap(p => p.keywords || []));
+    const keywords = order.filter(k => used.has(k));
 
-    // Generate filter buttons
-    const filterButtons = [
-        '<button class="filter-btn active" data-filter="all">All</button>',
-        ...categories.map(category => {
-            // Use lowercase for lookup
-            const displayName = categoryDisplayNames[category.toLowerCase()] || category;
-            return `<button class="filter-btn" data-filter="${category}">${displayName}</button>`;
-        })
+    filterContainer.innerHTML = [
+        '<button class="filter-btn active" data-filter="all" aria-pressed="true">All</button>',
+        ...keywords.map(k => `<button class="filter-btn" data-filter="${k}" aria-pressed="false">${k}</button>`)
     ].join('');
 
-    console.log('🎯 Generated filter buttons:', filterButtons);
-    filterContainer.innerHTML = filterButtons;
-    console.log('✅ Filter buttons inserted into DOM');
-
-    // Re-setup filtering with new buttons
+    // Bind the (delegated) multi-select filtering handler.
     setupProjectFiltering();
 }
 

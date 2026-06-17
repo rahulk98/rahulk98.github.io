@@ -1032,6 +1032,42 @@ a:hover { color: var(--accent-hover); }
     gap: 1.5rem;
 }
 
+/* Redesign: featured + secondary split inside #project-list */
+#project-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+}
+.project-grid--featured {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.project-grid--secondary {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.25rem;
+}
+.project-card__outcome {
+    margin: 0 0 0.35rem;
+    color: var(--accent);
+    font-weight: var(--font-weight-semibold);
+    font-size: 0.95rem;
+    line-height: 1.3;
+}
+.project-card__summary {
+    color: var(--text-secondary);
+    margin: 0;
+}
+.project-grid--featured .project-content { padding: 1.875rem; }
+.project-grid--featured .project-card h3 { font-size: 1.4rem; }
+.project-grid--secondary .project-card__outcome { font-size: 0.85rem; }
+.project-grid--secondary .project-card h3 { font-size: 1.1rem; }
+@media (max-width: 1024px) {
+    .project-grid--secondary { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 768px) {
+    .project-grid--featured,
+    .project-grid--secondary { grid-template-columns: 1fr; }
+}
+
 .project-card {
     background: var(--glass-surface);
     backdrop-filter: blur(var(--glass-blur));
