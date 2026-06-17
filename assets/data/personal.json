@@ -1,13 +1,13 @@
 {
     "name": "Rahul Krishnan",
     "title": "Data Science Master's Student",
-    "subtitle": "MSc Data Science student at Universität Trier with approximately 4 years of software engineering experience at SAP Labs. Working across LLMs, recommender systems, graph ML, and MLOps.",
-    "currentRole": "MSc Data Science at Universität Trier",
+    "subtitle": "MSc Data Science student at Universitaet Trier with approximately 4 years of software engineering experience at SAP Labs. Working across LLMs, recommender systems, graph ML, and MLOps.",
+    "currentRole": "MSc Data Science at Universitaet Trier",
     "previousRole": "Former SAP Software Developer",
     "location": "Trier, Germany",
     "bio": {
         "paragraphs": [
-            "I'm Rahul Krishnan, a Data Science master's student at Universität Trier, Germany, with a Computer Science background and approximately 4 years of professional software engineering experience at SAP Labs India. My work bridges data-driven machine learning research and the engineering discipline needed to ship it.",
+            "I'm Rahul Krishnan, a Data Science master's student at Universitaet Trier, Germany, with a Computer Science background and approximately 4 years of professional software engineering experience at SAP Labs India. My work bridges data-driven machine learning research and the engineering discipline needed to ship it.",
             "I build end-to-end AI systems, from training and evaluation to containerised deployment. Recent work includes a RAG resume assistant on Google Cloud Run, an Amazon Electronics recommender with a Two-Tower MLP on Azure, a HeteroGNN model for cross-lingual narrative similarity, and a study of reflective chain-of-thought faithfulness on BIG-Bench Hard.",
             "My MSc thesis at Trier compresses the runtime KV cache of large language models as a 3rd-order tensor (Tucker, CP, TT, t-SVD), framing per-layer rank allocation as constrained optimisation under a global memory budget. My broader interests sit at the intersection of LLM inference efficiency, alignment and evaluation, recommender systems, and reliable MLOps."
         ]

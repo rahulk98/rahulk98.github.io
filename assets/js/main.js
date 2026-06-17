@@ -1,18 +1,18 @@
-console.log('🚀 JavaScript file loaded at:', new Date().toLocaleTimeString());
+console.log('JavaScript file loaded at:', new Date().toLocaleTimeString());
 
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('📱 DOM Content Loaded - initializing app...');
+    console.log('DOM Content Loaded - initializing app...');
     initializeApp();
 });
 
 async function initializeApp() {
-    console.log('🎯 initializeApp() called - starting initialization...');
+    console.log('initializeApp() called - starting initialization...');
 
     testFunctionCall();
 
     // Wait for all data to load first
     await loadAllData();
-    console.log('📊 All data loaded, now initializing components...');
+    console.log('All data loaded, now initializing components...');
 
     loadExperience();
     loadProjects();
@@ -39,7 +39,7 @@ async function initializeApp() {
         initializeRag();
         setupRagModal();
 
-    console.log('✅ initializeApp() completed');
+    console.log('initializeApp() completed');
 }
 
 // Theme toggle functionality
@@ -59,7 +59,7 @@ function setupThemeToggle() {
     };
 
     const updateThemeButton = (theme) => {
-        themeToggle.textContent = theme === 'light' ? '🌙' : '🌞';
+        // Icon is drawn in CSS (#theme-toggle::before); only the label changes.
         themeToggle.setAttribute('aria-label', `Switch to ${theme === 'light' ? 'dark' : 'light'} theme`);
     };
 
@@ -359,12 +359,12 @@ function initializeExperience() {
 }
 
 function testFunctionCall() {
-    console.log('🧪 testFunctionCall() called - JavaScript is working!');
+    console.log('testFunctionCall() called - JavaScript is working!');
 }
 
 // Load all JSON data files
 async function loadAllData() {
-    console.log('🔄 loadAllData() called');
+    console.log('loadAllData() called');
     try {
         console.log('Starting to load configuration...');
         const response = await fetch('assets/data/config.json');
@@ -502,7 +502,7 @@ function loadEducation() {
 
   entries.forEach((edu, index) => {
     const isCurrent = /present/i.test(edu.to) || /current/i.test(edu.status || '');
-    const range = `${edu.from} – ${isCurrent ? 'Present' : edu.to}`;
+    const range = `${edu.from} - ${isCurrent ? 'Present' : edu.to}`;
     const article = document.createElement('article');
     article.className = 'edu-card';
     article.setAttribute('role','listitem');
@@ -575,7 +575,7 @@ function loadCertifications() {
           <h3 class="cert-card__title">${cert.title}</h3>
           <span class="cert-card__date">${cert.date}</span>
         </div>
-        <div class="cert-card__arrow" aria-hidden="true">↗</div>
+        <div class="cert-card__arrow" aria-hidden="true"></div>
       </a>`;
 
     fragment.appendChild(article);
@@ -610,7 +610,7 @@ function loadPublications() {
 
         const html = publications.publications.map(pub => `
             <li>
-                <strong>${pub.title}</strong> — ${pub.conference} ${pub.year}
+                <strong>${pub.title}</strong> - ${pub.conference} ${pub.year}
                 <a class="link" href="${pub.url}" target="_blank" rel="noopener">Read Paper</a>
             </li>
         `).join('');
@@ -806,17 +806,12 @@ function generateFilterButtons() {
     setupProjectFiltering();
 }
 
-// Render STAR (Situation, Task, Action, Result) blocks into a container.
+// Render the project detail as flowing paragraphs.
 // Shared by the project modal and the project.html detail page.
-function renderStar(project, el) {
+function renderDetail(project, el) {
     if (!el) return false;
-    const s = project && project.star;
-    if (!s) { el.innerHTML = ''; el.hidden = true; return false; }
-    const blocks = [['Situation', 'situation'], ['Task', 'task'], ['Action', 'action'], ['Result', 'result']];
-    const html = blocks
-        .filter(([, key]) => s[key])
-        .map(([label, key]) => `<div class="star-block"><h4>${label}</h4><p>${s[key]}</p></div>`)
-        .join('');
+    const paras = (project && project.detail) || [];
+    const html = paras.filter(Boolean).map(p => `<p>${p}</p>`).join('');
     el.innerHTML = html;
     el.hidden = !html;
     return !!html;
@@ -849,19 +844,12 @@ function setupModal() {
                 document.getElementById('modal-title').textContent = project.title;
                 const modalSummary = document.getElementById('modal-summary');
                 const modalDescription = document.getElementById('modal-description');
-                const descriptionText = project.description || '';
-                modalSummary.textContent = project.summary || '';
-                // Show description only if it exists and is not a duplicate of summary
-                if (descriptionText && descriptionText.trim() !== (project.summary || '').trim()) {
-                    modalDescription.textContent = descriptionText;
-                    modalDescription.style.display = '';
-                } else {
-                    modalDescription.textContent = '';
-                    modalDescription.style.display = 'none';
-                }
+                modalSummary.textContent = project.outcome || project.summary || '';
+                modalDescription.textContent = '';
+                modalDescription.style.display = 'none';
 
-                // STAR detail (Situation/Task/Action/Result)
-                renderStar(project, document.getElementById('modal-star'));
+                // Project detail as flowing paragraphs
+                renderDetail(project, document.getElementById('modal-detail'));
 
                 const stackContainer = document.getElementById('modal-stack');
                 if (stackContainer) {
@@ -1105,7 +1093,7 @@ function initializeRag() {
                 if (sessionStorage.getItem('ragColdStartShown') !== '1' && ragNoteEl) {
                     coldStartTimer = setTimeout(() => {
                         if (isStreaming && !accumulated) {
-                            ragNoteEl.textContent = 'The instance is cold starting — this may take a moment.';
+                            ragNoteEl.textContent = 'The instance is cold starting - this may take a moment.';
                             ragNoteEl.hidden = false;
                         }
                     }, 5000);
@@ -1320,7 +1308,7 @@ async function showEnhancedThinkingStates(pane) {
 
     await new Promise(resolve => setTimeout(resolve, 1500));
 
-    // Stage 2: Generation — keep highlighted until response completes
+    // Stage 2: Generation - keep highlighted until response completes
     if (retrievalStage) retrievalStage.classList.remove('active');
     const generationStage = thinkingEl.querySelector('#thinking-generation');
     if (generationStage) {

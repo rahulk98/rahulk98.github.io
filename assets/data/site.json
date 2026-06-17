@@ -1,6 +1,6 @@
 {
     "title": "Rahul Krishnan | Data Science & ML Portfolio",
-    "description": "Rahul Krishnan — Data Science Master's student & ex-SAP developer specializing in Machine Learning, Deep Learning, Recommender Systems, MLOps and Cloud Deployment. View projects, skills and publications.",
+    "description": "Rahul Krishnan - Data Science Master's student & ex-SAP developer specializing in Machine Learning, Deep Learning, Recommender Systems, MLOps and Cloud Deployment. View projects, skills and publications.",
     "url": "https://rahulk98.github.io/",
     "author": "Rahul Krishnan",
     "email": "rahulkrishnan1105@gmail.com",
@@ -64,12 +64,12 @@
             },
             {
                 "type": "EducationalOrganization",
-                "name": "Universität Trier"
+                "name": "Universitaet Trier"
             }
         ],
         "affiliation": {
             "type": "EducationalOrganization",
-            "name": "Universität Trier"
+            "name": "Universitaet Trier"
         },
         "hasOccupation": {
             "type": "Occupation",

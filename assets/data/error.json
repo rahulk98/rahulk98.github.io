@@ -1,6 +1,6 @@
 {
   "404": {
-    "icon": "🛸",
+    "icon": "",
     "title": "404",
     "message": "Sorry, that page doesn't exist.",
     "action": {

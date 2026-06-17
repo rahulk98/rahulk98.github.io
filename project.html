@@ -12,7 +12,7 @@
     </script>
     <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Project • Rahul Krishnan</title>
+  <title>Project - Rahul Krishnan</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
@@ -21,8 +21,8 @@
 <body>
   <header class="site-header">
     <nav class="nav" aria-label="Project">
-      <a class="logo" href="index.html#projects">← Projects</a>
-      <button id="theme-toggle" class="icon-btn" aria-label="Toggle dark mode" title="Toggle theme">🌓</button>
+      <a class="logo" href="index.html#projects">Back to Projects</a>
+      <button id="theme-toggle" class="icon-btn" aria-label="Toggle dark mode" title="Toggle theme"></button>
     </nav>
   </header>
   <main class="section" id="main">
@@ -34,7 +34,7 @@
     <div class="container footer-grid">
       <div>
         <strong>Rahul Krishnan</strong>
-        <p class="muted">Built with ❤️ using HTML/CSS/JS</p>
+        <p class="muted">Built with HTML, CSS and JS</p>
       </div>
     </div>
   </footer>
@@ -48,15 +48,12 @@
     const esc = (s) => String(s == null ? '' : s)
       .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 
-    // Reuse the shared renderStar() from main.js when it is loaded; inline fallback otherwise.
-    function renderStarInto(project, el){
+    // Reuse the shared renderDetail() from main.js when it is loaded; inline fallback otherwise.
+    function renderDetailInto(project, el){
       if (!el) return;
-      if (typeof renderStar === 'function') { renderStar(project, el); return; }
-      const s = project && project.star;
-      if (!s) { el.hidden = true; return; }
-      const blocks = [['Situation','situation'],['Task','task'],['Action','action'],['Result','result']];
-      el.innerHTML = blocks.filter(([,k]) => s[k])
-        .map(([label,k]) => `<div class="star-block"><h4>${label}</h4><p>${esc(s[k])}</p></div>`).join('');
+      if (typeof renderDetail === 'function') { renderDetail(project, el); return; }
+      const paras = (project && project.detail) || [];
+      el.innerHTML = paras.filter(Boolean).map(p => `<p>${esc(p)}</p>`).join('');
     }
 
     const params = new URLSearchParams(location.search);
@@ -69,23 +66,23 @@
       .then(projects => {
         const project = projects.find(p => p.slug === slug);
         if (!project) {
-          document.title = 'Project not found • Rahul Krishnan';
+          document.title = 'Project not found - Rahul Krishnan';
           target.innerHTML = '<p class="muted">Project not found.</p>';
           return;
         }
-        document.title = `${project.title} • Rahul Krishnan`;
+        document.title = `${project.title} - Rahul Krishnan`;
         const tags = (project.tags && project.tags.length) ? project.tags : (project.stack || []);
         const linkKeys = Object.keys(project.links || {});
         target.innerHTML = `
           ${project.outcome ? `<p class="project-card__outcome">${esc(project.outcome)}</p>` : ''}
           <h1>${esc(project.title)}</h1>
           <p class="project-card__summary">${esc(project.summary || '')}</p>
-          <div id="content-star" class="modal-star"></div>
+          <div id="content-detail" class="project-detail"></div>
           <div class="tags">${tags.map(t => `<span class="tag">${esc(t)}</span>`).join('')}</div>
           ${linkKeys.length ? `<div class="actions">${Object.entries(project.links).map(([k,v]) =>
             `<a href="${esc(v)}" target="_blank" rel="noopener">${k.charAt(0).toUpperCase()+k.slice(1)}</a>`).join('')}</div>` : ''}
         `;
-        renderStarInto(project, document.getElementById('content-star'));
+        renderDetailInto(project, document.getElementById('content-detail'));
       })
       .catch(() => { target.innerHTML = '<p class="muted">Failed to load project.</p>'; });
   })();
