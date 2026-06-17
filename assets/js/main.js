@@ -806,6 +806,22 @@ function generateFilterButtons() {
     setupProjectFiltering();
 }
 
+// Render STAR (Situation, Task, Action, Result) blocks into a container.
+// Shared by the project modal and the project.html detail page.
+function renderStar(project, el) {
+    if (!el) return false;
+    const s = project && project.star;
+    if (!s) { el.innerHTML = ''; el.hidden = true; return false; }
+    const blocks = [['Situation', 'situation'], ['Task', 'task'], ['Action', 'action'], ['Result', 'result']];
+    const html = blocks
+        .filter(([, key]) => s[key])
+        .map(([label, key]) => `<div class="star-block"><h4>${label}</h4><p>${s[key]}</p></div>`)
+        .join('');
+    el.innerHTML = html;
+    el.hidden = !html;
+    return !!html;
+}
+
 // Initialize projects when data is loaded
 function initializeProjects() {
     loadProjects();
@@ -844,9 +860,12 @@ function setupModal() {
                     modalDescription.style.display = 'none';
                 }
 
+                // STAR detail (Situation/Task/Action/Result)
+                renderStar(project, document.getElementById('modal-star'));
+
                 const stackContainer = document.getElementById('modal-stack');
                 if (stackContainer) {
-                    stackContainer.innerHTML = project.stack.map(tag => `<span class="tag">${tag}</span>`).join('');
+                    stackContainer.innerHTML = (project.stack || []).map(tag => `<span class="tag">${tag}</span>`).join('');
                 }
 
                 const linksContainer = document.getElementById('modal-links');

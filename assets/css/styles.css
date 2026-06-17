@@ -1068,6 +1068,27 @@ a:hover { color: var(--accent-hover); }
     .project-grid--secondary { grid-template-columns: 1fr; }
 }
 
+/* STAR detail blocks (shared by the modal and project.html) */
+.modal-star {
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+    margin: 1.1rem 0;
+}
+.modal-star:empty { display: none; }
+.star-block h4 {
+    margin: 0 0 0.2rem;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--accent);
+}
+.star-block p {
+    margin: 0;
+    color: var(--text-secondary);
+    line-height: 1.55;
+}
+
 .project-card {
     background: var(--glass-surface);
     backdrop-filter: blur(var(--glass-blur));
