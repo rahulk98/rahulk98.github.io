@@ -459,7 +459,7 @@ function loadSkills() {
     console.log('Skills data available:', window.skillsData);
 
     if (!skillsSection) {
-        console.error('Skills section element not found!');
+        // Section not present on this page (e.g. project.html); nothing to render.
         return;
     }
 
@@ -594,7 +594,7 @@ function loadPublications() {
     console.log('Publications data available:', window.publicationsData);
 
     if (!publicationsSection) {
-        console.error('Publications section element not found!');
+        // Section not present on this page (e.g. project.html); nothing to render.
         return;
     }
 
