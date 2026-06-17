@@ -1,18 +1,18 @@
-console.log('🚀 JavaScript file loaded at:', new Date().toLocaleTimeString());
+console.log('JavaScript file loaded at:', new Date().toLocaleTimeString());
 
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('📱 DOM Content Loaded - initializing app...');
+    console.log('DOM Content Loaded - initializing app...');
     initializeApp();
 });
 
 async function initializeApp() {
-    console.log('🎯 initializeApp() called - starting initialization...');
+    console.log('initializeApp() called - starting initialization...');
 
     testFunctionCall();
 
     // Wait for all data to load first
     await loadAllData();
-    console.log('📊 All data loaded, now initializing components...');
+    console.log('All data loaded, now initializing components...');
 
     loadExperience();
     loadProjects();
@@ -39,7 +39,7 @@ async function initializeApp() {
         initializeRag();
         setupRagModal();
 
-    console.log('✅ initializeApp() completed');
+    console.log('initializeApp() completed');
 }
 
 // Theme toggle functionality
@@ -59,7 +59,7 @@ function setupThemeToggle() {
     };
 
     const updateThemeButton = (theme) => {
-        themeToggle.textContent = theme === 'light' ? '🌙' : '🌞';
+        // Icon is drawn in CSS (#theme-toggle::before); only the label changes.
         themeToggle.setAttribute('aria-label', `Switch to ${theme === 'light' ? 'dark' : 'light'} theme`);
     };
 
@@ -228,34 +228,37 @@ function setupDemoLinkScrollToTop() {
 
 // Project filtering
 function setupProjectFiltering() {
-    // Remove existing event listeners to prevent duplicates
-    const existingButtons = document.querySelectorAll('.filter-btn');
-    existingButtons.forEach(button => {
-        button.replaceWith(button.cloneNode(true));
-    });
+    const filterContainer = document.getElementById('project-filters');
+    if (!filterContainer) return;
 
-    const filterButtons = document.querySelectorAll('.filter-btn');
-    const projectCards = document.querySelectorAll('.project-card');
-
-    filterButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            const filter = button.getAttribute('data-filter');
-            
-            // Update active button
-            filterButtons.forEach(btn => btn.classList.remove('active'));
-            button.classList.add('active');
-            
-            // Filter projects
-            projectCards.forEach(card => {
-                const category = card.getAttribute('data-category');
-                if (filter === 'all' || category === filter) {
-                    card.style.display = 'block';
-                    card.style.animation = 'fadeIn 0.3s ease';
-                } else {
-                    card.style.display = 'none';
-                }
-            });
+    const active = new Set();
+    const applyFilter = () => {
+        document.querySelectorAll('.project-card').forEach(card => {
+            const kws = (card.dataset.keywords || '').split('|').filter(Boolean);
+            const show = active.size === 0 || kws.some(k => active.has(k));
+            card.style.display = show ? '' : 'none';
+            if (show) card.style.animation = 'fadeIn 0.3s ease';
         });
+    };
+
+    // Delegate clicks to the container so re-rendered chips keep working; bind once.
+    if (filterContainer.dataset.bound === 'true') return;
+    filterContainer.dataset.bound = 'true';
+    filterContainer.addEventListener('click', (e) => {
+        const btn = e.target.closest('.filter-btn');
+        if (!btn) return;
+        const f = btn.getAttribute('data-filter');
+        if (f === 'all') active.clear();
+        else if (active.has(f)) active.delete(f);
+        else active.add(f);
+
+        const allBtn = filterContainer.querySelector('[data-filter="all"]');
+        filterContainer.querySelectorAll('.filter-btn').forEach(b => {
+            const on = b === allBtn ? active.size === 0 : active.has(b.getAttribute('data-filter'));
+            b.classList.toggle('active', on);
+            b.setAttribute('aria-pressed', String(on));
+        });
+        applyFilter();
     });
 }
 
@@ -356,12 +359,12 @@ function initializeExperience() {
 }
 
 function testFunctionCall() {
-    console.log('🧪 testFunctionCall() called - JavaScript is working!');
+    console.log('testFunctionCall() called - JavaScript is working!');
 }
 
 // Load all JSON data files
 async function loadAllData() {
-    console.log('🔄 loadAllData() called');
+    console.log('loadAllData() called');
     try {
         console.log('Starting to load configuration...');
         const response = await fetch('assets/data/config.json');
@@ -456,7 +459,7 @@ function loadSkills() {
     console.log('Skills data available:', window.skillsData);
 
     if (!skillsSection) {
-        console.error('Skills section element not found!');
+        // Section not present on this page (e.g. project.html); nothing to render.
         return;
     }
 
@@ -499,7 +502,7 @@ function loadEducation() {
 
   entries.forEach((edu, index) => {
     const isCurrent = /present/i.test(edu.to) || /current/i.test(edu.status || '');
-    const range = `${edu.from} – ${isCurrent ? 'Present' : edu.to}`;
+    const range = `${edu.from} - ${isCurrent ? 'Present' : edu.to}`;
     const article = document.createElement('article');
     article.className = 'edu-card';
     article.setAttribute('role','listitem');
@@ -572,7 +575,7 @@ function loadCertifications() {
           <h3 class="cert-card__title">${cert.title}</h3>
           <span class="cert-card__date">${cert.date}</span>
         </div>
-        <div class="cert-card__arrow" aria-hidden="true">↗</div>
+        <div class="cert-card__arrow" aria-hidden="true"></div>
       </a>`;
 
     fragment.appendChild(article);
@@ -591,7 +594,7 @@ function loadPublications() {
     console.log('Publications data available:', window.publicationsData);
 
     if (!publicationsSection) {
-        console.error('Publications section element not found!');
+        // Section not present on this page (e.g. project.html); nothing to render.
         return;
     }
 
@@ -607,7 +610,7 @@ function loadPublications() {
 
         const html = publications.publications.map(pub => `
             <li>
-                <strong>${pub.title}</strong> — ${pub.conference} ${pub.year}
+                <strong>${pub.title}</strong> - ${pub.conference} ${pub.year}
                 <a class="link" href="${pub.url}" target="_blank" rel="noopener">Read Paper</a>
             </li>
         `).join('');
@@ -739,18 +742,24 @@ function loadProjects() {
 
     try {
         const projects = window.projectsData;
-        list.innerHTML = projects.map((project, index) => `
-            <div class="project-card" data-index="${index}" data-category="${project.category}">
+
+        const renderCard = (project, index) => {
+            const tags = (project.tags && project.tags.length) ? project.tags : (project.stack || []).slice(0, 4);
+            const keywords = (project.keywords || []).join('|');
+            const linkKeys = Object.keys(project.links || {});
+            return `
+            <div class="project-card" data-index="${index}" data-keywords="${keywords}">
                 <div class="project-thumbnail" data-project="${project.slug}"></div>
                 <div class="project-content">
+                    ${project.outcome ? `<p class="project-card__outcome">${project.outcome}</p>` : ''}
                     <h3>${project.title}</h3>
-                    <p>${project.summary}</p>
+                    <p class="project-card__summary">${project.summary || ''}</p>
 
                     <div class="project-tags">
-                        ${project.stack.map(tech => `<span class="tag">${tech}</span>`).join('')}
+                        ${tags.map(tech => `<span class="tag">${tech}</span>`).join('')}
                     </div>
 
-                    ${Object.keys(project.links).length > 0 ? `
+                    ${linkKeys.length > 0 ? `
                         <div class="actions">
                             ${Object.entries(project.links).map(([key, value]) =>
                                 `<a href="${value}" target="_blank" rel="noopener" aria-label="View ${project.title} ${key}">${key.charAt(0).toUpperCase() + key.slice(1)}</a>`
@@ -758,11 +767,20 @@ function loadProjects() {
                         </div>
                     ` : ''}
                 </div>
-            </div>
-        `).join('');
+            </div>`;
+        };
 
-        // Generate filter buttons after projects are loaded
-        console.log('🎯 About to generate filter buttons...');
+        const featured = [];
+        const secondary = [];
+        projects.forEach((project, index) => {
+            (project.featured ? featured : secondary).push(renderCard(project, index));
+        });
+
+        list.innerHTML =
+            (featured.length ? `<div class="project-grid project-grid--featured">${featured.join('')}</div>` : '') +
+            (secondary.length ? `<div class="project-grid project-grid--secondary">${secondary.join('')}</div>` : '');
+
+        // Generate filter chips after projects are rendered
         generateFilterButtons();
     } catch (e) {
         console.error('Failed to load projects:', e);
@@ -771,51 +789,32 @@ function loadProjects() {
 }
 
 function generateFilterButtons() {
-    console.log('🔍 generateFilterButtons called');
     const filterContainer = document.getElementById('project-filters');
-    if (!filterContainer) {
-        console.error('❌ Filter container not found');
-        return;
-    }
-    if (!window.projectsData) {
-        console.error('❌ Projects data not loaded');
-        return;
-    }
+    if (!filterContainer || !window.projectsData) return;
 
-    // Get unique categories from projects
-    const categories = [...new Set(window.projectsData.map(project => project.category))];
-    console.log('📊 Found categories:', categories);
-    
-    // Create category display mapping
-    const categoryDisplayNames = {
-        'ml': 'ML',
-        'nlp': 'NLP', 
-        'recommender': 'Recommender',
-        'recommender systems': 'Recommender Systems',
-        'computer vision': 'Computer Vision',
-        'deployment': 'Deployment',
-        'ai': 'AI',
-        'data-science': 'Data Science',
-        'web': 'Web',
-        'mobile': 'Mobile'
-    };
+    // Fixed display order for the keyword chips; only show keywords actually used.
+    const order = ['LLMs & NLP', 'Machine Learning', 'Recommender Systems', 'Optimization', 'Computer Vision', 'MLOps & Deployment', 'Research'];
+    const used = new Set(window.projectsData.flatMap(p => p.keywords || []));
+    const keywords = order.filter(k => used.has(k));
 
-    // Generate filter buttons
-    const filterButtons = [
-        '<button class="filter-btn active" data-filter="all">All</button>',
-        ...categories.map(category => {
-            // Use lowercase for lookup
-            const displayName = categoryDisplayNames[category.toLowerCase()] || category;
-            return `<button class="filter-btn" data-filter="${category}">${displayName}</button>`;
-        })
+    filterContainer.innerHTML = [
+        '<button class="filter-btn active" data-filter="all" aria-pressed="true">All</button>',
+        ...keywords.map(k => `<button class="filter-btn" data-filter="${k}" aria-pressed="false">${k}</button>`)
     ].join('');
 
-    console.log('🎯 Generated filter buttons:', filterButtons);
-    filterContainer.innerHTML = filterButtons;
-    console.log('✅ Filter buttons inserted into DOM');
-
-    // Re-setup filtering with new buttons
+    // Bind the (delegated) multi-select filtering handler.
     setupProjectFiltering();
+}
+
+// Render the project detail as flowing paragraphs.
+// Shared by the project modal and the project.html detail page.
+function renderDetail(project, el) {
+    if (!el) return false;
+    const paras = (project && project.detail) || [];
+    const html = paras.filter(Boolean).map(p => `<p>${p}</p>`).join('');
+    el.innerHTML = html;
+    el.hidden = !html;
+    return !!html;
 }
 
 // Initialize projects when data is loaded
@@ -845,20 +844,16 @@ function setupModal() {
                 document.getElementById('modal-title').textContent = project.title;
                 const modalSummary = document.getElementById('modal-summary');
                 const modalDescription = document.getElementById('modal-description');
-                const descriptionText = project.description || '';
-                modalSummary.textContent = project.summary || '';
-                // Show description only if it exists and is not a duplicate of summary
-                if (descriptionText && descriptionText.trim() !== (project.summary || '').trim()) {
-                    modalDescription.textContent = descriptionText;
-                    modalDescription.style.display = '';
-                } else {
-                    modalDescription.textContent = '';
-                    modalDescription.style.display = 'none';
-                }
+                modalSummary.textContent = project.outcome || project.summary || '';
+                modalDescription.textContent = '';
+                modalDescription.style.display = 'none';
+
+                // Project detail as flowing paragraphs
+                renderDetail(project, document.getElementById('modal-detail'));
 
                 const stackContainer = document.getElementById('modal-stack');
                 if (stackContainer) {
-                    stackContainer.innerHTML = project.stack.map(tag => `<span class="tag">${tag}</span>`).join('');
+                    stackContainer.innerHTML = (project.stack || []).map(tag => `<span class="tag">${tag}</span>`).join('');
                 }
 
                 const linksContainer = document.getElementById('modal-links');
@@ -1098,7 +1093,7 @@ function initializeRag() {
                 if (sessionStorage.getItem('ragColdStartShown') !== '1' && ragNoteEl) {
                     coldStartTimer = setTimeout(() => {
                         if (isStreaming && !accumulated) {
-                            ragNoteEl.textContent = 'The instance is cold starting — this may take a moment.';
+                            ragNoteEl.textContent = 'The instance is cold starting - this may take a moment.';
                             ragNoteEl.hidden = false;
                         }
                     }, 5000);
@@ -1313,7 +1308,7 @@ async function showEnhancedThinkingStates(pane) {
 
     await new Promise(resolve => setTimeout(resolve, 1500));
 
-    // Stage 2: Generation — keep highlighted until response completes
+    // Stage 2: Generation - keep highlighted until response completes
     if (retrievalStage) retrievalStage.classList.remove('active');
     const generationStage = thinkingEl.querySelector('#thinking-generation');
     if (generationStage) {

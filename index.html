@@ -61,7 +61,7 @@
       ],
       "affiliation": {
         "@type": "EducationalOrganization",
-        "name": "Universität Trier"
+        "name": "Universitaet Trier"
       },
       "hasOccupation": {
         "@type": "Occupation",
@@ -93,7 +93,7 @@
                     <li role="menuitem"><a href="#contact">Contact</a></li>
                 </ul>
                 <div class="theme-switcher">
-                    <button id="theme-toggle" aria-label="Toggle light/dark theme">🌓</button>
+                    <button id="theme-toggle" aria-label="Toggle light/dark theme"></button>
                 </div>
             </nav>
         </div>
@@ -121,7 +121,7 @@
                             <div class="rag-title-row">
                                 <h3 class="rag-title">AI-Powered Q&A</h3>
                                 <span class="rag-chip">RAG</span>
-                                <button id="rag-info-btn" class="rag-info-btn" aria-label="How it works" title="How it works">ℹ️</button>
+                                <button id="rag-info-btn" class="rag-info-btn" aria-label="How it works" title="How it works">?</button>
                             </div>
                             <p class="rag-subtitle">Context-aware answers sourced from Rahul's resume, projects, and notes.</p>
                         </div>
@@ -133,11 +133,11 @@
                         <!-- Enhanced thinking states -->
                         <div id="rag-thinking" class="rag-thinking" hidden>
                             <div class="thinking-stage" id="thinking-retrieval">
-                                <div class="thinking-icon">🔍</div>
+                                <div class="thinking-icon"></div>
                                 <span class="thinking-text">Retrieving context...</span>
                             </div>
                             <div class="thinking-stage" id="thinking-generation">
-                                <div class="thinking-icon">🧠</div>
+                                <div class="thinking-icon"></div>
                                 <span class="thinking-text">Generating answer...</span>
                             </div>
                         </div>
@@ -214,7 +214,7 @@
                 <h2>Recent Writing</h2>
                 <div class="blog-teaser-grid" id="blog-teaser-list"></div>
                 <div style="text-align:center;">
-                    <a class="cta-button cta-secondary" href="/blog/">View all posts →</a>
+                    <a class="cta-button cta-secondary" href="/blog/">View all posts</a>
                 </div>
             </section>
             -->
@@ -248,6 +248,7 @@
             <h2 id="modal-title"></h2>
             <p id="modal-summary"></p>
             <p id="modal-description"></p>
+            <div id="modal-detail" class="project-detail"></div>
             <div id="modal-highlights-container" class="highlights" hidden>
                 <h3>Highlights</h3>
                 <ul id="modal-highlights"></ul>
@@ -264,21 +265,21 @@
             <h2>How this AI works</h2>
             <div class="rag-explanation">
                 <div class="explanation-item">
-                    <div class="explanation-icon">🔍</div>
+                    <div class="explanation-icon">1</div>
                     <div class="explanation-content">
                         <h4>Finds relevant passages</h4>
                         <p>Embeds your query and searches a vector index of Rahul's documents to find the most relevant information.</p>
                     </div>
                 </div>
                 <div class="explanation-item">
-                    <div class="explanation-icon">📚</div>
+                    <div class="explanation-icon">2</div>
                     <div class="explanation-content">
                         <h4>Retrieves context</h4>
                         <p>Gathers relevant passages from Rahul's resume, projects, and notes to provide accurate context.</p>
                     </div>
                 </div>
                 <div class="explanation-item">
-                    <div class="explanation-icon">🧠</div>
+                    <div class="explanation-icon">3</div>
                     <div class="explanation-content">
                         <h4>Generates grounded answers</h4>
                         <p>Uses Google Gemini to craft responses that cite the retrieved passages, ensuring answers are verifiable.</p>
@@ -286,7 +287,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <p class="tech-stack-info">Built with <strong>LlamaIndex</strong> • <strong>Gemini (Google)</strong> • <strong>Local indexed documents</strong></p>
+                <p class="tech-stack-info">Built with <strong>LlamaIndex</strong>, <strong>Gemini (Google)</strong> and <strong>local indexed documents</strong></p>
             </div>
         </div>
     </div>

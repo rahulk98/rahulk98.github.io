@@ -20,7 +20,7 @@
     }
   ],
   "backButton": {
-    "text": "← Back to Portfolio",
+    "text": "Back to Portfolio",
     "url": "/"
   }
 }

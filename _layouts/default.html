@@ -42,11 +42,11 @@
         <div class="container">
             <nav class="nav">
                 <ul class="nav-list" role="menu">
-                    <li role="menuitem"><a href="/">← Portfolio</a></li>
+                    <li role="menuitem"><a href="/">Portfolio</a></li>
                     <li role="menuitem"><a href="/blog/">Blog</a></li>
                 </ul>
                 <div class="theme-switcher">
-                    <button id="theme-toggle" aria-label="Toggle light/dark theme">🌓</button>
+                    <button id="theme-toggle" aria-label="Toggle light/dark theme"></button>
                 </div>
             </nav>
         </div>
@@ -71,7 +71,6 @@
             var root = document.documentElement;
 
             function update(theme) {
-                btn.textContent = theme === 'light' ? '🌙' : '🌞';
                 btn.setAttribute('aria-label', 'Switch to ' + (theme === 'light' ? 'dark' : 'light') + ' theme');
             }
 

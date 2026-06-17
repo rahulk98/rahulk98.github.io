@@ -12,7 +12,7 @@
     </script>
     <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Project • Rahul Krishnan</title>
+  <title>Project - Rahul Krishnan</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
@@ -21,8 +21,8 @@
 <body>
   <header class="site-header">
     <nav class="nav" aria-label="Project">
-      <a class="logo" href="index.html#projects">← Projects</a>
-      <button id="theme-toggle" class="icon-btn" aria-label="Toggle dark mode" title="Toggle theme">🌓</button>
+      <a class="logo" href="index.html#projects">Back to Projects</a>
+      <button id="theme-toggle" class="icon-btn" aria-label="Toggle dark mode" title="Toggle theme"></button>
     </nav>
   </header>
   <main class="section" id="main">
@@ -34,54 +34,57 @@
     <div class="container footer-grid">
       <div>
         <strong>Rahul Krishnan</strong>
-        <p class="muted">Built with ❤️ using HTML/CSS/JS</p>
+        <p class="muted">Built with HTML, CSS and JS</p>
       </div>
     </div>
   </footer>
   <script src="assets/js/main.js" defer></script>
   <script>
   (function(){
-    const root=document.documentElement;
-    const saved=localStorage.getItem('theme');
-    if(saved==='light') root.classList.add('light');
+    const root = document.documentElement;
+    const saved = localStorage.getItem('theme');
+    if (saved === 'light') root.classList.add('light');
 
-    function mdToHtml(md){
-      // very tiny markdown converter (headings, lists, links, code blocks)
-      md = md.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-      md = md.replace(/^###\s+(.*)$/gm,'<h3>$1</h3>')
-             .replace(/^##\s+(.*)$/gm,'<h2>$1</h2>')
-             .replace(/^#\s+(.*)$/gm,'<h1>$1</h1>');
-      md = md.replace(/^-\s+(.*)$/gm,'<li>$1</li>');
-      md = md.replace(/(<li>.*<\/li>\n?)+/g, m => '<ul>'+m.replace(/\n/g,'')+'<\/ul>');
-      md = md.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>');
-      md = md.replace(/\*(.*?)\*/g,'<em>$1</em>');
-      md = md.replace(/`([^`]+)`/g,'<code>$1</code>');
-      md = md.replace(/\\\[(.*?)\\\]\((.*?)\\\\)/g,'<a href="$2" target="_blank" rel="noopener">$1</a>');
-      return md.split(/\n{2,}/).map(par => `<p>${par}</p>`).join('');
+    const esc = (s) => String(s == null ? '' : s)
+      .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+
+    // Reuse the shared renderDetail() from main.js when it is loaded; inline fallback otherwise.
+    function renderDetailInto(project, el){
+      if (!el) return;
+      if (typeof renderDetail === 'function') { renderDetail(project, el); return; }
+      const paras = (project && project.detail) || [];
+      el.innerHTML = paras.filter(Boolean).map(p => `<p>${esc(p)}</p>`).join('');
     }
 
     const params = new URLSearchParams(location.search);
-    const id = params.get('id');
-    const map = {
-      'sentiment-bert':'projects/sentiment-bert.md',
-      'gaze-clip':'projects/gaze-clip.md',
-      'glaucoma':'projects/glaucoma.md'
-    };
-    const file = map[id];
+    const slug = params.get('slug') || params.get('id');
     const target = document.getElementById('content');
-    if(!file){
-      if (window.errorData && window.errorData[404]) {
-        target.innerHTML = `<p class="muted">${window.errorData[404].message}</p>`;
-      } else {
-        target.innerHTML = '<p class="muted">Project not found.</p>';
-      }
-      return;
-    }
-    fetch(file).then(r=>r.text()).then(md=>{
-      target.innerHTML = mdToHtml(md);
-    }).catch(()=>{
-      target.innerHTML = '<p class="muted">Failed to load project.</p>';
-    });
+    if (!slug) { target.innerHTML = '<p class="muted">Project not found.</p>'; return; }
+
+    fetch('assets/data/projects.json')
+      .then(r => r.json())
+      .then(projects => {
+        const project = projects.find(p => p.slug === slug);
+        if (!project) {
+          document.title = 'Project not found - Rahul Krishnan';
+          target.innerHTML = '<p class="muted">Project not found.</p>';
+          return;
+        }
+        document.title = `${project.title} - Rahul Krishnan`;
+        const tags = (project.tags && project.tags.length) ? project.tags : (project.stack || []);
+        const linkKeys = Object.keys(project.links || {});
+        target.innerHTML = `
+          ${project.outcome ? `<p class="project-card__outcome">${esc(project.outcome)}</p>` : ''}
+          <h1>${esc(project.title)}</h1>
+          <p class="project-card__summary">${esc(project.summary || '')}</p>
+          <div id="content-detail" class="project-detail"></div>
+          <div class="tags">${tags.map(t => `<span class="tag">${esc(t)}</span>`).join('')}</div>
+          ${linkKeys.length ? `<div class="actions">${Object.entries(project.links).map(([k,v]) =>
+            `<a href="${esc(v)}" target="_blank" rel="noopener">${k.charAt(0).toUpperCase()+k.slice(1)}</a>`).join('')}</div>` : ''}
+        `;
+        renderDetailInto(project, document.getElementById('content-detail'));
+      })
+      .catch(() => { target.innerHTML = '<p class="muted">Failed to load project.</p>'; });
   })();
   </script>
 </body>
