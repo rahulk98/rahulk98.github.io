@@ -10,9 +10,9 @@
             "specialization": "Data and Knowledge Systems (Schwerpunkt, 15.0 credits)",
             "creditsCompleted": "85.0",
             "thesis": {
-                "title": "Optimal KV Cache Compression via Low-Rank Tensor Decomposition and Constrained Optimization",
+                "title": "Memory-Efficient KV Cache Compression for Long-Context LLM Inference",
                 "status": "In progress",
-                "summary": "Treats each transformer layer's KV cache as a 3rd-order tensor and applies Tucker, CP, TT, and t-SVD decompositions to runtime cache activations. Per-layer rank allocation is framed as constrained optimisation under a global memory budget."
+                "summary": "Compressing the runtime KV cache to ease the GPU-memory bottleneck of long-context LLM inference. Method and results are unpublished."
             },
             "coursework": [
                 { "course": "Elements of Mathematics", "code": "MA4DSC1001", "grade": "3.0", "credits": "10.0" },

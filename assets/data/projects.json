@@ -1,6 +1,6 @@
 [
   {
-    "title": "MSc Thesis - KV Cache Compression via Low-Rank Tensor Decomposition",
+    "title": "MSc Thesis - Memory-Efficient KV Cache Compression for LLM Inference",
     "slug": "kv-cache-tensor",
     "date": "2026-03-01",
     "year": "2026",
@@ -8,14 +8,14 @@
     "category": "LLM Research",
     "keywords": ["LLMs & NLP", "Optimization", "Research"],
     "thumbnail": "assets/img/projects/kv-cache-tensor-thumb.jpg",
-    "outcome": "2x KV-cache compression at ~1.3% error on K, about 35-40x lower V error than xKV",
-    "summary": "Master's thesis at Universitaet Trier compressing the runtime KV cache of LLMs as a 3rd-order tensor (Tucker, CP, TT, t-SVD), with per-layer rank allocation framed as constrained optimisation.",
-    "tags": ["PyTorch", "Tucker", "Constrained Optimization", "Mistral-7B"],
-    "stack": ["Python", "PyTorch", "Tucker / CP / TT / t-SVD", "Constrained Optimization", "Mistral-7B", "LLaMA-2-13B"],
+    "outcome": "Cutting the KV-cache GPU-memory bottleneck for long-context LLM inference",
+    "summary": "Master's thesis at Universitaet Trier on memory-efficient LLM inference, compressing the runtime KV cache to ease the GPU-memory bottleneck at long context. Method and results are unpublished.",
+    "tags": ["PyTorch", "LLM Inference", "Mistral-7B", "LLaMA-2-13B"],
+    "stack": ["Python", "PyTorch", "LLM Inference", "Mistral-7B", "LLaMA-2-13B"],
     "links": {},
     "detail": [
-      "At long context (for example LLaMA-70B at 128K) the KV cache exceeds 40 GB of GPU memory and becomes the main deployment bottleneck, while prior work such as PALU and xKV only compresses weight matrices offline in 2D per-head form. This thesis instead compresses the runtime KV cache activations themselves, treating each layer's cache as a genuine 3rd-order tensor and allocating the compression budget per layer under a global memory constraint.",
-      "It applies Tucker, CP, TT and t-SVD decompositions to runtime activations on Mistral-7B-v0.3 and LLaMA-2-13B; the production method is a partial Tucker decomposition plus a JL-rotated 4-bit residual code driven by a joint Lagrangian rank allocator. At 2x compression this holds about 1.3% relative Frobenius error on K and 0.6 to 1.5% on V, roughly 35 to 40x lower V-cache error than xKV at the same ratio, and perplexity, GSM8K 8-shot CoT and RULER retrieval all stay within baseline across the 2x to 3x range. Fused reconstruction-attention kernels to cut decode latency are the next milestone."
+      "At long context the KV cache becomes the dominant GPU-memory cost of large-language-model inference, which caps how long a context a model can serve on a given GPU. My thesis develops a way to compress this runtime cache substantially while preserving generation quality.",
+      "The work is ongoing and not yet published, so the specific method and results are kept private for now. I am happy to walk through the approach and findings on request."
     ]
   },
   {
