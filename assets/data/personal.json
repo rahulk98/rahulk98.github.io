@@ -29,7 +29,7 @@
         "ariaLabel": "View my projects"
     },
     "profileImage": {
-        "src": "assets/img/profile.jpg",
+        "src": "assets/img/profile-600.jpg",
         "alt": "Rahul Krishnan - Data Science Master's Student",
         "width": 300,
         "height": 300
