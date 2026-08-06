@@ -12,28 +12,47 @@
     </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-    <meta http-equiv="Pragma" content="no-cache">
-    <meta http-equiv="Expires" content="0">
     <title>Rahul Krishnan | Data Science & ML Portfolio</title>
     <meta name="description" content="Rahul Krishnan - Data Science Master's student and ex-SAP Developer specializing in Machine Learning, NLP, and AI solutions. View my projects and experience.">
-    
+    <link rel="canonical" href="https://rahul-krishnan.is-a.dev/">
+
+    <!-- Icons -->
+    <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="assets/img/favicon-32.png" type="image/png" sizes="32x32">
+    <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
+
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://rahulk98.github.io/">
+    <meta property="og:url" content="https://rahul-krishnan.is-a.dev/">
     <meta property="og:title" content="Rahul Krishnan | Data Science & ML Portfolio">
     <meta property="og:description" content="Data Science Master's student and ex-SAP Developer specializing in Machine Learning, NLP, and AI solutions.">
-    <meta property="og:image" content="https://rahulk98.github.io/assets/img/profile.jpg">
+    <meta property="og:image" content="https://rahul-krishnan.is-a.dev/assets/img/og-image.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://rahulk98.github.io/">
+    <meta property="twitter:url" content="https://rahul-krishnan.is-a.dev/">
     <meta property="twitter:title" content="Rahul Krishnan | Data Science & ML Portfolio">
     <meta property="twitter:description" content="Data Science Master's student and ex-SAP Developer specializing in Machine Learning, NLP, and AI solutions.">
-    <meta property="twitter:image" content="https://rahulk98.github.io/assets/img/profile.jpg">
-    
+    <meta property="twitter:image" content="https://rahul-krishnan.is-a.dev/assets/img/og-image.jpg">
+
+    <!-- Apply saved theme before first paint to avoid a flash of the wrong theme -->
+    <script>
+        (function () {
+            try {
+                var saved = localStorage.getItem('theme');
+                var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                var theme = saved || (prefersDark ? 'dark' : 'light');
+                var root = document.documentElement;
+                root.classList.remove('light', 'dark');
+                root.classList.add(theme === 'light' ? 'light' : 'dark');
+            } catch (e) {}
+        })();
+    </script>
+
     <!-- Preload critical resources -->
-    <link rel="preload" href="assets/css/styles.css" as="style">
+    <link rel="preload" href="assets/css/styles.css?v=20260223v1" as="style">
     <link rel="preload" href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap" as="style">
 
     <link rel="stylesheet" href="assets/css/styles.css?v=20260223v1">
@@ -47,7 +66,7 @@
       "@type": "Person",
       "name": "Rahul Krishnan",
       "jobTitle": "Data Science Master's Student (Former SAP Software Developer)",
-      "url": "https://rahulk98.github.io/",
+      "url": "https://rahul-krishnan.is-a.dev/",
       "sameAs": [
         "https://github.com/rahulk98",
         "https://linkedin.com/in/rahulk98"
@@ -104,8 +123,11 @@
             <div class="container">
                 <div class="hero-content">
                     <div class="hero-image">
-                        <img src="assets/img/profile.jpg" alt="Rahul Krishnan - Data Science Master's Student and Software Developer" 
-                             width="300" height="300" loading="eager">
+                        <picture>
+                            <source srcset="assets/img/profile-600.webp" type="image/webp">
+                            <img src="assets/img/profile-600.jpg" alt="Rahul Krishnan - Data Science Master's Student and Software Developer"
+                                 width="300" height="300" loading="eager" fetchpriority="high">
+                        </picture>
                         <div class="hero-text">
                             <h1 id="hero-name">Rahul Krishnan</h1>
                             <p class="hero-subtitle" id="hero-subtitle">Former SAP Developer now pursuing Data Science Master's at University of Trier. I build AI solutions that solve real-world problems through machine learning and data science.</p>
@@ -292,32 +314,6 @@
         </div>
     </div>
 
-
-    <script>
-        // Load projects data from JSON file
-        fetch('assets/data/projects.json')
-            .then(response => response.json())
-            .then(data => {
-                window.projectsData = data;
-                // Initialize projects after data is loaded
-                if (window.initializeProjects) {
-                    window.initializeProjects();
-                }
-            })
-            .catch(error => console.error('Error loading projects data:', error));
-
-        // Load experience data from JSON file
-        fetch('assets/data/experience.json')
-            .then(response => response.json())
-            .then(data => {
-                window.experienceData = data;
-                // Initialize experience after data is loaded
-                if (window.initializeExperience) {
-                    window.initializeExperience();
-                }
-            })
-            .catch(error => console.error('Error loading experience data:', error));
-    </script>
 
     <script src="assets/js/main.js?v=20251019v3"></script>
 </body>
