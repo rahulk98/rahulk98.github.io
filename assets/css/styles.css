@@ -898,6 +898,13 @@ a:hover { color: var(--accent-hover); }
     font-family: var(--font-family-base);
 }
 
+.rag-stream-note {
+    margin-top: 0.35rem;
+    font-size: 0.75rem;
+    font-style: italic;
+    color: var(--text-muted);
+}
+
 .credits-text {
     font-size: 0.72rem;
     color: var(--text-muted);

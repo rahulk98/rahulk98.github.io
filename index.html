@@ -52,10 +52,10 @@
     </script>
 
     <!-- Preload critical resources -->
-    <link rel="preload" href="assets/css/styles.css?v=20260223v1" as="style">
+    <link rel="preload" href="assets/css/styles.css?v=20260807v1" as="style">
     <link rel="preload" href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap" as="style">
 
-    <link rel="stylesheet" href="assets/css/styles.css?v=20260223v1">
+    <link rel="stylesheet" href="assets/css/styles.css?v=20260807v1">
     <link rel="stylesheet" href="assets/css/blog.css?v=20260412v1">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap">
     
@@ -176,7 +176,7 @@
                         
                         <!-- Powered by section -->
                         <div class="rag-credits">
-                            <span class="credits-text">Powered by <span class="credits-link" id="gemini-link">Gemini</span> and <span class="credits-link" id="tech-stack-link">LlamaIndex</span></span>
+                            <span class="credits-text">Powered by <span class="credits-link" id="llm-link">OpenRouter</span> and <span class="credits-link" id="tech-stack-link">LlamaIndex</span></span>
                         </div>
                     </div>
                 </div>
@@ -289,32 +289,32 @@
                 <div class="explanation-item">
                     <div class="explanation-icon">1</div>
                     <div class="explanation-content">
-                        <h4>Finds relevant passages</h4>
-                        <p>Embeds your query and searches a vector index of Rahul's documents to find the most relevant information.</p>
+                        <h4>Hybrid retrieval</h4>
+                        <p>Embeds your query locally and runs it through both BM25 keyword search and vector search over Rahul's documents, fusing the two result lists.</p>
                     </div>
                 </div>
                 <div class="explanation-item">
                     <div class="explanation-icon">2</div>
                     <div class="explanation-content">
-                        <h4>Retrieves context</h4>
-                        <p>Gathers relevant passages from Rahul's resume, projects, and notes to provide accurate context.</p>
+                        <h4>Reranks the context</h4>
+                        <p>A local cross-encoder reranks the fused candidates so only the most relevant passages from Rahul's resume, projects, and notes reach the model.</p>
                     </div>
                 </div>
                 <div class="explanation-item">
                     <div class="explanation-icon">3</div>
                     <div class="explanation-content">
                         <h4>Generates grounded answers</h4>
-                        <p>Uses Google Gemini to craft responses that cite the retrieved passages, ensuring answers are verifiable.</p>
+                        <p>An open model served via OpenRouter answers from the retrieved passages. Follow-up questions work too: the conversation is condensed into a standalone query first.</p>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
-                <p class="tech-stack-info">Built with <strong>LlamaIndex</strong>, <strong>Gemini (Google)</strong> and <strong>local indexed documents</strong></p>
+                <p class="tech-stack-info">Built with <strong>LlamaIndex</strong>, <strong>OpenRouter</strong>, and <strong>local embeddings + reranker</strong> (ONNX, zero per-query API cost)</p>
             </div>
         </div>
     </div>
 
 
-    <script src="assets/js/main.js?v=20251019v3"></script>
+    <script src="assets/js/main.js?v=20260807v1"></script>
 </body>
 </html>

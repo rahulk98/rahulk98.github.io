@@ -1009,6 +1009,13 @@ function initializeRag() {
             let lastQuery = '';
             let userHasScrolled = false;
 
+            // Stable per-conversation ID so the backend can condense follow-up
+            // questions using chat history; rotated when the chat is cleared.
+            const newSessionId = () => (window.crypto && crypto.randomUUID)
+                ? crypto.randomUUID()
+                : 'sid-' + Math.random().toString(36).slice(2) + Date.now().toString(36);
+            let ragSessionId = newSessionId();
+
             // Track manual scrolling to pause auto-scroll
             outputEl.addEventListener('scroll', () => {
                 if (!isStreaming) return;
@@ -1108,7 +1115,7 @@ function initializeRag() {
                     const resp = await fetch(QUERY_URL, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ query, top_k: 5 }),
+                        body: JSON.stringify({ query, top_k: 5, session_id: ragSessionId }),
                         signal: currentController.signal
                     });
                     clearTimeout(timeoutId);
@@ -1139,20 +1146,30 @@ function initializeRag() {
                             const payload = trimmed.slice(5).trim();
                             if (payload === '[DONE]') continue;
 
+                            let parsed = null;
                             try {
-                                const parsed = JSON.parse(payload);
-                                if (parsed.token != null) {
-                                    if (firstToken) {
-                                        firstToken = false;
-                                        // Remove typing dots
-                                        if (typingIndicator.parentNode) typingIndicator.remove();
-                                    }
-                                    accumulated += parsed.token;
-                                    aiBubble.innerHTML = renderMarkdown(accumulated);
-                                    aiBubble.appendChild(cursor);
-                                    autoScroll();
+                                parsed = JSON.parse(payload);
+                            } catch (_) { continue; /* skip malformed JSON */ }
+
+                            if (parsed.error != null) {
+                                // Backend signals an interrupted stream; keep any
+                                // partial answer, otherwise surface the retry UI.
+                                if (!accumulated) throw new Error(parsed.error);
+                                const note = document.createElement('p');
+                                note.className = 'rag-stream-note';
+                                note.textContent = '(answer may be incomplete - the stream was interrupted)';
+                                aiBubble.appendChild(note);
+                            } else if (parsed.token != null) {
+                                if (firstToken) {
+                                    firstToken = false;
+                                    // Remove typing dots
+                                    if (typingIndicator.parentNode) typingIndicator.remove();
                                 }
-                            } catch (_) { /* skip malformed JSON */ }
+                                accumulated += parsed.token;
+                                aiBubble.innerHTML = renderMarkdown(accumulated);
+                                aiBubble.appendChild(cursor);
+                                autoScroll();
+                            }
                         }
                     }
 
@@ -1224,6 +1241,8 @@ function initializeRag() {
                     outputEl.innerHTML = '';
                     outputEl.style.opacity = '0';
                     if (bgTitleEl) bgTitleEl.hidden = false;
+                    // Clearing the chat starts a fresh conversation on the backend too
+                    ragSessionId = newSessionId();
                     showSuggestions();
                 }
             });
@@ -1423,7 +1442,7 @@ function setupRagModal() {
         const infoBtn = document.getElementById('rag-info-btn');
         const modal = document.getElementById('rag-info-modal');
         const closeBtn = document.getElementById('rag-modal-close');
-        const geminiLink = document.getElementById('gemini-link');
+        const llmLink = document.getElementById('llm-link');
         const techStackLink = document.getElementById('tech-stack-link');
         
         // Info button click
@@ -1462,8 +1481,8 @@ function setupRagModal() {
         });
         
         // Interactive credits
-        if (geminiLink) {
-            geminiLink.addEventListener('click', () => {
+        if (llmLink) {
+            llmLink.addEventListener('click', () => {
                 if (modal) {
                     modal.style.display = 'block';
                     modal.setAttribute('aria-hidden', 'false');

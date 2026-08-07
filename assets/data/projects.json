@@ -28,16 +28,17 @@
     "keywords": ["LLMs & NLP", "MLOps & Deployment"],
     "thumbnail": "assets/img/projects/rag-resume-api-thumb.jpg",
     "outcome": "Powers the live AI Q&A assistant embedded in this portfolio site",
-    "summary": "A Retrieval-Augmented Generation API over my resume and documents: LlamaIndex + Gemini 2.5 Flash, FastAPI on Cloud Run, with rate limiting and a daily budget cap.",
-    "tags": ["LlamaIndex", "FastAPI", "Gemini 2.5 Flash", "Cloud Run"],
-    "stack": ["LlamaIndex", "FastAPI", "Docker", "Google Cloud Run", "Gemini 2.5 Flash", "RAG"],
+    "summary": "A Retrieval-Augmented Generation API over my resume and documents: hybrid BM25 + vector retrieval with a local cross-encoder reranker, multi-turn chat, LlamaIndex + OpenRouter, FastAPI on Cloud Run - zero per-query API cost.",
+    "tags": ["LlamaIndex", "FastAPI", "Hybrid Retrieval", "OpenRouter", "Cloud Run"],
+    "stack": ["LlamaIndex", "FastAPI", "Docker", "Google Cloud Run", "OpenRouter", "BM25 + Vector Fusion", "ONNX Cross-Encoder Reranker", "RAG"],
     "links": {
       "demo": "https://rahul-krishnan.is-a.dev",
       "github": "https://github.com/rahulk98"
     },
     "detail": [
       "A static portfolio site gave visitors no interactive way to ask about my background, projects or experience, so I built a production-safe Retrieval-Augmented Generation backend that indexes my personal documents and answers questions in real time.",
-      "It uses a LlamaIndex vector store with gemini-embedding-001 for embeddings and gemini-2.5-flash for generation, served via FastAPI, containerised with Docker and deployed on Google Cloud Run. The live endpoint adds per-IP rate limiting, a daily Gemini budget cap, an in-memory query cache and Google Sheets request logging, and powers the Q&A box on this site with scale-to-zero free-tier hosting."
+      "Retrieval is hybrid: BM25 keyword search fused with vector search over local BGE embeddings (reciprocal rank fusion), reranked by a local ONNX cross-encoder - better recall than embeddings alone, with zero per-query API cost. Generation runs on OpenRouter's free-model router with a degenerate-answer guard that retries junk responses on a re-routed model, and multi-turn chat condenses follow-up questions into standalone queries using conversation history.",
+      "It is served via FastAPI, containerised with Docker and deployed on Google Cloud Run with scale-to-zero free-tier hosting. The live endpoint adds per-IP rate limiting, a daily query quota, an in-memory response cache, SSE token streaming and request logging, and a golden Q&A eval set gates retrieval quality in CI. It powers the Q&A box on this site."
     ]
   },
   {
