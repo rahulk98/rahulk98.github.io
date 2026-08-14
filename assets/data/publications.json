@@ -1,6 +1,13 @@
 {
     "publications": [
         {
+            "title": "A JoLT for the KV Cache: Near-Lossless KV Cache Compression via Joint Tucker and JL-Residual Allocation for LLMs",
+            "conference": "arXiv preprint",
+            "year": 2026,
+            "url": "https://arxiv.org/abs/2607.12550",
+            "description": "Reports 2x to 3x near-lossless KV cache compression, with perplexity and accuracy within statistical noise"
+        },
+        {
             "title": "Glaucoma Detection from Retinal Fundus Images",
             "conference": "ICCSP",
             "year": 2020,

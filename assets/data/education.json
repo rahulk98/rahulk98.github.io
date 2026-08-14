@@ -12,7 +12,7 @@
             "thesis": {
                 "title": "Memory-Efficient KV Cache Compression for Long-Context LLM Inference",
                 "status": "In progress",
-                "summary": "Finds a 2x-3x lossless compression zone for the runtime KV cache, confirmed on downstream reasoning and retrieval, not just perplexity. The compression method is unpublished."
+                "summary": "Public preprint: https://arxiv.org/abs/2607.12550. Reports 2x to 3x near-lossless KV cache compression, with perplexity and accuracy within statistical noise."
             },
             "coursework": [
                 { "course": "Elements of Mathematics", "code": "MA4DSC1001", "grade": "3.0", "credits": "10.0" },

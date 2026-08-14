@@ -2,7 +2,7 @@
   "categories": [
     {
       "title": "Programming & Data Analysis",
-      "skills": ["Python", "SQL", "R", "Java", "ABAP (SAP)", "MATLAB", "Rust", "TypeScript (basic)", "C++ (basic)"]
+      "skills": ["Python", "SciPy", "SQL", "R", "Java", "ABAP (SAP)", "MATLAB", "Rust", "TypeScript (basic)", "C++ (basic)"]
     },
     {
       "title": "Machine Learning & Deep Learning",
@@ -50,7 +50,7 @@
     },
     {
       "title": "Big Data & Databases",
-      "skills": ["Spark", "Hadoop", "MySQL", "PostgreSQL", "SAP HANA"]
+      "skills": ["Apache Spark", "Hadoop", "MySQL", "PostgreSQL", "SAP HANA"]
     },
     {
       "title": "BI Tools",

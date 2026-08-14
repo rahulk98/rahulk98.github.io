@@ -1,6 +1,6 @@
 [
   {
-    "title": "MSc Thesis - Memory-Efficient KV Cache Compression for LLM Inference",
+    "title": "MSc Thesis: KV Cache Compression for LLM Inference",
     "slug": "kv-cache-tensor",
     "date": "2026-03-01",
     "year": "2026",
@@ -8,14 +8,16 @@
     "category": "LLM Research",
     "keywords": ["LLMs & NLP", "Optimization", "Research"],
     "thumbnail": "assets/img/projects/kv-cache-tensor-thumb.jpg",
-    "outcome": "A 2x-3x lossless zone for KV-cache compression, confirmed on downstream accuracy (GSM8K, RULER), not just perplexity",
-    "summary": "Master's thesis at Universitaet Trier on memory-efficient LLM inference. Finds a 2x-3x compression 'free zone' for the runtime KV cache with no measurable loss in quality, confirmed on reasoning and long-context retrieval, not just perplexity. The compression method is unpublished.",
+    "outcome": "2x to 3x near-lossless KV cache compression, with quality preserved on reasoning and long-context retrieval",
+    "summary": "Master's thesis at Universitaet Trier on memory-efficient LLM inference. The public preprint reports 2x to 3x near-lossless KV cache compression, with perplexity and accuracy within statistical noise: https://arxiv.org/abs/2607.12550.",
     "tags": ["PyTorch", "LLM Inference", "Mistral-7B", "LLaMA-2-13B"],
     "stack": ["Python", "PyTorch", "LLM Inference", "Mistral-7B", "LLaMA-2-13B"],
-    "links": {},
+    "links": {
+      "preprint": "https://arxiv.org/abs/2607.12550"
+    },
     "detail": [
-      "At long context the KV cache is the dominant GPU-memory cost of large-language-model inference. My thesis compresses this runtime cache and identifies a 2x-3x 'free zone' where generation quality is preserved.",
-      "Crucially, the result holds beyond perplexity: on GSM8K reasoning every compressed setting matches baseline within statistical noise, and on RULER long-context retrieval the model stays exactly lossless. The compression method itself is unpublished for now, but I am happy to walk through the approach and full results on request."
+      "At long context the KV cache is the dominant GPU-memory cost of large-language-model inference. The public preprint reports 2x to 3x near-lossless compression while preserving quality.",
+      "The results include perplexity and downstream accuracy within statistical noise, including reasoning and long-context retrieval. Read the public preprint at https://arxiv.org/abs/2607.12550."
     ]
   },
   {

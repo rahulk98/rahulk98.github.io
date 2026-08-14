@@ -1,12 +1,12 @@
 [
   {
-    "title": "Student Assistant (Hilfskraft)",
+    "title": "Research Assistant / Student Assistant (studentische Hilfskraft)",
     "company": "Universitaet Trier, Department of Mathematics",
     "location": "Trier, Germany",
-    "dates": "Apr 2026 - Jul 2026",
+    "dates": "Mid-April 2026 - Present (extended)",
     "order": 0,
     "points": [
-      "Grading weekly exercise sheets for the Numerical Optimization lecture (Prof. Dr. Volker Schulz) during the summer semester 2026.",
+      "Role extended past the summer semester into a research-assistant capacity, while the title remains studentische Hilfskraft. Supporting continuing MSc thesis research under Prof. Dr. Volker Schulz; the public preprint reports 2x to 3x near-lossless KV cache compression: https://arxiv.org/abs/2607.12550.",
       "Reviewing student work on unconstrained and constrained optimisation, line-search and trust-region methods, KKT conditions, and numerical linear algebra for optimisation, with written feedback."
     ]
   },
