@@ -1,12 +1,12 @@
 {
     "title": "Rahul Krishnan | Data Science & ML Portfolio",
     "description": "Rahul Krishnan - Data Science Master's student & ex-SAP developer specializing in Machine Learning, Deep Learning, Recommender Systems, MLOps and Cloud Deployment. View projects, skills and publications.",
-    "url": "https://rahulk98.github.io/",
+    "url": "https://rahul-krishnan.is-a.dev/",
     "author": "Rahul Krishnan",
     "email": "rahulkrishnan1105@gmail.com",
     "googleAnalyticsId": "G-2C109RKXQE",
-    "profileImage": "assets/img/profile.jpg",
-    "favicon": "assets/img/favicon.ico",
+    "profileImage": "assets/img/profile-600.jpg",
+    "favicon": "assets/img/favicon.svg",
     "theme": {
         "default": "dark",
         "colors": {
@@ -25,9 +25,9 @@
     },
     "meta": {
         "ogType": "website",
-        "ogImage": "https://rahulk98.github.io/assets/img/profile.jpg",
+        "ogImage": "https://rahul-krishnan.is-a.dev/assets/img/og-image.jpg",
         "twitterCard": "summary_large_image",
-        "twitterImage": "https://rahulk98.github.io/assets/img/profile.jpg",
+        "twitterImage": "https://rahul-krishnan.is-a.dev/assets/img/og-image.jpg",
         "keywords": [
             "Machine Learning",
             "Deep Learning",

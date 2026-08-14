@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://rahulk98.github.io/sitemap.xml
+Sitemap: https://rahul-krishnan.is-a.dev/sitemap.xml
