@@ -4,15 +4,15 @@
             "institution": "Universitaet Trier",
             "degree": "MSc Data Science",
             "grade": "1.5",
-            "status": "current",
-            "from": "2024",
-            "to": "Present",
+            "status": "ongoing",
+            "from": "Oct 2024",
+            "to": "Sep 2026 (expected)",
             "specialization": "Data and Knowledge Systems (Schwerpunkt, 20.0 credits)",
             "creditsCompleted": "90.0",
             "thesis": {
-                "title": "A JoLT for the KV Cache: Near-Lossless KV Cache Compression for LLMs (Master's Thesis)",
+                "title": "Low-Rank Tensor Decomposition for Key-Value Cache Compression in Large Language Models",
                 "status": "In progress",
-                "summary": "Public preprint: https://arxiv.org/abs/2607.12550. Reports 2x to 3x near-lossless KV cache compression, with perplexity and accuracy within statistical noise."
+                "summary": "In my thesis, I am developing JoLT, which combines partial Tucker decomposition with a rotated low-bit residual. The public preprint reports near-lossless 2x to 3x compression within a 2 percentage point noninferiority bound across five models and four model families: https://arxiv.org/abs/2607.12550."
             },
             "coursework": [
                 { "course": "Elements of Mathematics", "code": "MA4DSC1001", "grade": "3.0", "credits": "10.0" },

@@ -1,6 +1,6 @@
 {
-    "title": "Rahul Krishnan | Data Science & ML Portfolio",
-    "description": "Rahul Krishnan - Data Science Master's student & ex-SAP developer specializing in Machine Learning, Deep Learning, Recommender Systems, MLOps and Cloud Deployment. View projects, skills and publications.",
+    "title": "Rahul Krishnan, Machine Learning Portfolio",
+    "description": "Rahul Krishnan is an MSc Data Science student at Universitaet Trier with research-assistant experience and more than four years of software engineering experience at SAP Labs India. Explore his machine learning research, deployed systems, skills, and publications.",
     "url": "https://rahul-krishnan.is-a.dev/",
     "author": "Rahul Krishnan",
     "email": "rahulkrishnan1105@gmail.com",
@@ -20,7 +20,6 @@
     },
     "social": {
         "github": "https://github.com/rahulk98",
-        "linkedin": "https://linkedin.com/in/rahulk98",
         "email": "rahulkrishnan1105@gmail.com"
     },
     "meta": {
@@ -34,7 +33,7 @@
             "Large Language Models",
             "LLM Inference",
             "KV Cache Compression",
-            "Reinforcement Learning from Verifier Rewards",
+            "RLVR and LLM Calibration",
             "Retrieval-Augmented Generation",
             "Recommender Systems",
             "Graph Neural Networks",
@@ -56,28 +55,16 @@
         "context": "https://schema.org/",
         "type": "Person",
         "name": "Rahul Krishnan",
-        "jobTitle": "Data Science Master's Student (Former SAP Software Developer)",
+        "jobTitle": "MSc Data Science Student",
         "alumniOf": [
             {
                 "type": "EducationalOrganization",
                 "name": "Amrita Vishwa Vidyapeetham"
-            },
-            {
-                "type": "EducationalOrganization",
-                "name": "Universitaet Trier"
             }
         ],
         "affiliation": {
             "type": "EducationalOrganization",
             "name": "Universitaet Trier"
-        },
-        "hasOccupation": {
-            "type": "Occupation",
-            "name": "Former Software Developer",
-            "occupationLocation": {
-                "type": "Organization",
-                "name": "SAP Labs India"
-            }
         }
     }
 }

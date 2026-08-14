@@ -1,15 +1,15 @@
 {
     "name": "Rahul Krishnan",
-    "title": "Data Science Master's Student",
-    "subtitle": "MSc Data Science student at Universitaet Trier with over 4 years of professional software engineering experience at SAP Labs India. Working across LLMs, recommender systems, graph ML, and MLOps.",
-    "currentRole": "MSc Data Science at Universitaet Trier",
+    "title": "MSc Data Science Student",
+    "subtitle": "I am an MSc Data Science student at Universitaet Trier with research-assistant experience and more than four years of software engineering experience at SAP Labs India. I work on efficient and reliable machine learning systems, from LLM inference and evaluation to recommender systems and cloud deployment.",
+    "currentRole": "MSc Data Science Student at Universitaet Trier",
     "previousRole": "Former SAP Software Developer",
     "location": "Trier, Germany",
     "bio": {
         "paragraphs": [
-            "I'm Rahul Krishnan, a Data Science master's student at Universitaet Trier and a former SAP software developer with over 4 years of professional software engineering experience at SAP Labs India. I build AI systems end to end, from training and evaluation through to containerised deployment, and I am drawn to the engineering layer that decides whether a model actually ships: latency, memory, cost and reliability.",
-            "My MSc thesis addresses a core bottleneck in long-context LLM inference, the memory consumed by the KV cache. Its public preprint reports 2x to 3x near-lossless KV cache compression, with quality preserved on reasoning and long-context retrieval: https://arxiv.org/abs/2607.12550. Around it I have studied where LLMs can be trusted, from chain-of-thought faithfulness on BIG-Bench Hard to reward design for calibration and selective abstention. On the applied side I have shipped a RAG assistant on Google Cloud Run, a Two-Tower recommender on Azure, and a neuro-symbolic model for cross-lingual narrative similarity.",
-            "I care about results that hold up: multi-seed evaluation, honest error bars and measured latency over single-run headline numbers. My interests sit at the intersection of LLM inference efficiency, evaluation and alignment, recommender systems, and reliable MLOps."
+            "I am an MSc Data Science student at Universitaet Trier. My experience there includes research assistance on KV cache compression and grading Numerical Optimization coursework. Before starting the MSc, I spent more than four years as a software engineer at SAP Labs India, building tax-document workflows, privacy controls, and large-scale result-processing systems.",
+            "My current research focuses on reducing the memory used by the KV cache in long-context LLM inference. The public JoLT preprint reports near-lossless 2x to 3x compression within a 2 percentage point noninferiority bound across five models and four model families, with 64K long-context and GSM8K reasoning evaluations. I have also studied chain-of-thought faithfulness and reward design for calibration and abstention.",
+            "I build complete machine learning systems, from training and evaluation to deployment. My projects include a RAG assistant on Google Cloud Run, a Two-Tower recommender on Azure Container Apps, and a neuro-symbolic narrative-similarity model. I focus on reproducible evaluation, measured latency, memory use, and clear technical limitations."
         ]
     },
     "interests": [
@@ -30,7 +30,7 @@
     },
     "profileImage": {
         "src": "assets/img/profile-600.jpg",
-        "alt": "Rahul Krishnan - Data Science Master's Student",
+        "alt": "Rahul Krishnan, MSc Data Science Student",
         "width": 300,
         "height": 300
     }

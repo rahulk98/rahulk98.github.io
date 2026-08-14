@@ -1,18 +1,24 @@
 {
-    "publications": [
-        {
-            "title": "A JoLT for the KV Cache: Near-Lossless KV Cache Compression for LLMs (Master's Thesis)",
-            "conference": "arXiv preprint",
-            "year": 2026,
-            "url": "https://arxiv.org/abs/2607.12550",
-            "description": "Reports 2x to 3x near-lossless KV cache compression, with perplexity and accuracy within statistical noise"
-        },
-        {
-            "title": "Glaucoma Detection from Retinal Fundus Images",
-            "conference": "ICCSP",
-            "year": 2020,
-            "url": "https://ieeexplore.ieee.org/document/9182388",
-            "description": "Detection of glaucoma from retinal fundus images using region growing and SVM"
-        }
-    ]
+  "publications": [
+    {
+      "title": "A JoLT for the KV Cache",
+      "conference": "arXiv preprint",
+      "year": 2026,
+      "url": "https://arxiv.org/abs/2607.12550",
+      "description": "My MSc thesis preprint reports near-lossless 2x to 3x KV cache compression within a 2 percentage point noninferiority bound across five models and four model families."
+    },
+    {
+      "title": "Structural Companion Study on Tensor Decompositions for the KV Cache",
+      "conference": "In preparation, targeting SIAM Journal on Mathematics of Data Science (SIMODS)",
+      "year": "",
+      "description": "Volker Schulz and I are preparing this structural and theoretical companion to the JoLT method paper."
+    },
+    {
+      "title": "Glaucoma Detection from Retinal Fundus Images",
+      "conference": "International Conference on Communication and Signal Processing (ICCSP)",
+      "year": 2020,
+      "url": "https://ieeexplore.ieee.org/document/9182388",
+      "description": "I co-authored this paper on glaucoma screening from retinal fundus images using region growing and SVM classification. The paper reports an F1 score of 86%."
+    }
+  ]
 }

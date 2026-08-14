@@ -3,11 +3,11 @@
     "title": "Research Assistant / Student Assistant (studentische Hilfskraft)",
     "company": "Universitaet Trier, Department of Mathematics",
     "location": "Trier, Germany",
-    "dates": "Mid-April 2026 - Present (extended)",
+    "dates": "2026",
     "order": 0,
     "points": [
-      "Role extended past the summer semester into a research-assistant capacity, while the title remains studentische Hilfskraft. Supporting continuing MSc thesis research under Prof. Dr. Volker Schulz; the public preprint reports 2x to 3x near-lossless KV cache compression: https://arxiv.org/abs/2607.12550.",
-      "Reviewing student work on unconstrained and constrained optimisation, line-search and trust-region methods, KKT conditions, and numerical linear algebra for optimisation, with written feedback."
+      "My role included support for continuing MSc thesis research on KV cache compression under Prof. Dr. Volker Schulz. The public JoLT preprint reports near-lossless 2x to 3x compression across five models and four model families: https://arxiv.org/abs/2607.12550.",
+      "Earlier in the role, I graded weekly Numerical Optimization exercise sheets and gave written feedback on unconstrained and constrained optimization, line search, trust-region methods, KKT conditions, and numerical linear algebra."
     ]
   },
   {
@@ -17,10 +17,10 @@
     "dates": "Mar 2024 - Sep 2024",
     "order": 1,
     "points": [
-      "Designed a rule-based, declarative content-matching framework for tax-document field comparison over SAP iFlow, letting country teams configure field comparisons with no custom code. Cut new-country onboarding from about 10 days to about 3 (~70%); adopted by the Spain, India, and Chile teams.",
-      "Built an iFlow bulk-retrieval algorithm on the Document Consistency Cockpit (DCC) Spain reporting path, replacing about 100 paginated API calls with a single bulk request and cutting report generation time by about 30%.",
-      "Ideated a per-customer self-correcting ML system for content-matching result processing, designed for in-tenant training to respect GDPR; presented at an internal SAP innovation forum and accepted as a future direction.",
-      "Promoted from SDE I to SDE II on consistent top reviews and selected for SAP Labs India's fast-track architect career-development program, the only person from the area on it at the time."
+      "I designed a rule-based, declarative content-matching framework for tax-document field comparison over SAP iFlow, letting country teams configure field comparisons with no custom code. It reduced new-country onboarding from about 10 days to about 3 days and was adopted by the Spain, India, and Chile teams.",
+      "I designed an iFlow bulk-retrieval algorithm for the DCC Spain reporting path, replacing about 100 paginated API calls with one bulk request and reducing report generation time by about 30%.",
+      "I proposed a per-customer self-correcting ML system for content-matching results, with in-tenant training to avoid central data pooling. I presented the concept at an internal SAP innovation forum in early 2024; it was accepted as a future direction but was not shipped before my role ended.",
+      "I was promoted from SDE I to SDE II after consistent top reviews and selected for SAP Labs India's fast-track architect career-development program, as the only person from my area in the program at the time."
     ]
   },
   {
@@ -30,10 +30,10 @@
     "dates": "Jul 2020 - Mar 2024",
     "order": 2,
     "points": [
-      "Owned the result-processing pillar of the Document Consistency Cockpit (DCC) end-to-end: architected the schema, decoupling layer, factory-based extensibility for new document types and countries, idempotency, and retry semantics. Load-tested at 10M to 100M document cycles; deployed for Spain and India.",
-      "Initiated and led a Turkey error-handling overhaul on SAP DRC, categorising two years of incidents by root cause and shipping fixes plus clearer messages and FAQs. Incident volume fell about 88% (roughly 50 to 2-3 per month) and the support rating rose from 2-3 to 4-5 (~66%).",
-      "Re-engineered a failing daily Turkey vendor reconciliation job, replacing a timing-out database join with a hash-map lookup keyed on tax ID and eliminating recurring failures as the ~10M-entry registry grew.",
-      "Architected Data Protection and Privacy (DPP / GDPR) compliance across the SAP Document Consistency solution and delivered legal and feature updates across Turkey, Mexico, and Chile. Recognised with the SAP Stellar Award (2023) for the DCC and Turkey work."
+      "I owned the result-processing pillar of the Document Consistency Cockpit end to end. I designed its schema, decoupling layer, factory-based extensibility, idempotency, and retry semantics. I load-tested it at 10M to 100M document cycles and deployed it for Spain and India.",
+      "I initiated and led a Turkey error-handling overhaul for SAP DRC, categorizing two years of incidents by root cause and shipping fixes, clearer messages, and customer-facing FAQs. Incident volume fell about 88%, from roughly 50 to 2 or 3 per month, while the support rating rose from 2 or 3 to 4 or 5 out of 5.",
+      "I re-engineered a failing daily Turkey vendor reconciliation job by replacing a timing-out database join with a hash-map lookup keyed on tax ID, eliminating recurring failures as the registered-entity list grew.",
+      "I designed GDPR-aligned Data Protection and Privacy compliance for the SAP Document Consistency solution and delivered legal and feature updates across Turkey, Mexico, and Chile. I received the SAP Stellar Award in 2023 for the DCC and Turkey work."
     ]
   },
   {
@@ -43,8 +43,8 @@
     "dates": "Jan 2020 - Jul 2020",
     "order": 3,
     "points": [
-      "Shipped backlog features on the SAP eDocument solution (now SAP DRC), including Turkey delivery-note support and an XML proxy update for upstream format changes.",
-      "Delivered consistently ahead of deadline with near-zero QA defects, earning a direct full-time offer on the same team."
+      "I shipped backlog features for the SAP eDocument solution, now SAP DRC, including Turkey delivery-note support and an XML proxy update for upstream format changes.",
+      "I delivered consistently ahead of deadline with near-zero QA defects and earned a direct full-time offer on the same team."
     ]
   }
 ]

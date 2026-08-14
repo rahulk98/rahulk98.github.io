@@ -567,16 +567,22 @@ function loadCertifications() {
     article.className = 'cert-card';
     article.setAttribute('role', 'listitem');
 
-    article.innerHTML = `
-      <a class="cert-card__link" href="${cert.link}" target="_blank" rel="noopener noreferrer"
-         aria-label="${cert.title} by ${cert.issuer}">
+    const cardBody = `
         <div class="cert-card__body">
           <span class="cert-card__issuer">${cert.issuer}</span>
           <h3 class="cert-card__title">${cert.title}</h3>
           <span class="cert-card__date">${cert.date}</span>
-        </div>
-        <div class="cert-card__arrow" aria-hidden="true"></div>
-      </a>`;
+        </div>`;
+
+    article.innerHTML = cert.link
+      ? `<a class="cert-card__link" href="${cert.link}" target="_blank" rel="noopener noreferrer"
+           aria-label="${cert.title} by ${cert.issuer}">
+           ${cardBody}
+           <div class="cert-card__arrow" aria-hidden="true"></div>
+         </a>`
+      : `<div class="cert-card__link" aria-label="${cert.title} by ${cert.issuer}">
+           ${cardBody}
+         </div>`;
 
     fragment.appendChild(article);
   });
@@ -608,12 +614,19 @@ function loadPublications() {
         console.log('Publications data structure:', publications);
         console.log('Number of publications:', publications.publications.length);
 
-        const html = publications.publications.map(pub => `
-            <li>
-                <strong>${pub.title}</strong> - ${pub.conference} ${pub.year}
-                <a class="link" href="${pub.url}" target="_blank" rel="noopener">Read Paper</a>
-            </li>
-        `).join('');
+        const html = publications.publications.map(pub => {
+            const venue = [pub.conference, pub.year].filter(Boolean).join(', ');
+            const paperLink = pub.url
+                ? `<a class="link" href="${pub.url}" target="_blank" rel="noopener">Read Paper</a>`
+                : '';
+
+            return `
+                <li>
+                    <strong>${pub.title}</strong>${venue ? `, ${venue}` : ''}
+                    ${paperLink}
+                </li>
+            `;
+        }).join('');
 
         console.log('Generated HTML length:', html.length);
         publicationsSection.innerHTML = html;
