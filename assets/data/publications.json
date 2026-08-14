@@ -1,7 +1,7 @@
 {
     "publications": [
         {
-            "title": "A JoLT for the KV Cache: Near-Lossless KV Cache Compression via Joint Tucker and JL-Residual Allocation for LLMs (Master's Thesis)",
+            "title": "A JoLT for the KV Cache: Near-Lossless KV Cache Compression for LLMs (Master's Thesis)",
             "conference": "arXiv preprint",
             "year": 2026,
             "url": "https://arxiv.org/abs/2607.12550",
