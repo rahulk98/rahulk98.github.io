@@ -1,6 +1,6 @@
 [
   {
-    "title": "MSc Thesis: KV Cache Compression for LLM Inference",
+    "title": "A JoLT for the KV Cache: Near-Lossless KV Cache Compression via Joint Tucker and JL-Residual Allocation for LLMs",
     "slug": "kv-cache-tensor",
     "date": "2026-03-01",
     "year": "2026",

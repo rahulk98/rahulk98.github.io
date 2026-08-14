@@ -10,7 +10,7 @@
             "specialization": "Data and Knowledge Systems (Schwerpunkt, 15.0 credits)",
             "creditsCompleted": "85.0",
             "thesis": {
-                "title": "Memory-Efficient KV Cache Compression for Long-Context LLM Inference",
+                "title": "A JoLT for the KV Cache: Near-Lossless KV Cache Compression via Joint Tucker and JL-Residual Allocation for LLMs",
                 "status": "In progress",
                 "summary": "Public preprint: https://arxiv.org/abs/2607.12550. Reports 2x to 3x near-lossless KV cache compression, with perplexity and accuracy within statistical noise."
             },
