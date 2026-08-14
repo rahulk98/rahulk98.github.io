@@ -7,10 +7,10 @@
             "status": "current",
             "from": "2024",
             "to": "Present",
-            "specialization": "Data and Knowledge Systems (Schwerpunkt, 15.0 credits)",
-            "creditsCompleted": "85.0",
+            "specialization": "Data and Knowledge Systems (Schwerpunkt, 20.0 credits)",
+            "creditsCompleted": "90.0",
             "thesis": {
-                "title": "A JoLT for the KV Cache: Near-Lossless KV Cache Compression via Joint Tucker and JL-Residual Allocation for LLMs",
+                "title": "A JoLT for the KV Cache: Near-Lossless KV Cache Compression via Joint Tucker and JL-Residual Allocation for LLMs (Master's Thesis)",
                 "status": "In progress",
                 "summary": "Public preprint: https://arxiv.org/abs/2607.12550. Reports 2x to 3x near-lossless KV cache compression, with perplexity and accuracy within statistical noise."
             },
@@ -26,6 +26,7 @@
                 { "course": "Research Case Studies", "code": "MA4DSC1009", "grade": "1.0", "credits": "10.0" },
                 { "course": "Digital Libraries and Foundations of Information Retrieval", "code": "MA4DSC1017", "grade": "1.0", "credits": "5.0" },
                 { "course": "Distributed Databases", "code": "MA4DSC1018", "grade": "1.0", "credits": "5.0" },
+                { "course": "Distributed Artificial Intelligence", "code": "MA4DSC1021", "grade": "2.0", "credits": "5.0" },
                 { "course": "Machine Learning", "code": "MA4DSC1023", "grade": "1.0", "credits": "5.0" }
             ]
         },
