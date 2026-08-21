@@ -9,15 +9,15 @@
     "keywords": ["LLMs & NLP", "Optimization", "Research"],
     "thumbnail": "assets/img/projects/kv-cache-tensor-thumb.jpg",
     "outcome": "Near-lossless 2x to 3x KV cache compression with accuracy within 2 percentage points of the uncompressed model",
-    "summary": "For my registered MSc thesis at Universitaet Trier, I am developing JoLT for memory-efficient LLM inference. It combines partial Tucker decomposition with a rotated low-bit residual and Lagrangian budget allocation. The related preprint is A JoLT for the KV Cache: https://arxiv.org/abs/2607.12550.",
+    "summary": "For my registered MSc thesis at Universitaet Trier, I am developing JoLT for memory-efficient LLM inference. It combines partial Tucker decomposition with a compact low-bit correction term (a rotated residual) and an optimization step (Lagrangian budget allocation) that decides how much to compress each part of the cache under a fixed memory budget. The related preprint is A JoLT for the KV Cache: https://arxiv.org/abs/2607.12550.",
     "tags": ["PyTorch", "Tucker Decomposition", "Lagrangian Optimization", "LLM Inference"],
     "stack": ["Python", "PyTorch", "Tucker Decomposition", "Lagrangian Optimization", "FlashJoLT", "LLM Inference"],
     "links": {
       "preprint": "https://arxiv.org/abs/2607.12550"
     },
     "detail": [
-      "KV caches can become a major memory cost during long-context LLM inference. In my thesis, I combine partial Tucker decomposition over token and feature modes with a rotated low-bit residual.",
-      "I use a Lagrangian dual to select decomposition ranks and residual bit widths jointly under a storage budget. Across five models and four model families, JoLT achieved near-lossless 2x to 3x compression while keeping accuracy within 2 percentage points of the uncompressed model. I evaluated it on 64K long-context retrieval and GSM8K reasoning."
+      "KV caches can become a major memory cost during long-context LLM inference. In my thesis, I combine partial Tucker decomposition, a low-rank factorization over token and feature modes, with a rotated low-bit residual that cheaply corrects the approximation.",
+      "I use a Lagrangian dual to jointly choose the compression settings (decomposition ranks and residual bit widths) under a storage budget. Across five models and four model families, JoLT achieved near-lossless 2x to 3x compression while keeping accuracy within 2 percentage points of the uncompressed model. I evaluated it on 64K long-context retrieval and GSM8K reasoning."
     ]
   },
   {
@@ -51,14 +51,14 @@
     "category": "LLM Research",
     "keywords": ["LLMs & NLP", "Machine Learning", "Research"],
     "thumbnail": "assets/img/projects/neuro-symbolic-narrative-thumb.jpg",
-    "outcome": "72.5% pairwise accuracy and 95% precision on a 500-triple cross-lingual evaluation",
+    "outcome": "72.5% pairwise accuracy and 95% precision on 500 story-comparison test cases spanning five languages",
     "summary": "I built a neuro-symbolic narrative-similarity system that combines a HeteroGNN over LLM-extracted story structure with Gemini text embeddings. I evaluated the interpretable additive fusion on pairwise and five-language cross-lingual data.",
     "tags": ["PyTorch Geometric", "HeteroConv", "GPT-OSS 20B", "CORAL"],
     "stack": ["Python", "PyTorch Geometric", "HeteroConv", "SAGEConv", "GPT-OSS 20B (Ollama)", "Gemini embeddings", "CORAL domain adaptation"],
     "links": {},
     "detail": [
-      "I used GPT-OSS 20B to extract themes, actions, outcomes, and plot type into schema-validated JSON, then formed a heterogeneous graph with four node types. I combined the graph representation with Gemini text embeddings through normalized additive averaging.",
-      "The system reached 72.5% accuracy on pairwise narrative similarity and 95% precision on a 500-triple Tell-Me-Again subset spanning German, English, Spanish, French, and Italian. My principal-angle analysis found the graph and text channels near-orthogonal at 85.4 degrees, enabling an exact additive decomposition of the fused cosine score. I trained the GNN on 1,900 synthetic triplets, so generalization to substantially different narrative domains remains untested."
+      "I used GPT-OSS 20B to extract themes, actions, outcomes, and plot type into schema-validated JSON, then formed a heterogeneous graph with four node types. I combined the graph representation with Gemini text embeddings through a simple weighted average.",
+      "The system reached 72.5% accuracy on pairwise narrative similarity and 95% precision on 500 story-comparison test cases from the Tell-Me-Again dataset, spanning German, English, Spanish, French, and Italian. An angle analysis showed the graph and text signals carry largely independent information, so each one's contribution to the final similarity score can be measured exactly. I trained the GNN on 1,900 synthetic triplets, so generalization to substantially different narrative domains remains untested."
     ]
   },
   {
@@ -71,13 +71,13 @@
     "keywords": ["LLMs & NLP", "Research"],
     "thumbnail": "assets/img/projects/fear-rlvr-thumb.jpg",
     "outcome": "At 1.5B and 3B, asymmetric rewards shifted abstention but did not improve calibration",
-    "summary": "I tested whether asymmetric RLVR rewards improve LLM calibration and abstention. My GRPO training and evaluation pipeline on Qwen 2.5 found no calibration benefit at the tested scales, but produced a mechanistic explanation for why.",
+    "summary": "I tested whether asymmetric rewards in reinforcement learning with verifiable rewards (RLVR) improve how well an LLM's confidence matches reality (calibration) and when it declines to answer (abstention). My GRPO training and evaluation pipeline on Qwen 2.5 found no calibration benefit at the tested scales, but produced a mechanistic explanation for why.",
     "tags": ["GRPO", "RLVR", "Qwen 2.5", "LoRA"],
     "stack": ["Python", "PyTorch", "GRPO (TRL)", "LoRA / PEFT", "vLLM", "Qwen 2.5", "Hugging Face", "Weights & Biases"],
     "links": {},
     "detail": [
-      "I tested whether heavily penalizing wrong answers would make Qwen 2.5 models better calibrated or more willing to abstain. I trained seven reward conditions at 1.5B and frontier conditions at 3B across six math and general-reasoning benchmarks, using calibration and selective-prediction metrics.",
-      "I found that asymmetric rewards changed how often models abstained, not calibration or accuracy when answering. Finding O explains the result: with GRPO within-group z-score normalization, the reward design reduces to a one-dimensional abstention-threshold control rather than independently changing per-question confidence.",
+      "I tested whether heavily penalizing wrong answers would make Qwen 2.5 models better calibrated or more willing to abstain. I trained seven reward conditions at 1.5B and the most promising reward settings at 3B across six math and general-reasoning benchmarks, using calibration and selective-prediction metrics.",
+      "I found that asymmetric rewards changed how often models abstained, not calibration or accuracy when answering. The reason: because of how GRPO normalizes rewards, penalty tuning only shifts the point at which the model declines to answer. It cannot change how confident the model is on individual questions.",
       "I limited the conclusions to 1.5B and 3B Qwen 2.5 models. I did not run a 7B confirmation because of compute constraints, collected only partial multi-seed error bars, and did not run some planned follow-up analyses at scale."
     ]
   },
@@ -132,13 +132,13 @@
     "category": "Optimization",
     "keywords": ["Optimization", "Research"],
     "thumbnail": "assets/img/projects/risk-averse-cvar-thumb.jpg",
-    "outcome": "Under severe open-loop temperature mismatch, CVaR control reduced the violation rate from 100% to 0%",
+    "outcome": "When the controller's temperature model was badly wrong, CVaR control cut constraint violations from 100% of scenarios to 0%",
     "summary": "I applied CVaR-based risk-averse optimization to nonlinear programming, perturbed SVM classification, and wine-fermentation model predictive control.",
     "tags": ["CasADi", "IPOPT", "CVXPY", "MPC"],
     "stack": ["Python", "CasADi", "IPOPT", "CVXPY", "OSQP", "MPC", "Jupyter"],
     "links": {},
     "detail": [
-      "I implemented Conditional Value at Risk objectives with the Rockafellar-Uryasev formulation and sample-average approximation across a Wobbly Rosenbrock program, a perturbed linear SVM, and a scenario-based wine-fermentation controller.",
+      "I implemented Conditional Value at Risk (CVaR) objectives, which optimize for the worst-case tail of outcomes, and tested them on three problems: a noisy benchmark function, an SVM trained on perturbed data, and a wine-fermentation controller.",
       "In my open-loop fermentation comparison with severe temperature mismatch, the CVaR controller reduced the violation rate from 100% to 0%, while using more control effort.",
       "In a separate closed-loop 21-day hot-scenario simulation, I found that CVaR improved final sugar and ethanol outcomes at higher control cost. This result is distinct from the open-loop violation comparison."
     ]
