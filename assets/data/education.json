@@ -12,7 +12,7 @@
             "thesis": {
                 "title": "Low-Rank Tensor Decomposition for Key-Value Cache Compression in Large Language Models",
                 "status": "In progress",
-                "summary": "In my thesis, I am developing JoLT, which combines partial Tucker decomposition with a rotated low-bit residual. The public preprint reports near-lossless 2x to 3x compression within a 2 percentage point noninferiority bound across five models and four model families: https://arxiv.org/abs/2607.12550."
+                "summary": "In my thesis, I am developing JoLT, which combines partial Tucker decomposition with a rotated low-bit residual. The public preprint reports near-lossless 2x to 3x compression, with accuracy staying within 2 percentage points of the uncompressed model, across five models and four model families: https://arxiv.org/abs/2607.12550."
             },
             "coursework": [
                 { "course": "Elements of Mathematics", "code": "MA4DSC1001", "grade": "3.0", "credits": "10.0" },

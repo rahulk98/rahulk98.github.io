@@ -8,7 +8,7 @@
     "bio": {
         "paragraphs": [
             "I am an MSc Data Science student at Universitaet Trier. My experience there includes research assistance on KV cache compression and grading Numerical Optimization coursework. Before starting the MSc, I spent more than four years as a software engineer at SAP Labs India, building tax-document workflows, privacy controls, and large-scale result-processing systems.",
-            "My current research focuses on reducing the memory used by the KV cache in long-context LLM inference. The public JoLT preprint reports near-lossless 2x to 3x compression within a 2 percentage point noninferiority bound across five models and four model families, with 64K long-context and GSM8K reasoning evaluations. I have also studied chain-of-thought faithfulness and reward design for calibration and abstention.",
+            "My current research focuses on reducing the memory used by the KV cache in long-context LLM inference. The public JoLT preprint reports near-lossless 2x to 3x compression across five models and four model families, keeping accuracy within 2 percentage points of the uncompressed model, with 64K long-context and GSM8K reasoning evaluations. I have also studied chain-of-thought faithfulness and reward design for calibration and abstention.",
             "I build complete machine learning systems, from training and evaluation to deployment. My projects include a RAG assistant on Google Cloud Run, a Two-Tower recommender on Azure Container Apps, and a neuro-symbolic narrative-similarity model. I focus on reproducible evaluation, measured latency, memory use, and clear technical limitations."
         ]
     },

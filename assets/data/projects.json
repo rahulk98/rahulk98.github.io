@@ -8,7 +8,7 @@
     "category": "LLM Research",
     "keywords": ["LLMs & NLP", "Optimization", "Research"],
     "thumbnail": "assets/img/projects/kv-cache-tensor-thumb.jpg",
-    "outcome": "Near-lossless 2x to 3x KV cache compression within a 2 percentage point noninferiority bound",
+    "outcome": "Near-lossless 2x to 3x KV cache compression with accuracy within 2 percentage points of the uncompressed model",
     "summary": "For my registered MSc thesis at Universitaet Trier, I am developing JoLT for memory-efficient LLM inference. It combines partial Tucker decomposition with a rotated low-bit residual and Lagrangian budget allocation. The related preprint is A JoLT for the KV Cache: https://arxiv.org/abs/2607.12550.",
     "tags": ["PyTorch", "Tucker Decomposition", "Lagrangian Optimization", "LLM Inference"],
     "stack": ["Python", "PyTorch", "Tucker Decomposition", "Lagrangian Optimization", "FlashJoLT", "LLM Inference"],
@@ -17,7 +17,7 @@
     },
     "detail": [
       "KV caches can become a major memory cost during long-context LLM inference. In my thesis, I combine partial Tucker decomposition over token and feature modes with a rotated low-bit residual.",
-      "I use a Lagrangian dual to select decomposition ranks and residual bit widths jointly under a storage budget. Across five models and four model families, JoLT achieved near-lossless 2x to 3x compression within a 2 percentage point noninferiority bound. I evaluated it on 64K long-context retrieval and GSM8K reasoning."
+      "I use a Lagrangian dual to select decomposition ranks and residual bit widths jointly under a storage budget. Across five models and four model families, JoLT achieved near-lossless 2x to 3x compression while keeping accuracy within 2 percentage points of the uncompressed model. I evaluated it on 64K long-context retrieval and GSM8K reasoning."
     ]
   },
   {

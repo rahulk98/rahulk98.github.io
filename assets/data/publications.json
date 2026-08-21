@@ -5,7 +5,7 @@
       "conference": "arXiv preprint",
       "year": 2026,
       "url": "https://arxiv.org/abs/2607.12550",
-      "description": "My MSc thesis preprint reports near-lossless 2x to 3x KV cache compression within a 2 percentage point noninferiority bound across five models and four model families."
+      "description": "My MSc thesis preprint reports near-lossless 2x to 3x KV cache compression, with accuracy staying within 2 percentage points of the uncompressed model, across five models and four model families."
     },
     {
       "title": "Structural Companion Study on Tensor Decompositions for the KV Cache",
