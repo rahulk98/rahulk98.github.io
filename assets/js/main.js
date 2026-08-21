@@ -1123,7 +1123,10 @@ function initializeRag() {
 
                 try {
                     currentController = new AbortController();
-                    const timeoutId = setTimeout(() => currentController.abort(), 30000);
+                    // Allow room for the backend's no-token fallback: a hung
+                    // upstream stream can take ~20s to raise before the server
+                    // retries via the non-streaming path.
+                    const timeoutId = setTimeout(() => currentController.abort(), 45000);
 
                     const resp = await fetch(QUERY_URL, {
                         method: 'POST',
