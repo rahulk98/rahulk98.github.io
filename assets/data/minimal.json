@@ -1,0 +1,45 @@
+{
+    "tagline": "MSc Data Science at Universitaet Trier. I work on efficient and reliable machine learning systems, currently on memory-efficient LLM inference.",
+    "ask": {
+        "label": "Ask about my work",
+        "note": "A retrieval assistant indexed over my papers, projects, and CV answers questions here."
+    },
+    "news": [
+        {
+            "date": "Jul 2026",
+            "text": "Preprint out: A JoLT for the KV Cache, near-lossless 2x to 3x compression across five models."
+        },
+        {
+            "date": "2026",
+            "text": "Research assistant with Prof. Dr. Volker Schulz, Department of Mathematics, Universitaet Trier."
+        },
+        {
+            "date": "2026",
+            "text": "Companion paper on tensor decompositions for the KV cache in preparation for SIMODS."
+        },
+        {
+            "date": "Sep 2026",
+            "text": "MSc Data Science at Universitaet Trier, expected. Current grade 1.5."
+        }
+    ],
+    "threads": [
+        {
+            "tag": "Inference",
+            "text": "Making long-context LLM inference cheaper in memory without giving up accuracy."
+        },
+        {
+            "tag": "Reliability",
+            "text": "Whether a model's stated reasoning and stated confidence track what it actually does."
+        },
+        {
+            "tag": "Systems",
+            "text": "Reproducible evaluation, measured latency and memory, and stated limitations."
+        }
+    ],
+    "nav": [
+        { "title": "Research", "url": "#research" },
+        { "title": "Papers", "url": "#papers" },
+        { "title": "Projects", "url": "#projects" },
+        { "title": "Recent", "url": "#recent" }
+    ]
+}

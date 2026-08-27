@@ -11,8 +11,14 @@
     "navigation": "assets/data/navigation.json",
     "privacy": "assets/data/privacy.json",
     "footer": "assets/data/footer.json",
-    "error": "assets/data/error.json"
+    "error": "assets/data/error.json",
+    "minimal": "assets/data/minimal.json"
   },
+  "design": "minimal",
+  "designOptions": [
+    "classic",
+    "minimal"
+  ],
   "sections": [
     "hero",
     "about",

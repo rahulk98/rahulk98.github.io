@@ -2,6 +2,7 @@
   "publications": [
     {
       "title": "A JoLT for the KV Cache",
+      "authors": "",
       "conference": "arXiv preprint",
       "year": 2026,
       "url": "https://arxiv.org/abs/2607.12550",
@@ -9,12 +10,14 @@
     },
     {
       "title": "Structural Companion Study on Tensor Decompositions for the KV Cache",
+      "authors": "",
       "conference": "In preparation, targeting SIAM Journal on Mathematics of Data Science (SIMODS)",
       "year": "",
       "description": "Volker Schulz and I are preparing this structural and theoretical companion to the JoLT method paper."
     },
     {
       "title": "Glaucoma Detection from Retinal Fundus Images",
+      "authors": "",
       "conference": "International Conference on Communication and Signal Processing (ICCSP)",
       "year": 2020,
       "url": "https://ieeexplore.ieee.org/document/9182388",

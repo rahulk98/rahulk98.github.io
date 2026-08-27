@@ -57,6 +57,20 @@
 
     <link rel="stylesheet" href="assets/css/styles.css?v=20260807v1">
     <link rel="stylesheet" href="assets/css/blog.css?v=20260412v1">
+    <link rel="stylesheet" href="assets/css/minimal.css?v=20260827v1">
+    <script>
+        // Apply the last known design immediately so a repeat visit does not
+        // flash the other one. config.json is still the source of truth.
+        (function () {
+            try {
+                var override = new URLSearchParams(window.location.search).get('design');
+                var cached = override || localStorage.getItem('siteDesign');
+                if (cached === 'classic' || cached === 'minimal') {
+                    document.documentElement.dataset.design = cached;
+                }
+            } catch (error) { /* no cached choice */ }
+        })();
+    </script>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap">
     
     <!-- Structured Data -->
@@ -85,6 +99,8 @@
     </script>
 </head>
 <body>
+    <div id="minimal-root"></div>
+
     <header class="header">
         <div class="container">
             <nav class="nav">
@@ -305,6 +321,7 @@
     </div>
 
 
+    <script src="assets/js/minimal.js?v=20260827v1"></script>
     <script src="assets/js/main.js?v=20260821v1"></script>
 </body>
 </html>

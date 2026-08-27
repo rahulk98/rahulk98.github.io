@@ -14,6 +14,19 @@ async function initializeApp() {
     await loadAllData();
     console.log('All data loaded, now initializing components...');
 
+    // config.json picks the design; ?design= overrides it for one visit.
+    const design = resolveDesign(window.siteConfig);
+    document.documentElement.dataset.design = design;
+
+    if (design === 'minimal') {
+        renderMinimal();
+        setupThemeToggle();
+        initializeRag();
+        optimizeImages();
+        console.log('initializeApp() completed (minimal design)');
+        return;
+    }
+
     loadExperience();
     loadProjects();
     loadPersonalInfo();
@@ -375,6 +388,7 @@ async function loadAllData() {
         console.log('Config response received, length:', configText.length);
 
         const config = JSON.parse(configText);
+        window.siteConfig = config;
         console.log('Config parsed successfully:', Object.keys(config.dataFiles));
 
         // Load all data files in parallel
