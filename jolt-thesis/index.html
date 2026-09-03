@@ -4,19 +4,19 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>JoLT: Low-Rank KV Cache Compression | Rahul Krishnan</title>
+  <title>JoLT: Near-Lossless KV Cache Compression | Rahul Krishnan</title>
   <meta name="description" content="JoLT jointly allocates Tucker ranks and low-bit residual budgets to compress the LLM KV cache near-losslessly through 3x, with a fused decode kernel that cuts peak decode memory by 3.61x.">
   <meta name="author" content="Rahul Krishnan">
   <meta name="robots" content="index, follow">
 
   <meta property="og:type" content="article">
-  <meta property="og:title" content="Low-Rank Tensor Decomposition for Key-Value Cache Compression in Large Language Models">
+  <meta property="og:title" content="JoLT: Near-Lossless KV Cache Compression">
   <meta property="og:description" content="JoLT jointly allocates Tucker ranks and low-bit residual budgets to compress the LLM KV cache near-losslessly through 3x, with a fused decode kernel that cuts peak decode memory by 3.61x.">
   <meta property="og:url" content="https://rahul-krishnan.is-a.dev/jolt-thesis/">
   <meta property="og:image" content="https://rahul-krishnan.is-a.dev/jolt-thesis/static/images/teaser_free_zone.png">
 
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Low-Rank Tensor Decomposition for Key-Value Cache Compression in Large Language Models">
+  <meta name="twitter:title" content="JoLT: Near-Lossless KV Cache Compression">
   <meta name="twitter:description" content="JoLT jointly allocates Tucker ranks and low-bit residual budgets to compress the LLM KV cache near-losslessly through 3x, with a fused decode kernel that cuts peak decode memory by 3.61x.">
   <meta name="twitter:image" content="https://rahul-krishnan.is-a.dev/jolt-thesis/static/images/teaser_free_zone.png">
 
@@ -46,10 +46,11 @@
       <div class="container is-max-desktop">
         <div class="columns is-centered">
           <div class="column has-text-centered">
-            <h1 class="title is-1 publication-title">Low-Rank Tensor Decomposition for Key-Value Cache Compression in Large Language Models</h1>
-            <h2 class="subtitle is-4 publication-authors" style="margin-top: -1rem;">JoLT: Near-Lossless KV Cache Compression via Joint Lagrangian Allocation of Tucker Ranks and a Rotated Residual</h2>
+            <h1 class="title is-1 publication-title">JoLT: Near-Lossless KV Cache Compression</h1>
+            <h2 class="subtitle is-4 publication-authors" style="margin-top: -1rem;">Joint Lagrangian allocation of Tucker ranks and a rotated low-bit residual</h2>
+            <p class="is-size-6 has-text-grey" style="margin-top: -1rem;">MSc thesis: Low-Rank Tensor Decomposition for Key-Value Cache Compression in Large Language Models</p>
 
-            <div class="is-size-5 publication-authors">
+            <div class="is-size-5 publication-authors" style="margin-top: 0.5rem;">
               <span class="author-block"><a href="../" target="_blank">Rahul Krishnan</a></span>
             </div>
             <div class="is-size-5 publication-authors">
@@ -98,7 +99,7 @@
       <div class="hero-body">
         <img class="teaser-img" src="static/images/teaser_free_zone.png" alt="Accuracy and perplexity change vs. the dense KV cache across compression ratio, for GSM8K, RULER, and five models' perplexity, showing near-lossless results through 3x">
         <h2 class="subtitle has-text-centered">
-          At 3x KV cache compression, GSM8K on Mistral-7B moves -1.21 pp and RULER 64K on LLaMA-3.1-8B moves -0.10 pp, with perplexity within 0.3% of the dense cache across all five tested models; even at 5x, RULER 64K costs only -2.40 pp.
+          At 3x KV cache compression, GSM8K on Mistral-7B moves -1.21 pp and RULER 64K on LLaMA-3.1-8B moves -0.10 pp, with perplexity within 0.3% of dense across all five models tested; even at 5x, RULER 64K costs only -2.40 pp.
         </h2>
       </div>
     </div>
@@ -111,9 +112,88 @@
           <h2 class="title is-3">Abstract</h2>
           <div class="content has-text-justified">
             <p>
-              The key-value cache dominates inference memory in long-context large language models, yet existing compression methods choose either low rank or quantization and set each tensor's budget by hand, so none allocates ranks and bit-widths jointly under one storage budget. We propose JoLT (Joint Lagrangian Tucker), which applies a partial Tucker decomposition to the token and feature axes of a fourth-order layer-group cache tensor, keeps the head and layer axes intact, and restores truncation energy with a rotated low-bit residual. A single Lagrangian dual allocates ranks and residual bit-widths jointly under a shared byte budget. JoLT and its production variant FlashJoLT are near-lossless through 3x compression of the KV cache from short context to 64K; on a RULER subset at 64K with LLaMA-3.1-8B, 4x costs under a point (-0.90 pp) and 5x stays within 2.40 pp. This near-lossless band holds across models and architecture families. For FlashJoLT we present a fused decode kernel that cuts peak decode memory of the KV cache by a measured 3.61x against the dense bf16 cache at context length 8192. Together, these results show that substantial KV-cache compression is possible without retraining while jointly exploiting low-rank and low-bit structure.
+              The key-value cache dominates inference memory in long-context large language models. Existing compression methods can combine low-rank compression and quantization, but they typically choose ranks and precisions independently or heuristically, so none allocates ranks and bit-widths jointly under one storage budget. We propose JoLT (Joint Lagrangian Tucker), which applies a partial Tucker decomposition to the token and feature axes of a fourth-order layer-group cache tensor, keeps the head and layer axes intact, and restores truncation energy with a rotated low-bit residual. A single Lagrangian dual allocates ranks and residual bit-widths jointly under a shared byte budget. JoLT and its production variant FlashJoLT are near-lossless through 3x compression of the KV cache from short context to 64K; on a RULER subset at 64K with LLaMA-3.1-8B, 4x costs under a point (-0.90 pp) and 5x stays within 2.40 pp. This near-lossless band holds across models and architecture families. For FlashJoLT we present a fused decode kernel that cuts peak decode memory of the KV cache by a measured 3.61x against the dense bf16 cache at context length 8192. Together, these results show that substantial KV-cache compression is possible without retraining while jointly exploiting low-rank and low-bit structure.
+            </p>
+            <p class="is-size-6 has-text-grey">
+              Near-lossless: downstream accuracy stays within a prespecified 2 pp noninferiority margin against the dense KV cache on a paired test; perplexity changes are reported separately.
             </p>
           </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3">How JoLT works</h2>
+          <div style="overflow-x: auto; max-width: 100%;">
+            <svg viewBox="0 0 960 260" width="100%" style="max-width: 100%; font-family: Inter, system-ui, sans-serif;" role="img" aria-label="JoLT pipeline: dense grouped KV cache to keeping layer and head axes intact to partial Tucker on token and feature axes to truncation residual, wrapping to rotate and low-bit quantize residual to Lagrangian allocator to FlashJoLT fused decode">
+              <defs>
+                <marker id="jolt-arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+                  <path d="M0,0 L10,5 L0,10 Z" fill="#c84b2f"></path>
+                </marker>
+              </defs>
+              <g>
+                <rect x="10" y="10" width="200" height="90" rx="10" fill="#f9f7f4" stroke="#e2ddd8"></rect>
+                <text x="110" y="40" text-anchor="middle" font-size="16" fill="#1a1714">Dense grouped</text>
+                <text x="110" y="58" text-anchor="middle" font-size="16" fill="#1a1714">KV cache</text>
+                <text x="110" y="74" text-anchor="middle" font-size="12" fill="#5a534d">4th-order tensor: layer group</text>
+                <text x="110" y="87" text-anchor="middle" font-size="12" fill="#5a534d">x head x token x feature</text>
+
+                <line x1="210" y1="55" x2="250" y2="55" stroke="#c84b2f" stroke-width="2" marker-end="url(#jolt-arrow)"></line>
+
+                <rect x="250" y="10" width="200" height="90" rx="10" fill="#f9f7f4" stroke="#e2ddd8"></rect>
+                <text x="350" y="40" text-anchor="middle" font-size="16" fill="#1a1714">Keep layer and head</text>
+                <text x="350" y="58" text-anchor="middle" font-size="16" fill="#1a1714">axes intact</text>
+                <text x="350" y="74" text-anchor="middle" font-size="12" fill="#5a534d">index-like axes,</text>
+                <text x="350" y="87" text-anchor="middle" font-size="12" fill="#5a534d">not compressed</text>
+
+                <line x1="450" y1="55" x2="490" y2="55" stroke="#c84b2f" stroke-width="2" marker-end="url(#jolt-arrow)"></line>
+
+                <rect x="490" y="10" width="200" height="90" rx="10" fill="#f9f7f4" stroke="#e2ddd8"></rect>
+                <text x="590" y="40" text-anchor="middle" font-size="16" fill="#1a1714">Partial Tucker on</text>
+                <text x="590" y="58" text-anchor="middle" font-size="16" fill="#1a1714">token + feature axes</text>
+                <text x="590" y="78" text-anchor="middle" font-size="12" fill="#5a534d">ranks r_T, r_d</text>
+
+                <line x1="690" y1="55" x2="730" y2="55" stroke="#c84b2f" stroke-width="2" marker-end="url(#jolt-arrow)"></line>
+
+                <rect x="730" y="10" width="200" height="90" rx="10" fill="#f9f7f4" stroke="#e2ddd8"></rect>
+                <text x="830" y="40" text-anchor="middle" font-size="16" fill="#1a1714">Truncation</text>
+                <text x="830" y="58" text-anchor="middle" font-size="16" fill="#1a1714">residual</text>
+                <text x="830" y="74" text-anchor="middle" font-size="12" fill="#5a534d">what the low-rank</text>
+                <text x="830" y="87" text-anchor="middle" font-size="12" fill="#5a534d">part misses</text>
+
+                <line x1="830" y1="100" x2="830" y2="155" stroke="#c84b2f" stroke-width="2" marker-end="url(#jolt-arrow)"></line>
+
+                <rect x="140" y="160" width="200" height="90" rx="10" fill="#f9f7f4" stroke="#e2ddd8"></rect>
+                <text x="240" y="190" text-anchor="middle" font-size="16" fill="#1a1714">Rotate + low-bit</text>
+                <text x="240" y="208" text-anchor="middle" font-size="16" fill="#1a1714">quantize residual</text>
+                <text x="240" y="224" text-anchor="middle" font-size="12" fill="#5a534d">orthogonal rotation,</text>
+                <text x="240" y="237" text-anchor="middle" font-size="12" fill="#5a534d">b bits</text>
+
+                <line x1="340" y1="205" x2="380" y2="205" stroke="#c84b2f" stroke-width="2" marker-end="url(#jolt-arrow)"></line>
+
+                <rect x="380" y="160" width="200" height="90" rx="10" fill="#f9f7f4" stroke="#c84b2f" stroke-width="2"></rect>
+                <text x="480" y="190" text-anchor="middle" font-size="16" fill="#1a1714">Lagrangian</text>
+                <text x="480" y="208" text-anchor="middle" font-size="16" fill="#1a1714">allocator</text>
+                <text x="480" y="224" text-anchor="middle" font-size="12" fill="#5a534d">chooses (r_T, r_d, b) per</text>
+                <text x="480" y="237" text-anchor="middle" font-size="12" fill="#5a534d">group under one byte budget</text>
+
+                <line x1="580" y1="205" x2="620" y2="205" stroke="#c84b2f" stroke-width="2" marker-end="url(#jolt-arrow)"></line>
+
+                <rect x="620" y="160" width="200" height="90" rx="10" fill="#f9f7f4" stroke="#e2ddd8"></rect>
+                <text x="720" y="190" text-anchor="middle" font-size="16" fill="#1a1714">FlashJoLT</text>
+                <text x="720" y="208" text-anchor="middle" font-size="16" fill="#1a1714">fused decode</text>
+                <text x="720" y="224" text-anchor="middle" font-size="12" fill="#5a534d">attention directly</text>
+                <text x="720" y="237" text-anchor="middle" font-size="12" fill="#5a534d">on the compressed cache</text>
+              </g>
+            </svg>
+          </div>
+          <p class="is-size-6 has-text-grey" style="margin-top: 1rem;">
+            JoLT compresses only the token and feature axes, quantizes the leftover residual after an orthogonal rotation, and lets a single Lagrangian dual pick ranks and bit-widths for every layer group under a shared storage budget.
+          </p>
         </div>
       </div>
     </div>
