@@ -13,7 +13,8 @@
     "tags": ["PyTorch", "Tucker Decomposition", "Lagrangian Optimization", "LLM Inference"],
     "stack": ["Python", "PyTorch", "Tucker Decomposition", "Lagrangian Optimization", "FlashJoLT", "LLM Inference"],
     "links": {
-      "preprint": "https://arxiv.org/abs/2607.12550"
+      "preprint": "https://arxiv.org/abs/2607.12550",
+      "project page": "jolt-thesis/"
     },
     "detail": [
       "KV caches can become a major memory cost during long-context LLM inference. In my thesis, I combine partial Tucker decomposition, a low-rank factorization over token and feature modes, with a rotated low-bit residual that cheaply corrects the approximation.",

@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>JoLT: Low-Rank KV Cache Compression | Rahul Krishnan</title>
+  <meta name="description" content="JoLT jointly allocates Tucker ranks and low-bit residual budgets to compress the LLM KV cache near-losslessly through 3x, with a fused decode kernel that cuts peak decode memory by 3.61x.">
+  <meta name="author" content="Rahul Krishnan">
+  <meta name="robots" content="index, follow">
+
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Low-Rank Tensor Decomposition for Key-Value Cache Compression in Large Language Models">
+  <meta property="og:description" content="JoLT jointly allocates Tucker ranks and low-bit residual budgets to compress the LLM KV cache near-losslessly through 3x, with a fused decode kernel that cuts peak decode memory by 3.61x.">
+  <meta property="og:url" content="https://rahul-krishnan.is-a.dev/jolt-thesis/">
+  <meta property="og:image" content="https://rahul-krishnan.is-a.dev/jolt-thesis/static/images/teaser_free_zone.png">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Low-Rank Tensor Decomposition for Key-Value Cache Compression in Large Language Models">
+  <meta name="twitter:description" content="JoLT jointly allocates Tucker ranks and low-bit residual budgets to compress the LLM KV cache near-losslessly through 3x, with a fused decode kernel that cuts peak decode memory by 3.61x.">
+  <meta name="twitter:image" content="https://rahul-krishnan.is-a.dev/jolt-thesis/static/images/teaser_free_zone.png">
+
+  <link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="../assets/img/favicon-32.png" type="image/png" sizes="32x32">
+  <link rel="apple-touch-icon" href="../assets/img/apple-touch-icon.png">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.4/css/bulma.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma-carousel@4.0.24/dist/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/academicons@1.9.5/css/academicons.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="static/css/index.css">
+
+  <script src="https://cdn.jsdelivr.net/npm/bulma-carousel@4.0.24/dist/js/bulma-carousel.min.js" defer></script>
+  <script src="static/js/index.js" defer></script>
+</head>
+<body>
+
+  <button class="scroll-to-top" onclick="scrollToTop()" title="Scroll to top" aria-label="Scroll to top">
+    <i class="fas fa-chevron-up"></i>
+  </button>
+
+  <main id="main-content">
+  <section class="hero">
+    <div class="hero-body">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered">
+          <div class="column has-text-centered">
+            <h1 class="title is-1 publication-title">Low-Rank Tensor Decomposition for Key-Value Cache Compression in Large Language Models</h1>
+            <h2 class="subtitle is-4 publication-authors" style="margin-top: -1rem;">JoLT: Near-Lossless KV Cache Compression via Joint Lagrangian Allocation of Tucker Ranks and a Rotated Residual</h2>
+
+            <div class="is-size-5 publication-authors">
+              <span class="author-block"><a href="../" target="_blank">Rahul Krishnan</a></span>
+            </div>
+            <div class="is-size-5 publication-authors">
+              <span class="author-block">Supervisor: Prof. Dr. Volker Schulz</span>
+            </div>
+            <div class="is-size-5 publication-authors">
+              <span class="author-block">M.Sc. Data Science thesis, Universitaet Trier, 2026</span>
+            </div>
+
+            <div class="column has-text-centered">
+              <div class="publication-links">
+                <span class="link-block">
+                  <a href="https://arxiv.org/abs/2607.12550" target="_blank" class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon"><i class="ai ai-arxiv"></i></span>
+                    <span>arXiv</span>
+                  </a>
+                </span>
+                <span class="link-block">
+                  <a href="https://arxiv.org/pdf/2607.12550" target="_blank" class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon"><i class="fas fa-file-pdf"></i></span>
+                    <span>Paper PDF</span>
+                  </a>
+                </span>
+                <span class="link-block">
+                  <a href="#" class="external-link button is-normal is-rounded is-dark" disabled title="coming soon" aria-disabled="true" onclick="return false;">
+                    <span class="icon"><i class="fas fa-file-pdf"></i></span>
+                    <span>Thesis</span>
+                  </a>
+                </span>
+                <span class="link-block">
+                  <a href="#" class="external-link button is-normal is-rounded is-dark" disabled title="coming soon" aria-disabled="true" onclick="return false;">
+                    <span class="icon"><i class="fab fa-github"></i></span>
+                    <span>Code</span>
+                  </a>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="hero teaser">
+    <div class="container is-max-desktop">
+      <div class="hero-body">
+        <img class="teaser-img" src="static/images/teaser_free_zone.png" alt="Accuracy and perplexity change vs. the dense KV cache across compression ratio, for GSM8K, RULER, and five models' perplexity, showing near-lossless results through 3x">
+        <h2 class="subtitle has-text-centered">
+          At 3x: GSM8K -1.21 pp, RULER 64K -0.10 pp, perplexity within 0.3% on all five models.
+        </h2>
+      </div>
+    </div>
+  </section>
+
+  <section class="section hero is-light">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3">Abstract</h2>
+          <div class="content has-text-justified">
+            <p>
+              The key-value cache dominates inference memory in long-context large language models, yet existing compression methods choose either low rank or quantization and set each tensor's budget by hand, so none allocates ranks and bit-widths jointly under one storage budget. We propose JoLT (Joint Lagrangian Tucker), which applies a partial Tucker decomposition to the token and feature axes of a fourth-order layer-group cache tensor, keeps the head and layer axes intact, and restores truncation energy with a rotated low-bit residual. A single Lagrangian dual allocates ranks and residual bit-widths jointly under a shared byte budget. JoLT and its production variant FlashJoLT are near-lossless through 3x compression of the KV cache from short context to 64K; on a RULER subset at 64K with LLaMA-3.1-8B, 4x costs under a point (-0.90 pp) and 5x stays within 2.40 pp. This near-lossless band holds across models and architecture families. For FlashJoLT we present a fused decode kernel that cuts peak decode memory of the KV cache by a measured 3.61x against the dense bf16 cache at context length 8192. Together, these results show that substantial KV-cache compression is possible without retraining while jointly exploiting low-rank and low-bit structure.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3">Key findings</h2>
+          <ul class="key-findings">
+            <li>Tucker beats CP, TT and t-SVD for runtime KV caches, but any 4D format that compresses the head or layer axis loses to per-head SVD: those axes are index-like and incompressible.</li>
+            <li>V is 2-3x harder to compress than K across architectures (median cellwise V/K error ratio 2.47).</li>
+            <li>Decomposing K after RoPE costs 22-70% extra reconstruction error, so JoLT operates pre-RoPE.</li>
+            <li>On GSM8K with Mistral-7B, 2x compression costs -0.45 pp and 3x costs -1.21 pp, while WikiText2+C4 perplexity at 3x stays within 0.3% of the dense cache on all five tested models.</li>
+            <li>At 64K context on the RULER subset with LLaMA-3.1-8B, 3x compression costs -0.10 pp (90.87 vs. 90.97 baseline); on the official RULER subset at 16K/32K with Mistral-7B, 3x costs -0.225 pp pooled (95% CI [-0.9, +0.5] pp).</li>
+            <li>FlashJoLT fused decode kernel: 3.61x lower peak decode KV memory vs dense fp16 at context 8192.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="hero is-small">
+    <div class="hero-body">
+      <div class="container">
+        <div id="results-carousel" class="carousel results-carousel">
+          <div class="item">
+            <img src="static/images/teaser_gsm8k_matched_memory.png" alt="GSM8K accuracy at matched KV memory budgets for Mistral-7B, comparing JoLT and FlashJoLT against KIVI, TurboQuant, per-head SVD, xKV, ReCalKV, PALU, KQ-SVD, and int4" loading="lazy"/>
+            <h2 class="subtitle has-text-centered">
+              At matched KV memory past the free zone, JoLT beats every low-rank competitor by 4-18 pp; fixed-rate quantizers KIVI, int4 and TurboQuant still lead at 3.6-4x.
+            </h2>
+          </div>
+          <div class="item">
+            <img src="static/images/ruler_context_ramp.png" alt="RULER official score change vs. context length for Mistral-7B-v0.3 at ratios R2, R3 and R4" loading="lazy"/>
+            <h2 class="subtitle has-text-centered">
+              On Mistral-7B the 4x penalty shrinks from -6.10 pp at 4K to -0.20 pp at 32K while 2x and 3x stay within 0.7 pp throughout. At 64K context on LLaMA-3.1-8B, JoLT is near-lossless at 2x and 3x (+0.23 pp and -0.10 pp), and even 4x costs under a point (-0.90 pp): three to four times less KV memory with no measurable loss in long-context retrieval.
+            </h2>
+          </div>
+          <div class="item">
+            <img src="static/images/ppl_vs_ratio_5models.png" alt="WikiText-2 plus C4 perplexity vs. compression ratio for five models" loading="lazy"/>
+            <h2 class="subtitle has-text-centered">
+              Perplexity on WikiText-2 + C4 stays flat across a 2x-3x free zone for all five evaluated models (Mistral-7B, LLaMA-2-13B, OLMoE-1B-7B, LLaMA-3.1-8B, Qwen2.5-14B) before rising past 3x.
+            </h2>
+          </div>
+          <div class="item">
+            <img src="static/images/ruler_64k_ramp.png" alt="RULER official score at 64K context for LLaMA-3.1-8B across compression ratios" loading="lazy"/>
+            <h2 class="subtitle has-text-centered">
+              RULER official score at 64K context with LLaMA-3.1-8B: 90.97 baseline, 91.20 at 2x, 90.87 at 3x, 90.07 at 4x, 88.57 at 5x.
+            </h2>
+          </div>
+          <div class="item">
+            <img src="static/images/gsm8k_ladder.png" alt="GSM8K exact-match accuracy vs. compression ratio for Mistral-7B and LLaMA-2-13B" loading="lazy"/>
+            <h2 class="subtitle has-text-centered">
+              GSM8K exact-match accuracy for Mistral-7B and LLaMA-2-13B holds through the 2x-3x free zone and only degrades at 4x.
+            </h2>
+          </div>
+          <div class="item">
+            <img src="static/images/format_pareto_ci.png" alt="Relative Frobenius reconstruction error vs. compression ratio for Tucker, CP, t-SVD and TT on K and V" loading="lazy"/>
+            <h2 class="subtitle has-text-centered">
+              Tucker has the lowest reconstruction error of the compared formats (CP, t-SVD, TT) on both K and V, and V error is consistently higher than K error at every compression ratio.
+            </h2>
+          </div>
+          <div class="item">
+            <img src="static/images/spectral_decay_group0.png" alt="Per-mode singular value decay for K pre-RoPE, K post-RoPE, and V, on token and feature modes" loading="lazy"/>
+            <h2 class="subtitle has-text-centered">
+              Singular-value decay is markedly slower for K after RoPE than before it, showing why JoLT decomposes K pre-RoPE.
+            </h2>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="BibTeX">
+    <div class="container is-max-desktop content">
+      <div class="bibtex-header">
+        <h2 class="title">BibTeX</h2>
+        <button class="copy-bibtex-btn" onclick="copyBibTeX()" title="Copy BibTeX to clipboard">
+          <i class="fas fa-copy"></i>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre id="bibtex-code"><code>@article{krishnan2026jolt,
+  author  = {Krishnan, Rahul and Schulz, Volker},
+  title   = {A {JoLT} for the {KV} {C}ache: {N}ear-{L}ossless {KV} {C}ache {C}ompression via {J}oint {L}agrangian {A}llocation of {T}ucker {R}anks and a {R}otated {R}esidual for {LLM}s},
+  journal = {arXiv preprint arXiv:2607.12550},
+  year    = {2026}
+}</code></pre>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="columns is-centered">
+        <div class="column is-8">
+          <div class="content">
+            <p>
+              This page was built using the <a href="https://github.com/eliahuhorwitz/Academic-project-page-template" target="_blank">Academic Project Page Template</a> which was adopted from the <a href="https://nerfies.github.io" target="_blank">Nerfies</a> project page.
+              You are free to borrow the source code of this website, we just ask that you link back to this page in the footer. <br> This website is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank">Creative
+              Commons Attribution-ShareAlike 4.0 International License</a>.
+            </p>
+            <a class="back-home" href="../">Back to rahul-krishnan.is-a.dev</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  </main>
+</body>
+</html>

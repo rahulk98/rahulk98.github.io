@@ -15,6 +15,12 @@
         <priority>0.8</priority>
     </url>
     <url>
+        <loc>https://rahul-krishnan.is-a.dev/jolt-thesis/</loc>
+        <lastmod>2026-09-03</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
         <loc>https://rahul-krishnan.is-a.dev/project.html?slug=rag-resume-api</loc>
         <lastmod>2026-08-06</lastmod>
         <changefreq>monthly</changefreq>
