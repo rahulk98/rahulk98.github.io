@@ -422,6 +422,8 @@
     display: flex;
     gap: 10px;
     align-items: stretch;
+    padding: 0;
+    background: none;
 }
 
 [data-design="minimal"] #rag-input {
@@ -838,7 +840,7 @@
 
     [data-design="minimal"] .rag-form {
         flex-direction: column;
-        align-items: flex-start;
+        align-items: stretch;
     }
 
     [data-design="minimal"] #rag-input {
@@ -847,7 +849,8 @@
     }
 
     [data-design="minimal"] #rag-send {
-        padding: 10px 18px;
+        width: 100%;
+        padding: 12px 18px;
     }
 
     .m-footer {
