@@ -1063,7 +1063,7 @@ function initializeRag() {
                     sendBtn.disabled = false;
                     inputEl.disabled = true;
                 } else {
-                    sendBtn.textContent = 'Send';
+                    sendBtn.textContent = 'Ask';
                     sendBtn.classList.remove('rag-stop');
                     sendBtn.disabled = false;
                     inputEl.disabled = false;

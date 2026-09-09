@@ -2,26 +2,29 @@
   "publications": [
     {
       "title": "A JoLT for the KV Cache",
-      "authors": "",
+      "authors": "Rahul Krishnan and Volker Schulz, Universitaet Trier",
       "conference": "arXiv preprint",
       "year": 2026,
       "url": "https://arxiv.org/abs/2607.12550",
-      "description": "My MSc thesis preprint reports near-lossless 2x to 3x KV cache compression, with accuracy staying within 2 percentage points of the uncompressed model, across five models and four model families."
+      "description": "My MSc thesis preprint reports near-lossless 2x to 3x KV cache compression, with accuracy staying within 2 percentage points of the uncompressed model, across five models and four model families.",
+      "result": "At 3x compression GSM8K moves -1.21 pp on Mistral-7B and RULER 64K moves -0.10 pp on LLaMA-3.1-8B, with perplexity within 0.3% of dense on all five models. The FlashJoLT fused decode kernel cuts peak decode KV memory by 3.61x.",
+      "projectPage": "jolt-thesis/"
     },
     {
       "title": "Structural Companion Study on Tensor Decompositions for the KV Cache",
-      "authors": "",
+      "authors": "Rahul Krishnan and Volker Schulz, Universitaet Trier",
       "conference": "In preparation, targeting SIAM Journal on Mathematics of Data Science (SIMODS)",
       "year": "",
       "description": "Volker Schulz and I are preparing this structural and theoretical companion to the JoLT method paper."
     },
     {
       "title": "Glaucoma Detection from Retinal Fundus Images",
-      "authors": "",
+      "authors": "Rahul Krishnan, Varun Sekhar, J. Sidharth, S. Gautham, and G. Gopakumar",
       "conference": "International Conference on Communication and Signal Processing (ICCSP)",
       "year": 2020,
       "url": "https://ieeexplore.ieee.org/document/9182388",
-      "description": "I co-authored this paper on glaucoma screening from retinal fundus images using region growing and SVM classification. The paper reports an F1 score of 86%."
+      "description": "I co-authored this paper on glaucoma screening from retinal fundus images using region growing and SVM classification. The paper reports an F1 score of 86%.",
+      "result": "F1 score of 86% for SVM-based glaucoma classification."
     }
   ]
 }

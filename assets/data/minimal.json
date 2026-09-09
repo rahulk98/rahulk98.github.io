@@ -7,39 +7,48 @@
     "news": [
         {
             "date": "Jul 2026",
+            "kind": "Paper",
             "text": "Preprint out: A JoLT for the KV Cache, near-lossless 2x to 3x compression across five models."
         },
         {
             "date": "2026",
-            "text": "Research assistant with Prof. Dr. Volker Schulz, Department of Mathematics, Universitaet Trier."
-        },
-        {
-            "date": "2026",
+            "kind": "Paper",
             "text": "Companion paper on tensor decompositions for the KV cache in preparation for SIMODS."
         },
         {
+            "date": "2026",
+            "kind": "Position",
+            "text": "Research assistant with Prof. Dr. Volker Schulz, Department of Mathematics, Universitaet Trier."
+        },
+        {
             "date": "Sep 2026",
+            "kind": "Education",
             "text": "MSc Data Science at Universitaet Trier, expected. Current grade 1.5."
         }
     ],
-    "threads": [
-        {
-            "tag": "Inference",
-            "text": "Making long-context LLM inference cheaper in memory without giving up accuracy."
-        },
-        {
-            "tag": "Reliability",
-            "text": "Whether a model's stated reasoning and stated confidence track what it actually does."
-        },
-        {
-            "tag": "Systems",
-            "text": "Reproducible evaluation, measured latency and memory, and stated limitations."
-        }
+    "about": [
+        "I work on making long-context LLM inference cheaper in memory without giving up accuracy. My MSc thesis at Universitaet Trier, supervised by Prof. Dr. Volker Schulz, treats the KV cache as a fourth-order tensor and asks how much of it can be removed before accuracy moves. The resulting preprint, JoLT, reports near-lossless 2x to 3x compression across five models and four model families, plus a fused decode kernel that cuts peak decode memory by 3.61x.",
+        "Two smaller studies test whether a model's stated reasoning and confidence track what it actually does. Before the MSc I spent four years as a backend engineer at SAP Labs India, so every result I publish comes with reproducible evaluation, measured latency and memory, and stated limitations."
     ],
-    "nav": [
-        { "title": "Research", "url": "#research" },
-        { "title": "Papers", "url": "#papers" },
-        { "title": "Projects", "url": "#projects" },
-        { "title": "Recent", "url": "#recent" }
+    "tabs": [
+        {
+            "id": "about",
+            "title": "About"
+        },
+        {
+            "id": "recent",
+            "title": "Recent",
+            "tagline": "News, work experience and education."
+        },
+        {
+            "id": "research",
+            "title": "Research",
+            "tagline": "Papers on KV cache compression for long-context LLM inference, each with its headline result."
+        },
+        {
+            "id": "projects",
+            "title": "Projects",
+            "tagline": "Systems and studies without a publication, from deployed services to evaluation experiments."
+        }
     ]
 }

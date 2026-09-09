@@ -11,6 +11,13 @@
  */
 
 const MINIMAL_FONTS_HREF = 'https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;1,6..72,400&family=IBM+Plex+Mono:wght@400;500&display=swap';
+const MINIMAL_TAB_IDS = ['about', 'recent', 'research', 'projects'];
+
+let minimalHeaderEl = null;
+let minimalPanels = {};
+let minimalTabButtons = {};
+let minimalActiveTab = 'about';
+let minimalCtx = null;
 
 function resolveDesign(config) {
     const options = (config && config.designOptions) || ['classic', 'minimal'];
@@ -52,29 +59,40 @@ function renderMinimal() {
     const site = window.siteData || {};
     const minimal = window.minimalData || {};
 
+    minimalCtx = { personal, site, minimal };
+
     const page = document.createElement('div');
     page.className = 'm-page';
+
     page.appendChild(buildMinimalTopbar(personal, minimal));
-    page.appendChild(buildMinimalIdentity(personal, site, minimal));
-    page.appendChild(buildMinimalAsk(minimal));
-    page.appendChild(buildMinimalBio(personal));
 
-    const news = minimal.news || [];
-    if (news.length) {
-        page.appendChild(buildMinimalRows('recent', 'Recent', news, item => [item.date, item.text]));
-    }
+    minimalHeaderEl = document.createElement('div');
+    page.appendChild(minimalHeaderEl);
 
-    const threads = minimal.threads || [];
-    if (threads.length) {
-        page.appendChild(buildMinimalRows('research', 'Research', threads, item => [item.tag, item.text]));
-    }
+    minimalPanels = {};
+    const tabs = (minimal.tabs && minimal.tabs.length) ? minimal.tabs : MINIMAL_TAB_IDS.map(id => ({ id }));
+    tabs.forEach(tab => {
+        const panel = buildMinimalPanel(tab.id, personal, minimal);
+        minimalPanels[tab.id] = panel;
+        page.appendChild(panel);
+    });
 
-    page.appendChild(buildMinimalPapers());
-    page.appendChild(buildMinimalProjects());
     page.appendChild(buildMinimalFooter(site));
 
     root.innerHTML = '';
     root.appendChild(page);
+
+    minimalActiveTab = resolveMinimalHash();
+    switchMinimalTab(minimalActiveTab);
+
+    window.addEventListener('hashchange', () => {
+        switchMinimalTab(resolveMinimalHash());
+    });
+}
+
+function resolveMinimalHash() {
+    const raw = (location.hash || '').replace(/^#/, '');
+    return MINIMAL_TAB_IDS.includes(raw) ? raw : 'about';
 }
 
 function loadMinimalFonts() {
@@ -95,23 +113,32 @@ function buildMinimalTopbar(personal, minimal) {
     name.textContent = personal.name || '';
     bar.appendChild(name);
 
-    const links = document.createElement('nav');
-    links.className = 'm-topbar__links m-mono';
-    (minimal.nav || []).forEach(item => {
-        const a = document.createElement('a');
-        a.href = item.url;
-        a.textContent = item.title;
-        links.appendChild(a);
+    const tabsWrap = document.createElement('div');
+    tabsWrap.className = 'm-tabs';
+    minimalTabButtons = {};
+    const tabs = (minimal.tabs && minimal.tabs.length) ? minimal.tabs : MINIMAL_TAB_IDS.map(id => ({ id, title: id }));
+    tabs.forEach(tab => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'm-tab';
+        btn.dataset.tab = tab.id;
+        btn.setAttribute('aria-selected', 'false');
+        btn.textContent = tab.title || tab.id;
+        btn.addEventListener('click', () => {
+            location.hash = '#' + tab.id;
+        });
+        minimalTabButtons[tab.id] = btn;
+        tabsWrap.appendChild(btn);
     });
+    bar.appendChild(tabsWrap);
 
     const themeToggle = document.createElement('button');
     themeToggle.id = 'theme-toggle';
     themeToggle.type = 'button';
     themeToggle.className = 'm-topbar__theme m-mono';
     themeToggle.textContent = 'Theme';
-    links.appendChild(themeToggle);
+    bar.appendChild(themeToggle);
 
-    bar.appendChild(links);
     return bar;
 }
 
@@ -176,6 +203,71 @@ function buildMinimalIdentity(personal, site, minimal) {
     return wrap;
 }
 
+function buildMinimalHeader(title, tagline) {
+    const header = document.createElement('div');
+    header.className = 'm-header';
+
+    const h1 = document.createElement('h1');
+    h1.className = 'm-header__title';
+    h1.textContent = title || '';
+    header.appendChild(h1);
+
+    const p = document.createElement('p');
+    p.className = 'm-header__tagline';
+    p.textContent = tagline || '';
+    header.appendChild(p);
+
+    return header;
+}
+
+function switchMinimalTab(tabId) {
+    const id = MINIMAL_TAB_IDS.includes(tabId) ? tabId : 'about';
+    minimalActiveTab = id;
+
+    const { personal, site, minimal } = minimalCtx || {};
+    const tabs = (minimal && minimal.tabs) || [];
+    const tabInfo = tabs.find(t => t.id === id) || {};
+
+    Object.keys(minimalTabButtons).forEach(key => {
+        minimalTabButtons[key].setAttribute('aria-selected', key === id ? 'true' : 'false');
+    });
+
+    if (minimalHeaderEl) {
+        minimalHeaderEl.innerHTML = '';
+        if (id === 'about') {
+            minimalHeaderEl.appendChild(buildMinimalIdentity(personal || {}, site || {}, minimal || {}));
+        } else {
+            minimalHeaderEl.appendChild(buildMinimalHeader(tabInfo.title, tabInfo.tagline));
+        }
+    }
+
+    Object.keys(minimalPanels).forEach(key => {
+        minimalPanels[key].hidden = key !== id;
+    });
+}
+
+function buildMinimalPanel(tabId, personal, minimal) {
+    const panel = document.createElement('div');
+    panel.className = 'm-panel';
+    panel.dataset.panel = tabId;
+    panel.hidden = true;
+
+    if (tabId === 'about') {
+        panel.appendChild(buildMinimalAsk(minimal));
+        panel.appendChild(buildMinimalBio(personal, minimal));
+    } else if (tabId === 'research') {
+        panel.appendChild(buildMinimalPapers());
+    } else if (tabId === 'projects') {
+        panel.appendChild(buildMinimalProjects());
+    } else if (tabId === 'recent') {
+        panel.appendChild(buildMinimalNews(minimal));
+        panel.appendChild(buildMinimalExperience());
+        panel.appendChild(buildMinimalEducation());
+    }
+
+    return panel;
+}
+
 function buildMinimalAsk(minimal) {
     const ask = minimal.ask || {};
     const section = document.createElement('section');
@@ -219,10 +311,11 @@ function buildMinimalAsk(minimal) {
     return section;
 }
 
-function buildMinimalBio(personal) {
-    const bio = document.createElement('section');
+function buildMinimalBio(personal, minimal) {
+    const bio = document.createElement('div');
     bio.className = 'm-bio';
-    const paragraphs = ((personal.bio || {}).paragraphs) || [];
+    const about = (minimal && minimal.about) || null;
+    const paragraphs = (about && about.length) ? about : (((personal || {}).bio || {}).paragraphs) || [];
     paragraphs.forEach(text => {
         const p = document.createElement('p');
         p.textContent = text;
@@ -231,38 +324,171 @@ function buildMinimalBio(personal) {
     return bio;
 }
 
-function buildMinimalRows(id, label, items, pick) {
+function buildMinimalNews(minimal) {
+    const news = (minimal && minimal.news) || [];
     const section = document.createElement('section');
     section.className = 'm-section';
-    section.id = id;
+    section.id = 'news';
 
     const heading = document.createElement('div');
     heading.className = 'm-section__label m-mono';
-    heading.textContent = label;
+    heading.textContent = 'News';
     section.appendChild(heading);
 
     const rows = document.createElement('div');
     rows.className = 'm-rows';
-    items.forEach(item => {
-        const [meta, text] = pick(item);
+    news.forEach(item => {
         const row = document.createElement('div');
         row.className = 'm-row';
 
         const metaEl = document.createElement('span');
         metaEl.className = 'm-row__meta m-mono';
-        metaEl.textContent = meta;
+        metaEl.textContent = item.date;
         row.appendChild(metaEl);
+
+        const body = document.createElement('div');
+        body.className = 'm-row__body';
+
+        const kindEl = document.createElement('span');
+        kindEl.className = 'm-row__kind m-mono';
+        kindEl.textContent = item.kind || '';
+        body.appendChild(kindEl);
 
         const textEl = document.createElement('p');
         textEl.className = 'm-row__text';
-        textEl.textContent = text;
-        row.appendChild(textEl);
+        textEl.textContent = item.text;
+        body.appendChild(textEl);
 
+        row.appendChild(body);
         rows.appendChild(row);
     });
     section.appendChild(rows);
 
     return section;
+}
+
+function buildMinimalExperience() {
+    const experience = (window.experienceData || []).slice().sort((a, b) => (a.order || 0) - (b.order || 0));
+    const section = document.createElement('section');
+    section.className = 'm-section';
+    section.id = 'experience';
+
+    const heading = document.createElement('div');
+    heading.className = 'm-section__label m-mono';
+    heading.textContent = 'Experience';
+    section.appendChild(heading);
+
+    const jobs = document.createElement('div');
+    jobs.className = 'm-jobs';
+
+    experience.forEach(entry => {
+        const job = document.createElement('div');
+        job.className = 'm-job';
+
+        const dates = document.createElement('span');
+        dates.className = 'm-job__dates m-mono';
+        dates.textContent = entry.dates || '';
+        job.appendChild(dates);
+
+        const body = document.createElement('div');
+        body.className = 'm-job__body';
+
+        const title = document.createElement('span');
+        title.className = 'm-job__title';
+        title.textContent = entry.title || '';
+        body.appendChild(title);
+
+        const org = document.createElement('span');
+        org.className = 'm-job__org m-mono';
+        org.textContent = [entry.company, entry.location].filter(Boolean).join('. ');
+        body.appendChild(org);
+
+        const points = document.createElement('ul');
+        points.className = 'm-job__points';
+        (entry.points || []).forEach(point => {
+            const li = document.createElement('li');
+            li.textContent = point;
+            points.appendChild(li);
+        });
+        body.appendChild(points);
+
+        job.appendChild(body);
+        jobs.appendChild(job);
+    });
+    section.appendChild(jobs);
+
+    return section;
+}
+
+function buildMinimalEducation() {
+    const education = ((window.educationData || {}).education) || [];
+    const section = document.createElement('section');
+    section.className = 'm-section';
+    section.id = 'education';
+
+    const heading = document.createElement('div');
+    heading.className = 'm-section__label m-mono';
+    heading.textContent = 'Education';
+    section.appendChild(heading);
+
+    const jobs = document.createElement('div');
+    jobs.className = 'm-jobs';
+
+    education.forEach(entry => {
+        const job = document.createElement('div');
+        job.className = 'm-job';
+
+        const dates = document.createElement('span');
+        dates.className = 'm-job__dates m-mono';
+        dates.textContent = buildEducationDates(entry);
+        job.appendChild(dates);
+
+        const body = document.createElement('div');
+        body.className = 'm-job__body';
+
+        const title = document.createElement('span');
+        title.className = 'm-job__title';
+        title.textContent = entry.degree || '';
+        body.appendChild(title);
+
+        const org = document.createElement('span');
+        org.className = 'm-job__org m-mono';
+        org.textContent = entry.institution || '';
+        body.appendChild(org);
+
+        const meta = document.createElement('p');
+        meta.className = 'm-job__meta';
+        meta.textContent = buildEducationMeta(entry);
+        body.appendChild(meta);
+
+        job.appendChild(body);
+        jobs.appendChild(job);
+    });
+    section.appendChild(jobs);
+
+    return section;
+}
+
+function stripEducationParen(value) {
+    return String(value || '').replace(/\s*\([^)]*\)\s*/g, '').trim();
+}
+
+function buildEducationDates(entry) {
+    const from = stripEducationParen(entry.from);
+    const to = stripEducationParen(entry.to);
+    return [from, to].filter(Boolean).join(' - ');
+}
+
+function buildEducationMeta(entry) {
+    if (entry.thesis) {
+        const toDate = stripEducationParen(entry.to);
+        const statusText = (entry.thesis.status || '').trim();
+        const statusLower = statusText ? statusText.charAt(0).toLowerCase() + statusText.slice(1) : '';
+        return `Expected ${toDate}. Grade ${entry.grade}, ${entry.creditsCompleted} credits completed. Specialization: ${entry.specialization}. Thesis: ${entry.thesis.title}, ${statusLower}.`;
+    }
+    const parts = [`Grade ${entry.grade}.`];
+    if (entry.achievement) parts.push(`${entry.achievement}.`);
+    return parts.join(' ');
 }
 
 function buildMinimalPapers() {
@@ -314,14 +540,37 @@ function buildMinimalPapers() {
             item.appendChild(desc);
         }
 
-        if (pub.url) {
+        if (pub.result) {
+            const result = document.createElement('div');
+            result.className = 'm-paper__result';
+
+            const resultLabel = document.createElement('span');
+            resultLabel.className = 'm-paper__result-label m-mono';
+            resultLabel.textContent = 'Result';
+            result.appendChild(resultLabel);
+
+            const resultText = document.createElement('p');
+            resultText.className = 'm-paper__result-text';
+            resultText.textContent = pub.result;
+            result.appendChild(resultText);
+
+            item.appendChild(result);
+        }
+
+        const linkEntries = [];
+        if (pub.url) linkEntries.push({ label: labelForPaperLink(pub.url), url: pub.url });
+        if (pub.projectPage) linkEntries.push({ label: 'Project page', url: pub.projectPage });
+
+        if (linkEntries.length) {
             const links = document.createElement('div');
             links.className = 'm-paper__links m-mono';
-            const a = document.createElement('a');
-            a.href = pub.url;
-            a.rel = 'noopener';
-            a.textContent = labelForPaperLink(pub.url);
-            links.appendChild(a);
+            linkEntries.forEach(entry => {
+                const a = document.createElement('a');
+                a.href = entry.url;
+                if (entry.url === pub.url) a.rel = 'noopener';
+                a.textContent = entry.label;
+                links.appendChild(a);
+            });
             item.appendChild(links);
         }
 
@@ -339,11 +588,19 @@ function labelForPaperLink(url) {
     return 'Link';
 }
 
+function hasLinkedPublication(project) {
+    const links = project.links || {};
+    return Object.prototype.hasOwnProperty.call(links, 'preprint') || Object.prototype.hasOwnProperty.call(links, 'paper');
+}
+
 function buildMinimalProjects() {
-    const projects = (window.projectsData || []).slice().sort(sortMinimalProjects);
+    const projects = (window.projectsData || [])
+        .filter(project => !hasLinkedPublication(project))
+        .slice()
+        .sort(sortMinimalProjects);
     const section = document.createElement('section');
     section.className = 'm-section m-projects';
-    section.id = 'projects';
+    section.id = 'projects-list';
 
     const label = document.createElement('div');
     label.className = 'm-section__label m-mono';
