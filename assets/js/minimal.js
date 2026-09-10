@@ -458,7 +458,7 @@ function buildMinimalEducation() {
 
         const meta = document.createElement('p');
         meta.className = 'm-job__meta';
-        meta.textContent = buildEducationMeta(entry);
+        appendEducationMeta(meta, entry);
         body.appendChild(meta);
 
         job.appendChild(body);
@@ -479,16 +479,22 @@ function buildEducationDates(entry) {
     return [from, to].filter(Boolean).join(' - ');
 }
 
-function buildEducationMeta(entry) {
+function appendEducationMeta(meta, entry) {
     if (entry.thesis) {
         const toDate = stripEducationParen(entry.to);
         const statusText = (entry.thesis.status || '').trim();
         const statusLower = statusText ? statusText.charAt(0).toLowerCase() + statusText.slice(1) : '';
-        return `Expected ${toDate}. Grade ${entry.grade}, ${entry.creditsCompleted} credits completed. Specialization: ${entry.specialization}. Thesis: ${entry.thesis.title}, ${statusLower}.`;
+        meta.appendChild(document.createTextNode(`Expected ${toDate}. Grade ${entry.grade}, ${entry.creditsCompleted} credits completed. Specialization: ${entry.specialization}. Thesis: `));
+        const thesis = document.createElement(entry.thesis.url ? 'a' : 'span');
+        thesis.textContent = entry.thesis.title;
+        if (entry.thesis.url) thesis.href = entry.thesis.url;
+        meta.appendChild(thesis);
+        meta.appendChild(document.createTextNode(`, ${statusLower}.`));
+        return;
     }
     const parts = [`Grade ${entry.grade}.`];
     if (entry.achievement) parts.push(`${entry.achievement}.`);
-    return parts.join(' ');
+    meta.textContent = parts.join(' ');
 }
 
 function buildMinimalPapers() {
@@ -509,12 +515,13 @@ function buildMinimalPapers() {
         const item = document.createElement('article');
         item.className = 'm-paper';
 
-        const title = document.createElement(pub.url ? 'a' : 'span');
+        const titleHref = pub.projectPage || pub.url;
+        const title = document.createElement(titleHref ? 'a' : 'span');
         title.className = 'm-paper__title';
         title.textContent = pub.title;
-        if (pub.url) {
-            title.href = pub.url;
-            title.rel = 'noopener';
+        if (titleHref) {
+            title.href = titleHref;
+            if (!pub.projectPage) title.rel = 'noopener';
         }
         item.appendChild(title);
 
