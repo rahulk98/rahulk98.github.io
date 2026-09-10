@@ -29,10 +29,14 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/academicons@1.9.5/css/academicons.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="static/css/index.css">
 
   <script src="https://cdn.jsdelivr.net/npm/bulma-carousel@4.0.24/dist/js/bulma-carousel.min.js" defer></script>
   <script src="static/js/index.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.production.min.js" crossorigin></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.production.min.js" crossorigin></script>
+  <script src="static/js/teaser.bundle.js" defer></script>
 </head>
 <body>
 
@@ -97,7 +101,9 @@
   <section class="hero teaser">
     <div class="container is-max-desktop">
       <div class="hero-body">
-        <img class="teaser-img" src="static/images/teaser_free_zone.png" alt="Accuracy and perplexity change vs. the dense KV cache across compression ratio, for GSM8K, RULER, and five models' perplexity, showing near-lossless results through 3x">
+        <div id="jolt-teaser" class="jolt-teaser" role="img" aria-label="Animated teaser: the KV cache grows with context, JoLT factors the token and feature modes with a rotated low-bit residual, one Lagrangian dual allocates ranks and bit-widths, perplexity stays near-lossless through 3x on five models, and the free zone widens with context up to 64K">
+          <noscript><img class="teaser-img" src="static/images/teaser_free_zone.png" alt="Accuracy and perplexity change vs. the dense KV cache across compression ratio, for GSM8K, RULER, and five models' perplexity, showing near-lossless results through 3x"></noscript>
+        </div>
         <h2 class="subtitle has-text-centered">
           At 3x KV cache compression, GSM8K on Mistral-7B moves -1.21 pp and RULER 64K on LLaMA-3.1-8B moves -0.10 pp, with perplexity within 0.3% of dense across all five models tested; even at 5x, RULER 64K costs only -2.40 pp.
         </h2>
