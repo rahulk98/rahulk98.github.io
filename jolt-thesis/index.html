@@ -135,70 +135,64 @@
         <div class="column is-four-fifths">
           <h2 class="title is-3">How JoLT works</h2>
           <div style="overflow-x: auto; max-width: 100%;">
-            <svg viewBox="0 0 960 260" width="100%" style="max-width: 100%; font-family: Inter, system-ui, sans-serif;" role="img" aria-label="JoLT pipeline: dense grouped KV cache to keeping layer and head axes intact to partial Tucker on token and feature axes to truncation residual, wrapping to rotate and low-bit quantize residual to Lagrangian allocator to FlashJoLT fused decode">
+            <svg viewBox="0 0 960 300" width="100%" style="max-width: 100%; font-family: Inter, system-ui, sans-serif;" role="img" aria-label="JoLT pipeline: the prefill KV cache is split into layer groups with keys and values as separate cells; one Lagrangian multiplier picks each cell's Tucker ranks and residual bit-width under a byte budget; partial Tucker keeps heads and layers intact and truncates tokens and features; the truncation residual is rotated and quantized; the stored core, factors and residual are read directly by the FlashJoLT fused decode kernel">
               <defs>
                 <marker id="jolt-arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
                   <path d="M0,0 L10,5 L0,10 Z" fill="#c84b2f"></path>
                 </marker>
               </defs>
               <g>
-                <rect x="10" y="10" width="200" height="90" rx="10" fill="#f9f7f4" stroke="#e2ddd8"></rect>
-                <text x="110" y="40" text-anchor="middle" font-size="16" fill="#1a1714">Dense grouped</text>
-                <text x="110" y="58" text-anchor="middle" font-size="16" fill="#1a1714">KV cache</text>
-                <text x="110" y="74" text-anchor="middle" font-size="12" fill="#5a534d">4th-order tensor: layer group</text>
-                <text x="110" y="87" text-anchor="middle" font-size="12" fill="#5a534d">x head x token x feature</text>
-
-                <line x1="210" y1="55" x2="250" y2="55" stroke="#c84b2f" stroke-width="2" marker-end="url(#jolt-arrow)"></line>
-
-                <rect x="250" y="10" width="200" height="90" rx="10" fill="#f9f7f4" stroke="#e2ddd8"></rect>
-                <text x="350" y="40" text-anchor="middle" font-size="16" fill="#1a1714">Keep layer and head</text>
-                <text x="350" y="58" text-anchor="middle" font-size="16" fill="#1a1714">axes intact</text>
-                <text x="350" y="74" text-anchor="middle" font-size="12" fill="#5a534d">index-like axes,</text>
-                <text x="350" y="87" text-anchor="middle" font-size="12" fill="#5a534d">not compressed</text>
-
-                <line x1="450" y1="55" x2="490" y2="55" stroke="#c84b2f" stroke-width="2" marker-end="url(#jolt-arrow)"></line>
-
-                <rect x="490" y="10" width="200" height="90" rx="10" fill="#f9f7f4" stroke="#e2ddd8"></rect>
-                <text x="590" y="40" text-anchor="middle" font-size="16" fill="#1a1714">Partial Tucker on</text>
-                <text x="590" y="58" text-anchor="middle" font-size="16" fill="#1a1714">token + feature axes</text>
-                <text x="590" y="78" text-anchor="middle" font-size="12" fill="#5a534d">ranks r_T, r_d</text>
-
-                <line x1="690" y1="55" x2="730" y2="55" stroke="#c84b2f" stroke-width="2" marker-end="url(#jolt-arrow)"></line>
-
-                <rect x="730" y="10" width="200" height="90" rx="10" fill="#f9f7f4" stroke="#e2ddd8"></rect>
-                <text x="830" y="40" text-anchor="middle" font-size="16" fill="#1a1714">Truncation</text>
-                <text x="830" y="58" text-anchor="middle" font-size="16" fill="#1a1714">residual</text>
-                <text x="830" y="74" text-anchor="middle" font-size="12" fill="#5a534d">what the low-rank</text>
-                <text x="830" y="87" text-anchor="middle" font-size="12" fill="#5a534d">part misses</text>
-
-                <line x1="830" y1="100" x2="830" y2="155" stroke="#c84b2f" stroke-width="2" marker-end="url(#jolt-arrow)"></line>
-
-                <rect x="140" y="160" width="200" height="90" rx="10" fill="#f9f7f4" stroke="#e2ddd8"></rect>
-                <text x="240" y="190" text-anchor="middle" font-size="16" fill="#1a1714">Rotate + low-bit</text>
-                <text x="240" y="208" text-anchor="middle" font-size="16" fill="#1a1714">quantize residual</text>
-                <text x="240" y="224" text-anchor="middle" font-size="12" fill="#5a534d">orthogonal rotation,</text>
-                <text x="240" y="237" text-anchor="middle" font-size="12" fill="#5a534d">b bits</text>
-
-                <line x1="340" y1="205" x2="380" y2="205" stroke="#c84b2f" stroke-width="2" marker-end="url(#jolt-arrow)"></line>
-
-                <rect x="380" y="160" width="200" height="90" rx="10" fill="#f9f7f4" stroke="#c84b2f" stroke-width="2"></rect>
-                <text x="480" y="190" text-anchor="middle" font-size="16" fill="#1a1714">Lagrangian</text>
-                <text x="480" y="208" text-anchor="middle" font-size="16" fill="#1a1714">allocator</text>
-                <text x="480" y="224" text-anchor="middle" font-size="12" fill="#5a534d">chooses (r_T, r_d, b) per</text>
-                <text x="480" y="237" text-anchor="middle" font-size="12" fill="#5a534d">group under one byte budget</text>
-
-                <line x1="580" y1="205" x2="620" y2="205" stroke="#c84b2f" stroke-width="2" marker-end="url(#jolt-arrow)"></line>
-
-                <rect x="620" y="160" width="200" height="90" rx="10" fill="#f9f7f4" stroke="#e2ddd8"></rect>
-                <text x="720" y="190" text-anchor="middle" font-size="16" fill="#1a1714">FlashJoLT</text>
-                <text x="720" y="208" text-anchor="middle" font-size="16" fill="#1a1714">fused decode</text>
-                <text x="720" y="224" text-anchor="middle" font-size="12" fill="#5a534d">attention directly</text>
-                <text x="720" y="237" text-anchor="middle" font-size="12" fill="#5a534d">on the compressed cache</text>
+                <rect x="10" y="10" width="210" height="100" rx="10" fill="#f9f7f4" stroke="#e2ddd8"></rect>
+                <text x="115" y="36" text-anchor="middle" font-size="16" fill="#1a1714">Prefill KV cache</text>
+                <text x="115" y="56" text-anchor="middle" font-size="12" fill="#5a534d">keys and values of all layers,</text>
+                <text x="115" y="69" text-anchor="middle" font-size="12" fill="#5a534d">kept in bf16 during prefill</text>
+                <line x1="220" y1="60" x2="258" y2="60" stroke="#c84b2f" stroke-width="2" marker-end="url(#jolt-arrow)"></line>
+                <rect x="260" y="10" width="210" height="100" rx="10" fill="#f9f7f4" stroke="#e2ddd8"></rect>
+                <text x="365" y="36" text-anchor="middle" font-size="16" fill="#1a1714">Layer groups g,</text>
+                <text x="365" y="54" text-anchor="middle" font-size="16" fill="#1a1714">cells (g, K) and (g, V)</text>
+                <text x="365" y="74" text-anchor="middle" font-size="12" fill="#5a534d">each cell a 4th-order tensor</text>
+                <text x="365" y="87" text-anchor="middle" font-size="12" fill="#5a534d">|g| &#215; n_h &#215; T &#215; d_h</text>
+                <line x1="470" y1="60" x2="508" y2="60" stroke="#c84b2f" stroke-width="2" marker-end="url(#jolt-arrow)"></line>
+                <rect x="510" y="10" width="440" height="100" rx="10" fill="#f9f7f4" stroke="#c84b2f" stroke-width="2"></rect>
+                <text x="730" y="36" text-anchor="middle" font-size="16" fill="#1a1714">Joint Lagrangian allocation</text>
+                <text x="730" y="56" text-anchor="middle" font-size="12" fill="#5a534d">one multiplier &#955; picks (r_T, r_d, b) per cell</text>
+                <text x="730" y="69" text-anchor="middle" font-size="12" fill="#5a534d">to minimise &#931; e = &#949;&#178;(b) &#183; &#964;(r_T, r_d)</text>
+                <text x="730" y="82" text-anchor="middle" font-size="12" fill="#5a534d">under one byte budget B</text>
+                <path d="M 620 110 L 620 150 L 115 150 L 115 180" fill="none" stroke="#c84b2f" stroke-width="2" marker-end="url(#jolt-arrow)"></path>
+                <path d="M 760 110 L 760 138 L 365 138 L 365 180" fill="none" stroke="#c84b2f" stroke-width="2" marker-end="url(#jolt-arrow)"></path>
+                <text x="130" y="174" text-anchor="start" font-size="12" fill="#c84b2f">ranks r_T, r_d</text>
+                <text x="380" y="174" text-anchor="start" font-size="12" fill="#c84b2f">bits b</text>
+                <rect x="10" y="190" width="210" height="100" rx="10" fill="#f9f7f4" stroke="#e2ddd8"></rect>
+                <text x="115" y="216" text-anchor="middle" font-size="16" fill="#1a1714">Partial Tucker</text>
+                <text x="115" y="234" text-anchor="middle" font-size="16" fill="#1a1714">(ST-HOSVD)</text>
+                <text x="115" y="254" text-anchor="middle" font-size="12" fill="#5a534d">heads and layers pinned;</text>
+                <text x="115" y="267" text-anchor="middle" font-size="12" fill="#5a534d">tokens to r_T, features to r_d;</text>
+                <text x="115" y="280" text-anchor="middle" font-size="12" fill="#5a534d">core + U_T + U_d</text>
+                <line x1="220" y1="240" x2="258" y2="240" stroke="#c84b2f" stroke-width="2" marker-end="url(#jolt-arrow)"></line>
+                <rect x="260" y="190" width="210" height="100" rx="10" fill="#f9f7f4" stroke="#e2ddd8"></rect>
+                <text x="365" y="216" text-anchor="middle" font-size="16" fill="#1a1714">Rotated low-bit</text>
+                <text x="365" y="234" text-anchor="middle" font-size="16" fill="#1a1714">residual</text>
+                <text x="365" y="254" text-anchor="middle" font-size="12" fill="#5a534d">R = X &#8722; X&#771;, random orthogonal</text>
+                <text x="365" y="267" text-anchor="middle" font-size="12" fill="#5a534d">rotation, uniform b-bit code,</text>
+                <text x="365" y="280" text-anchor="middle" font-size="12" fill="#5a534d">b &#8712; {0, 2, 4, 8}</text>
+                <line x1="470" y1="240" x2="508" y2="240" stroke="#c84b2f" stroke-width="2" marker-end="url(#jolt-arrow)"></line>
+                <rect x="510" y="190" width="210" height="100" rx="10" fill="#f9f7f4" stroke="#e2ddd8"></rect>
+                <text x="615" y="216" text-anchor="middle" font-size="16" fill="#1a1714">Compressed cache</text>
+                <text x="615" y="236" text-anchor="middle" font-size="12" fill="#5a534d">core, two factor matrices,</text>
+                <text x="615" y="249" text-anchor="middle" font-size="12" fill="#5a534d">packed residual with one</text>
+                <text x="615" y="262" text-anchor="middle" font-size="12" fill="#5a534d">fp32 scale per row</text>
+                <line x1="720" y1="240" x2="758" y2="240" stroke="#c84b2f" stroke-width="2" marker-end="url(#jolt-arrow)"></line>
+                <rect x="760" y="190" width="190" height="100" rx="10" fill="#f9f7f4" stroke="#e2ddd8"></rect>
+                <text x="855" y="216" text-anchor="middle" font-size="16" fill="#1a1714">FlashJoLT</text>
+                <text x="855" y="234" text-anchor="middle" font-size="16" fill="#1a1714">fused decode</text>
+                <text x="855" y="254" text-anchor="middle" font-size="12" fill="#5a534d">attention directly on the</text>
+                <text x="855" y="267" text-anchor="middle" font-size="12" fill="#5a534d">compressed cache; inverts</text>
+                <text x="855" y="280" text-anchor="middle" font-size="12" fill="#5a534d">the rotation on the fly</text>
               </g>
             </svg>
           </div>
           <p class="is-size-6 has-text-grey" style="margin-top: 1rem;">
-            JoLT compresses only the token and feature axes, quantizes the leftover residual after an orthogonal rotation, and lets a single Lagrangian dual pick ranks and bit-widths for every layer group under a shared storage budget.
+            JoLT groups the layers, treats the keys and the values of each group as separate cells, and lets one Lagrangian multiplier pick every cell&#39;s Tucker ranks and residual bit-width under a shared byte budget before anything is compressed. The partial Tucker step keeps heads and layers intact and truncates only tokens and features, the rotated low-bit residual recovers the truncated tail, and FlashJoLT attends directly on the stored core, factors and residual.
           </p>
         </div>
       </div>
