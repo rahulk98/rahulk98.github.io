@@ -183,9 +183,58 @@ body {
   background: #f7f5f0;
 }
 
+/* Blend the engine's chrome into the page: paper stage, no dark frame,
+   a quiet light playback bar in the teaser's own palette. The engine sets
+   these inline, so the overrides need !important. */
+.jolt-teaser [data-om-starter="animations-v3"] {
+  background: #f7f5f0 !important;
+}
+
+.jolt-teaser svg[data-om-exportable-video-with-duration-secs] {
+  box-shadow: none !important;
+}
+
+.jolt-teaser [data-omelette-chrome] {
+  max-width: none !important;
+  padding: 8px 16px !important;
+  background: #f7f5f0 !important;
+  border-top: 1px solid #d8d3c8 !important;
+  border-radius: 0 !important;
+  color: #1c1b18 !important;
+}
+
+.jolt-teaser [data-omelette-chrome] button {
+  background: transparent !important;
+  border: 1px solid #d8d3c8 !important;
+  color: #1c1b18 !important;
+}
+
+.jolt-teaser [data-omelette-chrome] button:hover {
+  background: #ebe8e1 !important;
+}
+
+.jolt-teaser [data-omelette-chrome] > div {
+  color: #6f6b62 !important;
+  font-family: "IBM Plex Mono", Menlo, monospace !important;
+}
+
+/* scrub track: base, fill, knob */
+.jolt-teaser [data-omelette-chrome] > div:nth-of-type(2) > div:nth-child(1) {
+  background: #d8d3c8 !important;
+}
+
+.jolt-teaser [data-omelette-chrome] > div:nth-of-type(2) > div:nth-child(2) {
+  background: #1f8a5b !important;
+}
+
+.jolt-teaser [data-omelette-chrome] > div:nth-of-type(2) > div:nth-child(3) {
+  background: #1c1b18 !important;
+  box-shadow: none !important;
+}
+
 /* The engine's video-export button talks to a design-tool host; no host here. */
 .jolt-teaser button[title="Export video"] {
-  display: none;
+  display: none !important;
 }
 
 .jolt-teaser noscript img {
