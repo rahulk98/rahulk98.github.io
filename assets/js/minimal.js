@@ -29,17 +29,27 @@ function resolveDesign(config) {
         choice = null;
     }
 
-    if (!options.includes(choice)) {
-        choice = (config && config.design) || 'classic';
+    // Whether the choice came from a real source rather than the last-resort
+    // fallback. Caching the fallback would pin a visitor to it for good after a
+    // single failed config fetch.
+    let resolved = options.includes(choice);
+
+    if (!resolved) {
+        const fromConfig = config && config.design;
+        choice = fromConfig || 'classic';
+        resolved = Boolean(fromConfig) && options.includes(choice);
     }
     if (!options.includes(choice)) {
         choice = 'classic';
+        resolved = false;
     }
 
-    try {
-        localStorage.setItem('siteDesign', choice);
-    } catch (error) {
-        // Storage can be unavailable in private mode. The config still decides.
+    if (resolved) {
+        try {
+            localStorage.setItem('siteDesign', choice);
+        } catch (error) {
+            // Storage can be unavailable in private mode. The config still decides.
+        }
     }
 
     return choice;
