@@ -2,94 +2,94 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
     <url>
-        <loc>https://rahul-krishnan.is-a.dev/</loc>
+        <loc>https://rahulkrishnan.me/</loc>
         <lastmod>2026-08-06</lastmod>
         <changefreq>weekly</changefreq>
         <priority>1.0</priority>
     </url>
 
     <url>
-        <loc>https://rahul-krishnan.is-a.dev/project.html?slug=kv-cache-tensor</loc>
+        <loc>https://rahulkrishnan.me/project.html?slug=kv-cache-tensor</loc>
         <lastmod>2026-08-06</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
-        <loc>https://rahul-krishnan.is-a.dev/jolt-thesis/</loc>
+        <loc>https://rahulkrishnan.me/jolt-thesis/</loc>
         <lastmod>2026-09-03</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
-        <loc>https://rahul-krishnan.is-a.dev/project.html?slug=rag-resume-api</loc>
+        <loc>https://rahulkrishnan.me/project.html?slug=rag-resume-api</loc>
         <lastmod>2026-08-06</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
-        <loc>https://rahul-krishnan.is-a.dev/project.html?slug=neuro-symbolic-narrative</loc>
+        <loc>https://rahulkrishnan.me/project.html?slug=neuro-symbolic-narrative</loc>
         <lastmod>2026-08-06</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
-        <loc>https://rahul-krishnan.is-a.dev/project.html?slug=fear-rlvr</loc>
+        <loc>https://rahulkrishnan.me/project.html?slug=fear-rlvr</loc>
         <lastmod>2026-08-06</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
-        <loc>https://rahul-krishnan.is-a.dev/project.html?slug=amazon-electronics-recommender</loc>
+        <loc>https://rahulkrishnan.me/project.html?slug=amazon-electronics-recommender</loc>
         <lastmod>2026-08-06</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
-        <loc>https://rahul-krishnan.is-a.dev/project.html?slug=rcot-faithfulness</loc>
+        <loc>https://rahulkrishnan.me/project.html?slug=rcot-faithfulness</loc>
         <lastmod>2026-08-06</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
-        <loc>https://rahul-krishnan.is-a.dev/project.html?slug=risk-averse-cvar</loc>
+        <loc>https://rahulkrishnan.me/project.html?slug=risk-averse-cvar</loc>
         <lastmod>2026-08-06</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
-        <loc>https://rahul-krishnan.is-a.dev/project.html?slug=ml-kaggle-competitions</loc>
+        <loc>https://rahulkrishnan.me/project.html?slug=ml-kaggle-competitions</loc>
         <lastmod>2026-08-06</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
-        <loc>https://rahul-krishnan.is-a.dev/project.html?slug=sentiment-bert</loc>
+        <loc>https://rahulkrishnan.me/project.html?slug=sentiment-bert</loc>
         <lastmod>2026-08-06</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
-        <loc>https://rahul-krishnan.is-a.dev/project.html?slug=glaucoma</loc>
+        <loc>https://rahulkrishnan.me/project.html?slug=glaucoma</loc>
         <lastmod>2026-08-06</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.8</priority>
     </url>
 
     <url>
-        <loc>https://rahul-krishnan.is-a.dev/blog/</loc>
+        <loc>https://rahulkrishnan.me/blog/</loc>
         <lastmod>2026-04-12</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.7</priority>
     </url>
     <url>
-        <loc>https://rahul-krishnan.is-a.dev/blog/2026/04/hello-world/</loc>
+        <loc>https://rahulkrishnan.me/blog/2026/04/hello-world/</loc>
         <lastmod>2026-04-12</lastmod>
         <changefreq>yearly</changefreq>
         <priority>0.6</priority>
     </url>
 
     <url>
-        <loc>https://rahul-krishnan.is-a.dev/privacy.html</loc>
+        <loc>https://rahulkrishnan.me/privacy.html</loc>
         <lastmod>2026-08-06</lastmod>
         <changefreq>yearly</changefreq>
         <priority>0.3</priority>

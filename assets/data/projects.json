@@ -35,7 +35,7 @@
     "tags": ["LlamaIndex", "FastAPI", "Hybrid Retrieval", "OpenRouter", "Cloud Run"],
     "stack": ["LlamaIndex", "FastAPI", "Docker", "Google Cloud Run", "OpenRouter", "BM25 + Vector Retrieval", "Local Cross-Encoder Reranker", "RAG"],
     "links": {
-      "demo": "https://rahul-krishnan.is-a.dev"
+      "demo": "https://rahulkrishnan.me"
     },
     "detail": [
       "I indexed my resume and project documents so portfolio visitors can ask natural-language questions about my background, projects, and experience.",
