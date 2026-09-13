@@ -65,13 +65,17 @@
         // Apply the last known design immediately so a repeat visit does not
         // flash the other one. config.json is still the source of truth.
         (function () {
+            // First visit has no cached choice, so assume the design config.json
+            // currently ships. Without this the classic markup paints first.
+            var design = 'minimal';
             try {
                 var override = new URLSearchParams(window.location.search).get('design');
                 var cached = override || localStorage.getItem('siteDesign');
                 if (cached === 'classic' || cached === 'minimal') {
-                    document.documentElement.dataset.design = cached;
+                    design = cached;
                 }
-            } catch (error) { /* no cached choice */ }
+            } catch (error) { /* keep the default */ }
+            document.documentElement.dataset.design = design;
         })();
     </script>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap">
