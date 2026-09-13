@@ -6,8 +6,8 @@
     "dates": "2026",
     "order": 0,
     "points": [
-      "My role included support for continuing MSc thesis research on KV cache compression under Prof. Dr. Volker Schulz. The public JoLT preprint reports near-lossless 2x to 3x compression across five models and four model families: https://arxiv.org/abs/2607.12550.",
-      "Earlier in the role, I graded weekly Numerical Optimization exercise sheets and gave written feedback on unconstrained and constrained optimization, line search, trust-region methods, KKT conditions, and numerical linear algebra."
+      "I researched KV cache compression under Prof. Dr. Volker Schulz, co-authoring the JoLT preprint that reports near-lossless 2x to 3x compression across five models and four model families: https://arxiv.org/abs/2607.12550.",
+      "I graded weekly Numerical Optimization exercise sheets and provided technical feedback on unconstrained and constrained optimization, line search, trust-region methods, KKT conditions, and numerical linear algebra."
     ]
   },
   {

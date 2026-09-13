@@ -15,7 +15,7 @@
       "authors": "Rahul Krishnan and Volker Schulz, Universitaet Trier",
       "conference": "In preparation, targeting SIAM Journal on Mathematics of Data Science (SIMODS)",
       "year": "",
-      "description": "Volker Schulz and I are preparing this structural and theoretical companion to the JoLT method paper."
+      "description": "A theoretical companion to the JoLT method paper, analyzing structural tensor properties and low-rank approximability of attention key-value states."
     },
     {
       "title": "Glaucoma Detection from Retinal Fundus Images",
@@ -23,8 +23,8 @@
       "conference": "International Conference on Communication and Signal Processing (ICCSP)",
       "year": 2020,
       "url": "https://ieeexplore.ieee.org/document/9182388",
-      "description": "I co-authored this paper on glaucoma screening from retinal fundus images using region growing and SVM classification. The paper reports an F1 score of 86%.",
-      "result": "F1 score of 86% for SVM-based glaucoma classification."
+      "description": "Undergraduate research on automated glaucoma screening from retinal fundus images using optic-disc and optic-cup segmentation with SVM classification.",
+      "result": "Achieved an F1 score of 86% on the Drishti-GS dataset for SVM-based glaucoma detection."
     }
   ]
 }

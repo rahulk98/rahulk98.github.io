@@ -115,12 +115,12 @@
     "keywords": ["LLMs & NLP", "Research"],
     "thumbnail": "assets/img/projects/rcot-faithfulness-thumb.jpg",
     "outcome": "Reflective CoT reduced bias susceptibility by about 7 percentage points over standard CoT across 650 cases",
-    "summary": "I co-built a team research study evaluating whether reflective chain-of-thought improves LLM reasoning faithfulness under controlled prompt bias.",
+    "summary": "I collaborated on a research study evaluating whether reflective chain-of-thought improves LLM reasoning faithfulness under controlled prompt bias.",
     "tags": ["Gemini 2.5 Flash Lite", "LLaMA 3.2 3B", "BIG-Bench Hard"],
     "stack": ["Python", "Gemini 2.5 Flash Lite", "LLaMA 3.2 3B (Ollama)", "BIG-Bench Hard", "Structured JSON outputs", "LaTeX"],
     "links": {},
     "detail": [
-      "I co-built a reproducible Python evaluation across Gemini 2.5 Flash Lite and LLaMA 3.2 3B, comparing direct answering, chain-of-thought, and reflective chain-of-thought across 13 BIG-Bench Hard categories in zero-shot and few-shot settings.",
+      "I co-developed a reproducible Python evaluation pipeline across Gemini 2.5 Flash Lite and LLaMA 3.2 3B, comparing direct answering, chain-of-thought, and reflective chain-of-thought across 13 BIG-Bench Hard categories in zero-shot and few-shot settings.",
       "We found that Reflective CoT reduced bias susceptibility by about 7 percentage points over standard CoT, but models still produced plausible rationales that did not reveal the prompt cue driving biased answers. Our results show that structured reflection improved bias resistance but did not establish faithful reasoning."
     ]
   },
@@ -133,7 +133,7 @@
     "category": "Optimization",
     "keywords": ["Optimization", "Research"],
     "thumbnail": "assets/img/projects/risk-averse-cvar-thumb.jpg",
-    "outcome": "When the controller's temperature model was badly wrong, CVaR control cut constraint violations from 100% of scenarios to 0%",
+    "outcome": "Under severe temperature mismatch between model and reality, CVaR control cut constraint violations from 100% of scenarios to 0%",
     "summary": "I applied CVaR-based risk-averse optimization to nonlinear programming, perturbed SVM classification, and wine-fermentation model predictive control.",
     "tags": ["CasADi", "IPOPT", "CVXPY", "MPC"],
     "stack": ["Python", "CasADi", "IPOPT", "CVXPY", "OSQP", "MPC", "Jupyter"],
@@ -154,15 +154,15 @@
     "keywords": ["Machine Learning"],
     "thumbnail": "assets/img/projects/ml-kaggle-thumb.jpg",
     "outcome": "Top-3 finish in all three university Kaggle challenges",
-    "summary": "I placed in the top three in three course-integrated Kaggle competitions spanning tabular machine learning, a PyTorch CNN trained from scratch, and few-shot LLM classification.",
+    "summary": "I placed in the top three across three university Kaggle competitions spanning tabular machine learning, a PyTorch CNN trained from scratch, and few-shot LLM classification.",
     "tags": ["Polars", "Scikit-Learn", "PyTorch", "Gemma-3-12B"],
     "stack": ["Polars", "Scikit-Learn (HistGBM)", "PyTorch (VGG-style CNN)", "Hugging Face Transformers", "Gemma-3-12B", "Few-shot prompting"],
     "links": {},
     "detail": [
       "I completed three University of Trier course competitions with reproducible single-file Python submissions.",
-      "I built a HistGradientBoostingClassifier with temporal and fare-derived features for taxi-tip prediction.",
-      "I designed a VGG-style PyTorch CNN trained from scratch with augmentation, AdamW, cosine learning-rate scheduling, and early stopping.",
-      "I built a few-shot classification workflow with 4-bit Gemma-3-12B inference and retrieval of similar training examples."
+      "For taxi-tip prediction, I engineered temporal and fare-derived features with HistGradientBoosting.",
+      "For image classification, I trained a custom VGG-style PyTorch CNN from scratch using data augmentation, AdamW, and cosine learning-rate scheduling.",
+      "For text classification, I built a few-shot pipeline using 4-bit Gemma-3-12B inference with similarity-based exemplar retrieval."
     ]
   },
   {

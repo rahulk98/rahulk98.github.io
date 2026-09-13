@@ -1,5 +1,5 @@
 {
-    "tagline": "MSc Data Science at Universitaet Trier. I work on efficient and reliable machine learning systems, currently on memory-efficient LLM inference.",
+    "tagline": "MSc Data Science student and researcher at Universitaet Trier. I build efficient and reliable machine learning systems, currently focusing on memory-efficient LLM inference.",
     "ask": {
         "label": "Ask about my work",
         "note": "A retrieval assistant indexed over my papers, projects, and CV answers questions here."
@@ -27,8 +27,9 @@
         }
     ],
     "about": [
-        "I work on making long-context LLM inference cheaper in memory without giving up accuracy. My MSc thesis at Universitaet Trier, supervised by Prof. Dr. Volker Schulz, treats the KV cache as a fourth-order tensor and asks how much of it can be removed before accuracy moves. The resulting preprint, JoLT, reports near-lossless 2x to 3x compression across five models and four model families, plus a fused decode kernel that cuts peak decode memory by 3.61x.",
-        "Two smaller studies test whether a model's stated reasoning and confidence track what it actually does. Before the MSc I spent four years as a backend engineer at SAP Labs India, so every result I publish comes with reproducible evaluation, measured latency and memory, and stated limitations."
+        "I am a machine learning researcher and software engineer specializing in efficient LLM inference, numerical optimization, and reliable AI systems. At Universitaet Trier, I research KV cache compression under Prof. Dr. Volker Schulz, pairing graduate research with more than four years of enterprise software development experience at SAP Labs India.",
+        "My primary research tackles the memory wall in long-context language models. Through JoLT, an approach combining partial Tucker decomposition with low-bit residuals, I demonstrated near-lossless 2x to 3x KV cache compression across five models—maintaining accuracy within 2 percentage points on 64K-context and GSM8K benchmarks, with a custom fused kernel reducing peak decode memory by 3.61x. I also study model trust, exploring whether step-by-step explanations reflect actual model reasoning and analyzing how asymmetric penalties in RLVR steer model calibration.",
+        "Having designed large-scale distributed systems and compliance workflows at SAP, I hold machine learning to high engineering standards. I build complete systems—including a production RAG assistant on Google Cloud Run and a sub-100ms Two-Tower recommender on Azure—focused on rigorous empirical validation, measured performance, and transparent limitations."
     ],
     "tabs": [
         {
