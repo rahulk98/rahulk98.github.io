@@ -11,7 +11,7 @@ The site uses a data-driven static architecture built with vanilla HTML5, CSS3, 
   - `minimal` (default): A tabbed, publication-focused interface designed for quick scanning across research preprints, technical projects, and recent updates.
   - `classic`: A single-page layout featuring a hero section, filterable project grid, and linear section flow.
 - Theme Persistence: Dark and light modes are controlled through CSS custom properties defined on `:root` and `.dark`. The user preference is stored in `localStorage` and applied before initial paint to prevent theme flashing.
-- Embedded RAG Assistant: A client-side query interface connects to an external FastAPI retrieval service deployed on Google Cloud Run. The backend indexes resume and research documents, supporting natural-language Q&A through hybrid BM25 and vector retrieval.
+- Embedded RAG Assistant: A client-side query interface connects to an external FastAPI retrieval service self-hosted with Docker on a VPS at rag.rahulkrishnan.me. The backend indexes resume and research documents, supporting natural-language Q&A through hybrid BM25 and vector retrieval.
 
 ## Repository Structure
 
@@ -28,7 +28,7 @@ The site uses a data-driven static architecture built with vanilla HTML5, CSS3, 
 │   ├── js/
 │   │   ├── main.js         # Application bootstrap, JSON fetcher, classic DOM rendering
 │   │   ├── minimal.js      # Minimal tabbed interface and view controller
-│   │   └── rag.js          # Client interface for the Cloud Run RAG endpoint
+│   │   └── rag.js          # Client interface for the RAG endpoint
 │   ├── data/
 │   │   ├── config.json     # Master file registry and active design setting
 │   │   ├── personal.json   # Bio, contact details, and classic hero copy

@@ -995,7 +995,7 @@ function initializeRag() {
         const inputEl = pane.querySelector('#rag-input');
         const sendBtn = pane.querySelector('#rag-send');
 
-        const QUERY_URL = 'https://resume-rag-system-312008307798.europe-west1.run.app/query/stream';
+        const QUERY_URL = 'https://rag.rahulkrishnan.me/query/stream';
 
         // Immediately reveal UI without any health checks
         if (loadingEl) loadingEl.style.display = 'none';

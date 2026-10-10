@@ -48,4 +48,4 @@ Section render order (from config.json): hero -> about -> experience -> projects
 - Project data uses the schema: `title`, `category` (ml/nlp/deployment), `slug`, `stack[]`, `summary`, `problem`, `role`, `outcome`, `links{github, demo}`
 - CSS uses custom properties (`--accent`, `--font-family-base`, `--section-padding-desktop`) - modify `:root` in styles.css for theming
 - Responsive breakpoints: mobile <768px, tablet 768-1024px, desktop 1024px+
-- Google Analytics tag ID: `G-2C109RKXQE`
+- Umami website ID: `cd8992ec-09ff-4125-9feb-fcd610bd4e2f` (self-hosted on personal-box, dashboard tailnet-only)
