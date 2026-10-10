@@ -1,6 +1,6 @@
 # Personal Portfolio
 
-Static portfolio website deployed to GitHub Pages at [rahul-krishnan.is-a.dev](https://rahul-krishnan.is-a.dev). The site showcases research in machine learning efficiency (KV cache compression, LLM evaluation, numerical optimization) and enterprise backend software engineering.
+Static portfolio website deployed to GitHub Pages at [rahulkrishnan.me](https://rahulkrishnan.me). The site showcases research in machine learning efficiency (KV cache compression, LLM evaluation, numerical optimization) and enterprise backend software engineering.
 
 ## Architecture
 

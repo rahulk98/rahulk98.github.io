@@ -209,7 +209,7 @@ function setupDemoLinkScrollToTop() {
         try {
             const url = new URL(href, window.location.href);
             const isSameOrigin = url.origin === window.location.origin;
-            const isOwnDomainAlias = /(^|\.)is-a\.dev$/i.test(url.hostname) && /rahul-krishnan/i.test(url.hostname);
+            const isOwnDomainAlias = /(^|\.)rahulkrishnan\.me$/i.test(url.hostname) || (/(^|\.)is-a\.dev$/i.test(url.hostname) && /rahul-krishnan/i.test(url.hostname));
 
             if (isSameOrigin || isOwnDomainAlias) {
                 e.preventDefault();

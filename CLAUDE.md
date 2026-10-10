@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Static portfolio website for Rahul Krishnan, deployed on GitHub Pages at `rahul-krishnan.is-a.dev`. Built with vanilla HTML, CSS, and JavaScript - no build tools or frameworks.
+Static portfolio website for Rahul Krishnan, deployed on GitHub Pages at `rahulkrishnan.me`. Built with vanilla HTML, CSS, and JavaScript - no build tools or frameworks.
 
 ## Development
 
