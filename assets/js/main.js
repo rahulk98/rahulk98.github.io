@@ -996,6 +996,8 @@ function initializeRag() {
         const sendBtn = pane.querySelector('#rag-send');
 
         const QUERY_URL = 'https://rag.rahulkrishnan.me/query/stream';
+        const HEALTH_URL = 'https://rag.rahulkrishnan.me/health';
+        const OFFLINE_MESSAGE = 'The AI assistant is offline right now. The rest of the site works normally.';
 
         // Immediately reveal UI without any health checks
         if (loadingEl) loadingEl.style.display = 'none';
@@ -1089,6 +1091,46 @@ function initializeRag() {
 
             showSuggestions();
 
+            // Offline handling: the backend is self-hosted and may be down.
+            // Probe it in the background; while unreachable, disable the chat
+            // and say so instead of letting questions hang.
+            const defaultPlaceholder = inputEl.placeholder;
+
+            async function isRagReachable() {
+                try {
+                    const resp = await requestWithTimeout(HEALTH_URL, { method: 'GET', cache: 'no-store' }, 6000);
+                    if (!resp.ok) return false;
+                    const data = await resp.json().catch(() => ({}));
+                    return !!data && String(data.status).toLowerCase() === 'ok';
+                } catch (_) {
+                    return false;
+                }
+            }
+
+            function setRagOffline(offline) {
+                inputEl.disabled = offline;
+                sendBtn.disabled = offline;
+                inputEl.placeholder = offline ? 'Assistant offline' : defaultPlaceholder;
+                outputEl.querySelectorAll('.rag-suggestion-pill').forEach(pill => { pill.disabled = offline; });
+                if (!ragNoteEl) return;
+                ragNoteEl.textContent = '';
+                ragNoteEl.hidden = !offline;
+                if (!offline) return;
+                ragNoteEl.appendChild(document.createTextNode(OFFLINE_MESSAGE + ' '));
+                const checkBtn = document.createElement('button');
+                checkBtn.type = 'button';
+                checkBtn.className = 'rag-retry';
+                checkBtn.textContent = 'Check again';
+                checkBtn.addEventListener('click', async () => {
+                    checkBtn.disabled = true;
+                    checkBtn.textContent = 'Checking...';
+                    setRagOffline(!(await isRagReachable()));
+                });
+                ragNoteEl.appendChild(checkBtn);
+            }
+
+            isRagReachable().then(ok => { if (!ok && !isStreaming) setRagOffline(true); });
+
             async function submitQuery(query) {
                 const suggestionsEl = document.getElementById('rag-suggestions');
                 if (suggestionsEl) suggestionsEl.remove();
@@ -1121,6 +1163,8 @@ function initializeRag() {
 
                 let accumulated = '';
                 let userAborted = false;
+                let timedOut = false;
+                let wentOffline = false;
 
                 // Cold-start note: show after 5s if still loading on first use
                 let coldStartTimer = null;
@@ -1140,7 +1184,10 @@ function initializeRag() {
                     // Allow room for the backend's no-token fallback: a hung
                     // upstream stream can take ~20s to raise before the server
                     // retries via the non-streaming path.
-                    const timeoutId = setTimeout(() => currentController.abort(), 45000);
+                    const timeoutId = setTimeout(() => {
+                        timedOut = true;
+                        currentController.abort();
+                    }, 45000);
 
                     const resp = await fetch(QUERY_URL, {
                         method: 'POST',
@@ -1209,10 +1256,17 @@ function initializeRag() {
                         aiBubble.innerHTML = renderMarkdown('No answer returned.');
                     }
                 } catch (err) {
-                    userAborted = err.name === 'AbortError';
+                    // A timeout with a partial answer is treated like a stop.
+                    userAborted = err.name === 'AbortError' && !(timedOut && !accumulated);
                     if (typingIndicator.parentNode) typingIndicator.remove();
 
-                    if (userAborted) {
+                    // No HTTP response at all (network error or timeout):
+                    // check whether the backend is down rather than flaky.
+                    const unreachable = !userAborted && !accumulated && !/^HTTP /.test(err.message || '');
+                    if (unreachable && !(await isRagReachable())) {
+                        aiBubble.innerHTML = renderMarkdown("Couldn't reach the assistant - it seems to be offline. Please try again later.");
+                        wentOffline = true;
+                    } else if (userAborted) {
                         // Keep partial answer if any, or show stopped message
                         if (!accumulated) {
                             aiBubble.innerHTML = renderMarkdown('*Generation stopped.*');
@@ -1240,7 +1294,11 @@ function initializeRag() {
                     if (coldStartTimer) clearTimeout(coldStartTimer);
                     try { sessionStorage.setItem('ragColdStartShown', '1'); } catch (_) {}
                     if (ragNoteEl) ragNoteEl.hidden = true;
-                    inputEl.focus();
+                    if (wentOffline) {
+                        setRagOffline(true);
+                    } else {
+                        inputEl.focus();
+                    }
                     autoScroll();
                 }
             }

@@ -49,3 +49,5 @@ Section render order (from config.json): hero -> about -> experience -> projects
 - CSS uses custom properties (`--accent`, `--font-family-base`, `--section-padding-desktop`) - modify `:root` in styles.css for theming
 - Responsive breakpoints: mobile <768px, tablet 768-1024px, desktop 1024px+
 - Umami website ID: `cd8992ec-09ff-4125-9feb-fcd610bd4e2f` (self-hosted on personal-box, dashboard tailnet-only)
+- Every page (incl. `_layouts/default.html` and `jolt-thesis/index.html`) loads Umami only through `<script async src="/assets/js/analytics.js">`, which injects the tracker after `load`. Never add the Umami tag directly or with `defer`: a hanging analytics host would then hold back `DOMContentLoaded`, and with it all of `main.js` rendering, until the connection times out.
+- The RAG backend (`rag.rahulkrishnan.me`, also on personal-box) may be offline: `initializeRag()` probes `/health` and disables the chat with an offline note rather than failing. Its CORS only allows `https://rahulkrishnan.me`, so the chat always shows offline on a local server.
