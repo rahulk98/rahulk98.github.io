@@ -380,7 +380,7 @@ async function loadAllData() {
     console.log('loadAllData() called');
     try {
         console.log('Starting to load configuration...');
-        const response = await fetch('assets/data/config.json');
+        const response = await fetch('assets/data/config.json', { cache: 'no-cache' });
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -395,7 +395,7 @@ async function loadAllData() {
         const promises = Object.entries(config.dataFiles).map(async ([key, path]) => {
             try {
                 console.log(`Loading ${key} from ${path}...`);
-                const response = await fetch(path);
+                const response = await fetch(path, { cache: 'no-cache' });
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status} for ${path}`);
                 }

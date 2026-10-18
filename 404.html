@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-design="minimal">
 <head>
     <!-- Cloudflare Web Analytics -->
     <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "417e4ef4c2944b32a559316091f0f786"}'></script>
@@ -24,16 +24,40 @@
           } catch (e) {}
       })();
   </script>
-  <link rel="stylesheet" href="/assets/css/styles.css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;1,6..72,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+  <link rel="stylesheet" href="/assets/css/minimal.css?v=20261018v3">
 </head>
 <body>
-  <main>
-    <section class="not-found">
-      <div class="icon" aria-hidden="true" id="error-icon"></div>
-      <h1 id="error-title">404</h1>
-      <p id="error-message">Sorry, that page doesn't exist.</p>
-      <p><a class="btn" href="/" id="error-action">Go home</a></p>
-    </section>
-  </main>
+  <div class="m-page">
+    <div class="m-topbar">
+      <a class="m-topbar__name m-mono" href="/">Rahul Krishnan</a>
+      <nav class="m-tabs" aria-label="Site">
+        <a class="m-tab" href="/#about">About</a>
+        <a class="m-tab" href="/#recent">Recent</a>
+        <a class="m-tab" href="/#work">Work</a>
+      </nav>
+      <button id="theme-toggle" type="button" class="m-topbar__theme m-mono" aria-label="Toggle light/dark theme">Theme</button>
+    </div>
+
+    <header class="m-header">
+      <h1 class="m-header__title">404</h1>
+      <p class="m-header__tagline">Sorry, that page doesn't exist.</p>
+    </header>
+
+    <main class="m-panel m-prose">
+      <p><a href="/">Go home</a></p>
+    </main>
+
+    <footer class="m-footer m-mono">
+      <span>Rahul Krishnan</span>
+      <div class="m-footer__links">
+        <a href="https://github.com/rahulk98">GitHub</a>
+        <a href="mailto:rahulkrishnan1105@gmail.com">Email</a>
+        <a href="/privacy.html">Privacy Policy</a>
+      </div>
+    </footer>
+  </div>
+
+  <script src="/assets/js/subpage.js" defer></script>
 </body>
 </html>

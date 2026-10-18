@@ -11,11 +11,13 @@
       "projectPage": "jolt-thesis/"
     },
     {
-      "title": "Structural Companion Study on Tensor Decompositions for the KV Cache",
+      "title": "Tensor Decomposition of Transformer Key-Value Caches: Spectral Structure and Format Comparison",
       "authors": "Rahul Krishnan and Volker Schulz, Universitaet Trier",
-      "conference": "In preparation, targeting SIAM Journal on Mathematics of Data Science (SIMODS)",
-      "year": "",
-      "description": "A theoretical companion to the JoLT method paper, analyzing structural tensor properties and low-rank approximability of attention key-value states."
+      "conference": "arXiv preprint, in preparation for Numerical Linear Algebra with Applications (NLAA)",
+      "year": 2026,
+      "url": "https://arxiv.org/abs/2609.28029",
+      "description": "A companion to the JoLT paper that treats the KV cache as a fourth-order tensor, measures its singular-value spectra on Mistral-7B-v0.3 and LLaMA-2-13B, and compares Tucker, CP, tensor train and t-SVD at matched storage.",
+      "result": "Token and feature modes are low-rank while head and layer modes are nearly full-rank. Tucker has the lowest reconstruction error at every compression ratio from 2x to 5x, and post-RoPE keys lose 41% to 64% of their pre-RoPE compressibility."
     },
     {
       "title": "Glaucoma Detection from Retinal Fundus Images",

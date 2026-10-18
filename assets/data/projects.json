@@ -75,7 +75,10 @@
     "summary": "I tested whether asymmetric rewards in reinforcement learning with verifiable rewards (RLVR) improve how well an LLM's confidence matches reality (calibration) and when it declines to answer (abstention). My GRPO training and evaluation pipeline on Qwen 2.5 found no calibration benefit at the tested scales, but produced a mechanistic explanation for why.",
     "tags": ["GRPO", "RLVR", "Qwen 2.5", "LoRA"],
     "stack": ["Python", "PyTorch", "GRPO (TRL)", "LoRA / PEFT", "vLLM", "Qwen 2.5", "Hugging Face", "Weights & Biases"],
-    "links": {},
+    "links": {
+      "github": "https://github.com/rahulk98/project-fear",
+      "project page": "grpo-abstention-dial/"
+    },
     "detail": [
       "I tested whether heavily penalizing wrong answers would make Qwen 2.5 models better calibrated or more willing to abstain. I trained seven reward conditions at 1.5B and the most promising reward settings at 3B across six math and general-reasoning benchmarks, using calibration and selective-prediction metrics.",
       "I found that asymmetric rewards changed how often models abstained, not calibration or accuracy when answering. The reason: because of how GRPO normalizes rewards, penalty tuning only shifts the point at which the model declines to answer. It cannot change how confident the model is on individual questions.",

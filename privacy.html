@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-design="minimal">
 <head>
     <!-- Cloudflare Web Analytics -->
     <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "417e4ef4c2944b32a559316091f0f786"}'></script>
@@ -25,64 +25,48 @@
             } catch (e) {}
         })();
     </script>
-    <link rel="stylesheet" href="assets/css/styles.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;1,6..72,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+    <link rel="stylesheet" href="assets/css/minimal.css?v=20261018v3">
 </head>
 <body>
-    <header class="header">
-        <div class="container">
-            <nav class="nav">
-                <button class="mobile-menu-toggle" aria-expanded="false" aria-label="Toggle navigation menu">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </button>
-                <ul class="nav-list" role="menu">
-                    <li role="menuitem"><a href="/">Home</a></li>
-                    <li role="menuitem"><a href="/#about">About</a></li>
-                    <li role="menuitem"><a href="/#projects">Projects</a></li>
-                    <li role="menuitem"><a href="/#contact">Contact</a></li>
-                </ul>
-                <div class="theme-switcher">
-                    <button id="theme-toggle" aria-label="Toggle light/dark theme"></button>
-                </div>
-            </nav>
-        </div>
+  <div class="m-page">
+    <div class="m-topbar">
+      <a class="m-topbar__name m-mono" href="/">Rahul Krishnan</a>
+      <nav class="m-tabs" aria-label="Site">
+        <a class="m-tab" href="/#about">About</a>
+        <a class="m-tab" href="/#recent">Recent</a>
+        <a class="m-tab" href="/#work">Work</a>
+      </nav>
+      <button id="theme-toggle" type="button" class="m-topbar__theme m-mono" aria-label="Toggle light/dark theme">Theme</button>
+    </div>
+
+    <header class="m-header">
+      <h1 class="m-header__title">Privacy Policy</h1>
+      <p class="m-header__tagline">Last updated: September 13, 2026</p>
     </header>
 
-    <main class="main">
-        <div class="container">
-            <section class="section">
-                <h1>Privacy Policy</h1>
-                <p><em>Last updated: September 13, 2026</em></p>
-                
-                <h2>Information Collection</h2>
-                <p>This website uses Umami, a self-hosted, open-source analytics tool that runs on my own server. It does not use cookies and collects no personal information. It records aggregate page views, referrers, browser and device type, and country. The data stays on my server and is not shared with third parties.</p>
-                
-                <p>This website also uses Cloudflare Web Analytics. It does not use cookies, does not fingerprint visitors, and collects no personal information. It records aggregate page views, referrers, and basic performance timings. See the <a href="https://www.cloudflare.com/web-analytics/" target="_blank" rel="noopener">Cloudflare Web Analytics</a> page for details.</p>
-                
-                <h2>External Links</h2>
-                <p>This website contains links to external services such as GitHub and LinkedIn. These services have their own privacy policies and terms of service.</p>
-                
-                <h2>Contact Information</h2>
-                <p>If you have any questions about this privacy policy, you can contact me at rahulkrishnan1105@gmail.com</p>
-                
-                <h2>Changes to This Policy</h2>
-                <p>This privacy policy may be updated from time to time. Any changes will be posted on this page with an updated date.</p>
-                
-                <div style="margin-top: 2rem;">
-                    <a href="/" class="cta-button">Back to Portfolio</a>
-                </div>
-            </section>
-        </div>
+    <main class="m-panel m-prose">
+        <h2>Information Collection</h2>
+        <p>This website uses Umami, a self-hosted, open-source analytics tool that runs on my own server. It does not use cookies and collects no personal information. It records aggregate page views, referrers, browser and device type, and country. The data stays on my server and is not shared with third parties.</p>
+        <p>This website also uses Cloudflare Web Analytics. It does not use cookies, does not fingerprint visitors, and collects no personal information. It records aggregate page views, referrers, and basic performance timings. See the <a href="https://www.cloudflare.com/web-analytics/" target="_blank" rel="noopener">Cloudflare Web Analytics</a> page for details.</p>
+        <h2>External Links</h2>
+        <p>This website contains links to external services such as GitHub and LinkedIn. These services have their own privacy policies and terms of service.</p>
+        <h2>Contact Information</h2>
+        <p>If you have any questions about this privacy policy, you can contact me at rahulkrishnan1105@gmail.com</p>
+        <h2>Changes to This Policy</h2>
+        <p>This privacy policy may be updated from time to time. Any changes will be posted on this page with an updated date.</p>
     </main>
 
-    <footer class="footer">
-        <div class="container">
-            <p>&copy; 2024 Rahul Krishnan. All rights reserved.</p>
-        </div>
+    <footer class="m-footer m-mono">
+      <span>Rahul Krishnan</span>
+      <div class="m-footer__links">
+        <a href="https://github.com/rahulk98">GitHub</a>
+        <a href="mailto:rahulkrishnan1105@gmail.com">Email</a>
+        <a href="/privacy.html">Privacy Policy</a>
+      </div>
     </footer>
+  </div>
 
-    <script src="assets/js/main.js"></script>
+  <script src="assets/js/subpage.js" defer></script>
 </body>
 </html>

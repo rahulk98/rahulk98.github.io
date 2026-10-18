@@ -11,11 +11,14 @@
  */
 
 const MINIMAL_FONTS_HREF = 'https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;1,6..72,400&family=IBM+Plex+Mono:wght@400;500&display=swap';
-const MINIMAL_TAB_IDS = ['about', 'recent', 'research', 'projects'];
+const MINIMAL_TAB_IDS = ['about', 'recent', 'work'];
+// Filters inside the Work tab; their hashes also open the Work tab.
+const MINIMAL_WORK_FILTERS = ['research', 'projects'];
 
 let minimalHeaderEl = null;
 let minimalPanels = {};
 let minimalTabButtons = {};
+let minimalFilterButtons = {};
 let minimalActiveTab = 'about';
 let minimalCtx = null;
 
@@ -92,17 +95,50 @@ function renderMinimal() {
     root.innerHTML = '';
     root.appendChild(page);
 
-    minimalActiveTab = resolveMinimalHash();
-    switchMinimalTab(minimalActiveTab);
+    applyMinimalHash();
+    window.addEventListener('hashchange', applyMinimalHash);
+}
 
-    window.addEventListener('hashchange', () => {
-        switchMinimalTab(resolveMinimalHash());
+function applyMinimalHash() {
+    const raw = (location.hash || '').replace(/^#/, '');
+    if (MINIMAL_WORK_FILTERS.includes(raw)) {
+        switchMinimalTab('work');
+        setMinimalWorkFilter(raw);
+        return;
+    }
+    switchMinimalTab(MINIMAL_TAB_IDS.includes(raw) ? raw : 'about');
+    if (raw === 'work') setMinimalWorkFilter('all');
+}
+
+function setMinimalWorkFilter(filter) {
+    const papers = document.getElementById('papers');
+    const projects = document.getElementById('projects-list');
+    if (papers) papers.hidden = filter === 'projects';
+    if (projects) projects.hidden = filter === 'research';
+    Object.keys(minimalFilterButtons).forEach(key => {
+        minimalFilterButtons[key].setAttribute('aria-pressed', key === filter ? 'true' : 'false');
     });
 }
 
-function resolveMinimalHash() {
-    const raw = (location.hash || '').replace(/^#/, '');
-    return MINIMAL_TAB_IDS.includes(raw) ? raw : 'about';
+function buildMinimalWorkFilter() {
+    const wrap = document.createElement('div');
+    wrap.className = 'm-filter m-mono';
+    wrap.setAttribute('role', 'group');
+    wrap.setAttribute('aria-label', 'Filter work');
+
+    minimalFilterButtons = {};
+    [['all', 'All', 'work'], ['research', 'Research', 'research'], ['projects', 'Projects', 'projects']].forEach(([key, text, hash]) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'm-filter__btn';
+        btn.textContent = text;
+        btn.addEventListener('click', () => {
+            location.hash = '#' + hash;
+        });
+        minimalFilterButtons[key] = btn;
+        wrap.appendChild(btn);
+    });
+    return wrap;
 }
 
 function loadMinimalFonts() {
@@ -265,10 +301,12 @@ function buildMinimalPanel(tabId, personal, minimal) {
     if (tabId === 'about') {
         panel.appendChild(buildMinimalAsk(minimal));
         panel.appendChild(buildMinimalBio(personal, minimal));
-    } else if (tabId === 'research') {
-        panel.appendChild(buildMinimalPapers());
-    } else if (tabId === 'projects') {
-        panel.appendChild(buildMinimalProjects());
+    } else if (tabId === 'work') {
+        panel.appendChild(buildMinimalWorkFilter());
+        const research = buildMinimalPapers();
+        research.appendChild(buildMinimalProjects(true));
+        panel.appendChild(research);
+        panel.appendChild(buildMinimalProjects(false));
     } else if (tabId === 'recent') {
         panel.appendChild(buildMinimalNews(minimal));
         panel.appendChild(buildMinimalExperience());
@@ -515,7 +553,7 @@ function buildMinimalPapers() {
 
     const label = document.createElement('div');
     label.className = 'm-section__label m-mono';
-    label.textContent = 'Papers';
+    label.textContent = 'Research';
     section.appendChild(label);
 
     const list = document.createElement('div');
@@ -610,19 +648,20 @@ function hasLinkedPublication(project) {
     return Object.prototype.hasOwnProperty.call(links, 'preprint') || Object.prototype.hasOwnProperty.call(links, 'paper');
 }
 
-function buildMinimalProjects() {
+function isResearchProject(project) {
+    return (project.keywords || []).includes('Research');
+}
+
+// research = true: unpublished research projects, listed under the papers.
+// research = false: the remaining projects, as their own section.
+function buildMinimalProjects(research) {
     const projects = (window.projectsData || [])
-        .filter(project => !hasLinkedPublication(project))
+        .filter(project => !hasLinkedPublication(project) && isResearchProject(project) === research)
         .slice()
         .sort(sortMinimalProjects);
-    const section = document.createElement('section');
-    section.className = 'm-section m-projects';
-    section.id = 'projects-list';
-
-    const label = document.createElement('div');
-    label.className = 'm-section__label m-mono';
-    label.textContent = 'Projects';
-    section.appendChild(label);
+    const section = document.createElement(research ? 'div' : 'section');
+    section.className = research ? 'm-projects' : 'm-section m-projects';
+    if (!research) section.id = 'projects-list';
 
     projects.forEach(project => {
         const item = document.createElement('article');
@@ -635,7 +674,7 @@ function buildMinimalProjects() {
         title.className = 'm-project__title';
         title.textContent = project.title;
         if (project.slug) {
-            title.href = `project.html?slug=${encodeURIComponent(project.slug)}`;
+            title.href = (project.links && project.links['project page']) || `project.html?slug=${encodeURIComponent(project.slug)}`;
         }
         head.appendChild(title);
 

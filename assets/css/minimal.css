@@ -703,10 +703,44 @@
     line-height: 1.55;
 }
 
+/* Work filter */
+
+.m-filter {
+    display: flex;
+    gap: 20px;
+}
+
+.m-filter__btn {
+    font-family: inherit;
+    font-size: 13px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--m-muted);
+    background: none;
+    border: 0;
+    border-bottom: 1px solid transparent;
+    padding: 0 0 4px;
+    cursor: pointer;
+}
+
+.m-filter__btn:hover {
+    color: var(--m-fg);
+}
+
+.m-filter__btn[aria-pressed="true"] {
+    color: var(--m-fg);
+    border-bottom-color: var(--m-accent);
+}
+
+.m-filter + .m-section,
+.m-filter + .m-section[hidden] + .m-section {
+    padding-top: 40px;
+}
+
 /* Projects */
 
-.m-projects .m-section__label {
-    padding-bottom: 8px;
+.m-papers + .m-projects {
+    margin-top: 30px;
 }
 
 .m-project {
@@ -783,6 +817,55 @@
 
 [data-design="minimal"] .m-footer a {
     color: var(--m-muted);
+}
+
+/* Subpages (project, privacy, 404): the top bar uses links instead of buttons */
+
+.m-page a.m-topbar__name,
+.m-page a.m-tab {
+    display: inline-block;
+    color: var(--m-muted);
+    text-decoration: none;
+}
+
+.m-page a.m-topbar__name:hover,
+.m-page a.m-tab:hover,
+.m-page a.m-tab[aria-selected="true"] {
+    color: var(--m-fg);
+    text-decoration: none;
+}
+
+.m-back {
+    font-size: 13px;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+}
+
+.m-detail {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.m-prose {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.m-prose p {
+    font-size: 19px;
+    line-height: 1.7;
+}
+
+.m-prose h2 {
+    font-size: 26px;
+    line-height: 1.25;
+    padding-top: 24px;
+}
+
+.m-prose h2:first-child {
+    padding-top: 0;
 }
 
 /* Phone */

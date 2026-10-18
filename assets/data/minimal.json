@@ -11,9 +11,9 @@
             "text": "Preprint out: A JoLT for the KV Cache, near-lossless 2x to 3x compression across five models."
         },
         {
-            "date": "2026",
+            "date": "Sep 2026",
             "kind": "Paper",
-            "text": "Companion paper on tensor decompositions for the KV cache in preparation for SIMODS."
+            "text": "Companion preprint out: Tensor Decomposition of Transformer Key-Value Caches, comparing Tucker, CP, tensor train and t-SVD on the KV cache. In preparation for NLAA."
         },
         {
             "date": "2026",
@@ -42,14 +42,9 @@
             "tagline": "News, work experience and education."
         },
         {
-            "id": "research",
-            "title": "Research",
-            "tagline": "Papers on KV cache compression for long-context LLM inference, each with its headline result."
-        },
-        {
-            "id": "projects",
-            "title": "Projects",
-            "tagline": "Systems and studies without a publication, from deployed services to evaluation experiments."
+            "id": "work",
+            "title": "Work",
+            "tagline": "Papers on KV cache compression with their headline results, and systems and studies without a publication."
         }
     ]
 }

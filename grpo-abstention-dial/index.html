@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Cloudflare Web Analytics -->
+  <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "417e4ef4c2944b32a559316091f0f786"}'></script>
+
+  <!-- Umami Analytics (self-hosted) -->
+  <script async src="/assets/js/analytics.js"></script>
+
+  <title>Under GRPO, Asymmetric Rewards Reduce to One Abstention Dial | Rahul Krishnan</title>
+  <meta name="description" content="Seven GRPO reward schemes that punish wrong answers more than they reward right ones changed how often Qwen 2.5 abstained, not accuracy when answering or confidence ranking. After z-scoring, every reward triple is (1, 0, t).">
+  <meta name="author" content="Rahul Krishnan">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://rahulkrishnan.me/grpo-abstention-dial/">
+
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Under GRPO, asymmetric &quot;don't guess&quot; rewards reduce to a single abstention dial">
+  <meta property="og:description" content="Seven GRPO reward schemes that punish wrong answers more than they reward right ones changed how often Qwen 2.5 abstained, not accuracy when answering or confidence ranking. After z-scoring, every reward triple is (1, 0, t).">
+  <meta property="og:url" content="https://rahulkrishnan.me/grpo-abstention-dial/">
+  <meta property="og:image" content="https://rahulkrishnan.me/grpo-abstention-dial/static/images/fig01_abstention_sweep.png">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Under GRPO, asymmetric &quot;don't guess&quot; rewards reduce to a single abstention dial">
+  <meta name="twitter:description" content="Seven GRPO reward schemes that punish wrong answers more than they reward right ones changed how often Qwen 2.5 abstained, not accuracy when answering or confidence ranking. After z-scoring, every reward triple is (1, 0, t).">
+  <meta name="twitter:image" content="https://rahulkrishnan.me/grpo-abstention-dial/static/images/fig01_abstention_sweep.png">
+
+  <link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="../assets/img/favicon-32.png" type="image/png" sizes="32x32">
+  <link rel="apple-touch-icon" href="../assets/img/apple-touch-icon.png">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.4/css/bulma.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="static/css/index.css">
+
+  <script src="static/js/index.js" defer></script>
+  <script>
+    window.MathJax = { tex: { inlineMath: [['$', '$']], displayMath: [['$$', '$$']] } };
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-chtml.min.js" defer></script>
+</head>
+<body>
+
+  <button class="scroll-to-top" onclick="scrollToTop()" title="Scroll to top" aria-label="Scroll to top">
+    <i class="fas fa-chevron-up"></i>
+  </button>
+
+  <main id="main-content">
+  <section class="hero">
+    <div class="hero-body">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered">
+          <div class="column has-text-centered">
+            <h1 class="title is-1 publication-title">Under GRPO, asymmetric "don't guess" rewards reduce to a single abstention dial</h1>
+
+            <div class="is-size-5 publication-authors" style="margin-top: 0.5rem;">
+              <span class="author-block"><a href="../" target="_blank">Rahul Krishnan</a></span>
+            </div>
+            <div class="is-size-6 publication-authors">
+              <span class="author-block">Work done March to June 2026</span>
+            </div>
+
+            <div class="column has-text-centered">
+              <div class="publication-links">
+                <span class="link-block">
+                  <a href="https://github.com/rahulk98/project-fear" target="_blank" class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon"><i class="fab fa-github"></i></span>
+                    <span>Code</span>
+                  </a>
+                </span>
+                <span class="link-block">
+                  <a href="https://github.com/rahulk98/project-fear/blob/main/research/POST.md" target="_blank" class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon"><i class="fas fa-file-lines"></i></span>
+                    <span>Write-up</span>
+                  </a>
+                </span>
+                <!-- TODO: add the LessWrong button once the post is published and Rahul gives the URL. -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="hero teaser">
+    <div class="container is-max-desktop">
+      <div class="hero-body">
+        <img class="teaser-img" src="static/images/fig01_abstention_sweep.png" alt="Abstention rate, mean over 16 samples, for each reward condition on six benchmarks with Qwen 2.5 1.5B; abstention rises with the threshold t on every benchmark">
+        <h2 class="subtitle has-text-centered">
+          Punishing wrong answers under GRPO changed how often Qwen 2.5 abstained, not its accuracy when answering or how well its confidence ranked right versus wrong answers.
+        </h2>
+      </div>
+    </div>
+  </section>
+
+  <section class="section hero is-light">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3">Abstract</h2>
+          <div class="content has-text-justified">
+            <p>
+              We trained Qwen 2.5 1.5B and 3B base models with GRPO under seven reward schemes that punish wrong answers more than they reward right ones, hoping the models would learn to abstain when they are likely to be wrong. The rewards changed how often the models abstained. They did not improve accuracy on the questions the models still answered, and they did not change how well the models' confidence ranked right versus wrong answers. The reason is an elementary property of GRPO's within-group z-score normalization: after z-scoring, every (correct, wrong, abstain) reward triple is equivalent to (1, 0, t) for a single number t. The seven-condition sweep is one dial, not seven designs. A concurrent paper (Che et al. 2026) derives a closely related result formally; our contribution is the empirical side, including explicit abstention rewards, a 3B check, a no-normalization ablation and a cross-task transfer test.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3 has-text-centered">Why this matters for honesty</h2>
+          <div class="content write-up">
+            <p>A model that answers every question, including the ones it does not know, will hallucinate. One proposed fix is to change the incentives: score a wrong answer worse than an abstention, so that guessing stops paying. Kalai et al. (2025) argue that binary right/wrong grading is a root cause of hallucination for this reason, and several recent RL papers add an abstention option with a wrong-answer penalty (TruthRL, Reinforced Hesitation, Abstain-R1, KARL).</p>
+            <p>The decision theory is clean. With reward $+\alpha$ for a correct answer, $-\beta$ for a wrong one and $r_a$ for abstaining, an expected-value maximizer should answer only when its probability of being right exceeds</p>
+            <p>$$\tau = \frac{\beta + r_a}{\alpha + \beta}.$$</p>
+            <p>So the reward ratio looks like a knob for "answer only when you are at least $\tau$ confident". The hope is that RL then teaches the model to abstain on the specific questions it would get wrong, which is a per-question calibration skill. We found that, under GRPO as usually implemented, the reward cannot teach that skill. It can only move a global threshold.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3 has-text-centered">Setup</h2>
+          <div class="content write-up">
+            <p><strong>Training.</strong> Qwen 2.5 1.5B base (main) and Qwen 2.5 3B base. GRPO via TRL 0.15.2 with LoRA, group size $G = 8$, 1500 steps, learning rate $10^{-6}$, KL coefficient 0.04, sampling temperature 0.7. Training problems: MATH train levels 4 and 5 plus the longest quarter of GSM8K train (5883 problems). Answers are graded symbolically with math_verify.</p>
+            <p><strong>Abstention.</strong> There is no "I don't know" token. A response with no boxed final answer counts as an abstention and receives $r_a$, so the model has to discover silence as a strategy.</p>
+            <p><strong>Conditions.</strong></p>
+            <div class="table-container">
+              <table class="table is-striped is-narrow is-fullwidth">
+                <thead><tr><th>Condition</th><th>$\alpha$ (correct)</th><th>$\beta$ (wrong)</th><th>$r_a$ (abstain)</th><th>$\tau$</th></tr></thead>
+                <tbody>
+                  <tr><td>S0</td><td>1.0</td><td>1.0</td><td>0.0</td><td>0.50</td></tr>
+                  <tr><td>S1</td><td>1.0</td><td>2.0</td><td>0.0</td><td>0.67</td></tr>
+                  <tr><td>S2</td><td>0.5</td><td>2.0</td><td>0.0</td><td>0.80</td></tr>
+                  <tr><td>S3</td><td>0.1</td><td>1.0</td><td>0.0</td><td>0.91</td></tr>
+                  <tr><td>S4</td><td>0.0</td><td>1.0</td><td>0.0</td><td>1.00</td></tr>
+                  <tr><td>C1</td><td>1.0</td><td>1.0</td><td>0.2</td><td>0.60</td></tr>
+                  <tr><td>C2</td><td>1.0</td><td>1.0</td><td>0.5</td><td>0.75</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p>S0 to S4 raise the wrong-answer penalty (implicit abstention). C1 and C2 pay for abstaining (explicit abstention). C2 and S2 reach nearly the same threshold through different mechanisms. A positive-only control P0 uses +1 / 0 / 0.</p>
+            <p><strong>Evaluation.</strong> K=16 sampled rollouts per problem (K=32 for some runs) and greedy decoding, on MATH, GSM8K, AIME 2024 and 2025, MMLU-STEM and TruthfulQA-MC. We report abstention rate, accuracy on attempted questions ("accuracy when answering"), and selective-prediction curves.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3 has-text-centered">The mechanism: z-scoring leaves one degree of freedom</h2>
+          <div class="content write-up">
+            <p>GRPO samples $G$ responses per prompt and uses the within-group z-score as the advantage:</p>
+            <p>$$A_i = \frac{r_i - \mathrm{mean}(r)}{\mathrm{std}(r)}.$$</p>
+            <p>This is invariant to any transform $r \mapsto a r + b$ with $a &gt; 0$. Map the wrong-answer reward $-\beta$ to 0 and the correct-answer reward $\alpha$ to 1. The abstain reward then lands at</p>
+            <p>$$t = \frac{r_a + \beta}{\alpha + \beta},$$</p>
+            <p>which is exactly the threshold $\tau$. Every condition in the table is therefore the triple (correct = 1, wrong = 0, abstain = t), and GRPO can only tell conditions apart through $t$. Two consequences follow.</p>
+            <ol>
+              <li><strong>Two-outcome groups ignore the reward values.</strong> If a group contains only two distinct outcomes, for example only correct and wrong answers, every condition gives the same advantages. With $k$ of $G$ responses at the higher reward they are $+\sqrt{(G-k)(G-1)/(Gk)}$ and $-\sqrt{k(G-1)/(G(G-k))}$, functions of the counts alone.</li>
+              <li><strong>Three-outcome groups see only $t$.</strong> When correct, wrong and abstained responses all occur, the design enters only through where abstention sits between wrong and correct.</li>
+            </ol>
+            <p>A worked example: a group of 4 with one correct, two wrong and one abstained response, z-scored with the sample standard deviation as in the trainer.</p>
+            <div class="table-container">
+              <table class="table is-striped is-narrow is-fullwidth">
+                <thead><tr><th>Condition</th><th>$t$</th><th>correct</th><th>wrong</th><th>abstain</th></tr></thead>
+                <tbody>
+                  <tr><td>S0</td><td>0.50</td><td>+1.306</td><td>-0.783</td><td>+0.261</td></tr>
+                  <tr><td>C1</td><td>0.60</td><td>+1.225</td><td>-0.816</td><td>+0.408</td></tr>
+                  <tr><td>C2</td><td>0.75</td><td>+1.091</td><td>-0.849</td><td>+0.606</td></tr>
+                  <tr><td>S2</td><td>0.80</td><td>+1.046</td><td>-0.856</td><td>+0.665</td></tr>
+                  <tr><td>S3</td><td>0.91</td><td>+0.946</td><td>-0.864</td><td>+0.782</td></tr>
+                  <tr><td>S4</td><td>1.00</td><td>+0.866</td><td>-0.866</td><td>+0.866</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p>By contrast, a group of 8 with two correct and six wrong answers gets advantages +1.620 and -0.540 under all seven conditions.</p>
+            <p>Raising $t$ raises the abstain advantage in mixed groups, which pushes the model to abstain more. But the reward values carry no information about which question the model is likely to get wrong; any per-question signal has to come from the group composition, and that is the same for every condition. So we should expect the sweep to move a global abstention rate and leave the per-question ranking alone. S4 is a degenerate corner: at $t = 1$, abstaining is worth as much as being right.</p>
+            <p>None of this is deep. Affine invariance of the z-score is standard, and analyses of binary-reward GRPO use the closed form above. The point is the consequence for reward design: tuning the wrong-answer penalty under GRPO is tuning one scalar.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3 has-text-centered">Results</h2>
+          <div class="content write-up">
+            <p>All numbers are recomputed from the raw evaluation files (per-run metrics and rollouts). Unless stated otherwise, each condition is one training seed; see Limitations.</p>
+
+            <h3>1. The sweep moves abstention, not accuracy when answering</h3>
+            <p>Greedy decoding on MATH test (5000 problems), 1.5B:</p>
+            <div class="table-container">
+              <table class="table is-striped is-narrow is-fullwidth">
+                <thead><tr><th>Condition</th><th>$t$</th><th>Attempt rate</th><th>Accuracy when answering</th></tr></thead>
+                <tbody>
+                  <tr><td>S0</td><td>0.50</td><td>0.867</td><td>0.618</td></tr>
+                  <tr><td>S1</td><td>0.67</td><td>0.857</td><td>0.617</td></tr>
+                  <tr><td>S2</td><td>0.80</td><td>0.849</td><td>0.612</td></tr>
+                  <tr><td>S3</td><td>0.91</td><td>0.836</td><td>0.602</td></tr>
+                  <tr><td>S4</td><td>1.00</td><td>0.325</td><td>0.513</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p>As $t$ rises the model answers less often, and its remaining answers are no more accurate. If punishment taught the model to drop the questions it would get wrong, accuracy when answering would rise. Instead it falls slightly through S3 and sharply at S4. GSM8K is the same (attempt rate and accuracy when answering: S0 0.951 and 0.722, S3 0.717 and 0.699, S4 0.017 and 0.591).</p>
+            <p>With K=16 sampling, accuracy when answering on MATH goes from 0.535 (S0) to 0.510 (S3) and 0.410 (S4). This is not only a selection effect: on the 1326 MATH problems that all seven conditions attempt by majority vote, per-attempt accuracy still drops from 0.626 (S0) to 0.493 (S4).</p>
+            <p>Abstention rises with $t$ on every benchmark (figure at the top of this page), though not strictly everywhere: on AIME 2024 and 2025 (30 problems each), S1 abstains slightly less than S0.</p>
+
+            <h3>2. The confidence ranking does not change</h3>
+            <p>If the rewards improved per-question calibration, the model's own confidence (agreement of the majority answer across K=16 samples) would separate right from wrong answers better. The figure below shows the selective-accuracy curves on MATH: S0 to S3, C1 and C2 lie on top of each other. Only S4 is worse.</p>
+            <figure class="paper-figure">
+              <img src="static/images/fig04_auacc_curves.png" alt="Selective accuracy curves on MATH for each condition when problems are ranked by mode-vote confidence; S0 to S3, C1 and C2 overlap and only S4 is lower" loading="lazy">
+              <figcaption>Accuracy on the covered subset when MATH test problems are ranked by mode-vote confidence, 1.5B.</figcaption>
+            </figure>
+            <p>Area under the risk-coverage curve (AURC, lower is better), recomputed from the rollouts with the same ranking:</p>
+            <div class="table-container">
+              <table class="table is-striped is-narrow is-fullwidth">
+                <thead><tr><th>Condition</th><th>MATH AURC</th><th>GSM8K AURC</th></tr></thead>
+                <tbody>
+                  <tr><td>P0 (positive-only)</td><td>0.1067</td><td>0.0409</td></tr>
+                  <tr><td>C1</td><td>0.1114</td><td>0.0511</td></tr>
+                  <tr><td>S0</td><td>0.1125</td><td>0.0497</td></tr>
+                  <tr><td>S1</td><td>0.1141</td><td>0.0530</td></tr>
+                  <tr><td>C2</td><td>0.1158</td><td>0.0604</td></tr>
+                  <tr><td>S2</td><td>0.1165</td><td>0.0631</td></tr>
+                  <tr><td>base model</td><td>0.1196</td><td>0.0663</td></tr>
+                  <tr><td>S3</td><td>0.1219</td><td>0.0644</td></tr>
+                  <tr><td>S4</td><td>0.2537</td><td>0.2859</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p>No punishment condition beats the symmetric baseline, and the positive-only control P0 is best. S0 and P0 are identical in two-outcome groups, since {+1, -1} is an affine image of {+1, 0}. They differ only in $t$: 0.5 for S0, 0 for P0, where abstaining is as bad as being wrong.</p>
+
+            <h3>3. Explicit and implicit abstention are interchangeable</h3>
+            <p>C2 pays for abstaining; S2 punishes wrong answers; their thresholds are 0.75 and 0.80. With K=16, C2 and S2 have MATH abstention 0.178 and 0.183 and accuracy when answering 0.518 and 0.519; on GSM8K, 0.339 and 0.347 abstention and 0.653 and 0.652 accuracy when answering. Their AURC values are adjacent. Two different-looking designs give the same policy.</p>
+
+            <h3>4. The 3B check</h3>
+            <p>At 3B we trained S0 and P0 (one seed each, K=32 evaluation), which differ only in $t$. MATH accuracy over all problems is 0.422 for S0 and 0.419 for P0, while S0 abstains more: 0.069 versus 0.032 on MATH, 0.067 versus 0.010 on GSM8K. On MMLU-STEM accuracy (0.185 versus 0.184) and abstention (0.653 versus 0.654) match. Because S0 abstains more at the same MATH accuracy, its MATH accuracy when answering is about 2 points higher (0.453 versus 0.432, derived from the numbers above). With one seed per condition we cannot tell whether that gap is real. On GSM8K, S0 has lower accuracy (0.689 versus 0.729).</p>
+
+            <h3>5. Removing the normalization lets the magnitude through, badly</h3>
+            <p>If z-scoring is what erases the reward values, removing it should bring them back. We trained S0 and S2 with a signed, unnormalized advantage (1.5B, one seed, K=32):</p>
+            <div class="table-container">
+              <table class="table is-striped is-narrow is-fullwidth">
+                <thead><tr><th>Benchmark</th><th>S0 abstention</th><th>S2 abstention</th></tr></thead>
+                <tbody>
+                  <tr><td>MATH</td><td>0.152</td><td>0.461</td></tr>
+                  <tr><td>GSM8K</td><td>0.186</td><td>0.797</td></tr>
+                  <tr><td>MMLU-STEM</td><td>0.484</td><td>0.934</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p>Now the penalty reaches behavior: S2 abstains three times as often as S0 on MATH. But it moves toward over-abstention, not selective abstention. Subtracting only a global mean gives intermediate values (S0 versus S2: 0.162 versus 0.226 on MATH, 0.280 versus 0.502 on GSM8K). The z-score hides the asymmetry, and it also keeps high-penalty training from sliding into refusal.</p>
+
+            <h3>6. The threshold transfers to another task, competence does not</h3>
+            <p>We used the 1.5B adapters zero-shot as step-correctness judges on PRM800K. Judge abstention rises with $t$: 0.342, 0.367, 0.386, 0.426 and 0.549 for S0 to S4 at temperature 0, with the same order at 0.7. At 1.0 the order breaks (S0 0.717, S1 0.699, S2 0.743, S3 0.718, S4 0.747), with n = 2000. Judging accuracy on attempted items stays flat across S0 to S4 (0.635 to 0.648 at temperature 0). The willingness to abstain carries over; the competence does not change.</p>
+
+            <h3>7. What the probes showed</h3>
+            <p>We trained linear probes on last-token hidden states to predict whether a sampled answer is correct. A probe trained on one condition's rollouts decodes correctness on every other condition almost as well as that condition's own probe: across 14 trained conditions, mean off-diagonal AUROC is 0.989 on MATH and 0.992 on GSM8K, against 0.998 and 1.000 on the diagonal (worst single pair 0.787 on MATH). The conditions appear to share one internal correctness direction and differ mainly in the abstention threshold, as the mechanism predicts.</p>
+            <p>We also compared probes against self-consistency and across domains. The output files behind those numbers were not preserved, so we leave them out until they are re-run.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3 has-text-centered">What we can and cannot conclude</h2>
+          <div class="content write-up">
+            <p><strong>Observed.</strong> Across seven conditions at 1.5B, abstention moved with $t$ while accuracy when answering stayed flat or fell and the confidence ranking did not change. The two matched-threshold conditions behaved alike. At 3B, the two conditions differed in abstention, not MATH accuracy. Without normalization, the reward magnitude mattered, in the over-abstaining direction.</p>
+            <p><strong>Inferred.</strong> Under z-scored GRPO with a scalar correct/wrong/abstain reward, the penalty acts as a global abstention bias, not a per-question calibration signal.</p>
+            <p><strong>Not shown.</strong> That asymmetric rewards cannot teach calibration with other estimators, reward shapes, larger models or longer training; or whether the 3B accuracy-when-answering gap is real.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3 has-text-centered">Limitations</h2>
+          <div class="content write-up">
+            <ul>
+              <li><strong>Scale.</strong> 1.5B and 3B only, trained on one shared A100 40GB. 7B was out of reach.</li>
+              <li><strong>Seeds.</strong> Most runs have one seed. S0, S3 and C2 have a second seed at K=16, and the seeds agree closely on MATH (accuracy 0.459 and 0.458, 0.406 and 0.401, 0.426 and 0.426). All other conditions, the 3B runs and the ablations have one seed and no error bars.</li>
+              <li><strong>3B coverage.</strong> Only S0 and P0 were trained at 3B: two points on the dial, not the sweep.</li>
+              <li><strong>Abstention format.</strong> "No boxed answer" mixes deliberate refusal with failures to finish. Mean completion length falls with $t$ (1519 characters for S0, 1466 for S3, 976 for S4 on MATH), which argues against truncation as the cause.</li>
+              <li><strong>Estimators.</strong> We tested z-score, global-mean and unnormalized advantages, not RLOO, Dr. GRPO or decoupled abstention advantages.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3 has-text-centered">Related work and what is new</h2>
+          <div class="content write-up">
+            <ul>
+              <li><strong>Che, Yuan, Zhao and Yu (2026), <a href="https://arxiv.org/abs/2608.00301" target="_blank">arXiv 2608.00301</a></strong>, is the closest work. For the +1 / $-\lambda$ / 0 rule they show that in the sparse-answer regime GRPO's group normalization replaces every designed penalty with an effective penalty of one, moving the learned threshold to 1/2, with experiments at 1.5B and 7B. Their treatment is formal and covers penalty-only rules. Ours was done independently and is empirical, covering explicit abstention rewards, their equivalence with penalties, accuracy when answering and confidence ranking, a normalization ablation and cross-task transfer.</li>
+              <li><strong>Liu et al. (2025), <a href="https://arxiv.org/abs/2503.20783" target="_blank">arXiv 2503.20783</a> (Dr. GRPO)</strong>, show that dividing by the group standard deviation biases updates by question difficulty, and remove it. They do not discuss reward-scale invariance.</li>
+              <li><strong>Zhu et al. (2025), <a href="https://arxiv.org/abs/2506.01347" target="_blank">arXiv 2506.01347</a></strong>, study negative-sample reinforcement; our S3 matches their weighting.</li>
+              <li><strong>Abstention and calibration rewards.</strong> TruthRL (<a href="https://arxiv.org/abs/2509.25760" target="_blank">arXiv 2509.25760</a>) uses a ternary reward with z-scored GRPO. Reinforced Hesitation (<a href="https://arxiv.org/abs/2511.11500" target="_blank">arXiv 2511.11500</a>) uses +1 / 0 / $-\lambda$ without dividing by the standard deviation. TIAR (<a href="https://arxiv.org/abs/2605.25850" target="_blank">arXiv 2605.25850</a>) notes that an abstention reward shifts the group statistics and decouples the abstention advantage. RLCR (<a href="https://arxiv.org/abs/2507.16806" target="_blank">arXiv 2507.16806</a>) rewards verbalized confidence with a Brier score.</li>
+            </ul>
+            <p>What we think is new: the reduction stated for full three-level designs (every scheme is (1, 0, t)), and evidence that the full sweep behaves as that one dial, including the C2 and S2 equivalence, the unchanged confidence ranking, the 3B check, the ablation and the transfer to step judging.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3 has-text-centered">Acknowledgements</h2>
+          <div class="content write-up">
+            <p>Sanjana Deshpande collaborated on the project.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="columns is-centered">
+        <div class="column is-8">
+          <div class="content">
+            <p>
+              This page was built using the <a href="https://github.com/eliahuhorwitz/Academic-project-page-template" target="_blank">Academic Project Page Template</a> which was adopted from the <a href="https://nerfies.github.io" target="_blank">Nerfies</a> project page.
+              You are free to borrow the source code of this website, we just ask that you link back to this page in the footer. <br> This website is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank">Creative
+              Commons Attribution-ShareAlike 4.0 International License</a>.
+            </p>
+            <a class="back-home" href="../">Back to rahulkrishnan.me</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  </main>
+</body>
+</html>

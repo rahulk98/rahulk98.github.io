@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-design="minimal">
 <head>
     <!-- Cloudflare Web Analytics -->
     <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "417e4ef4c2944b32a559316091f0f786"}'></script>
@@ -36,76 +36,86 @@
   </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;1,6..72,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/minimal.css?v=20261018v3" />
 </head>
 <body>
-  <header class="site-header">
-    <nav class="nav" aria-label="Project">
-      <a class="logo" href="index.html#projects">Back to Projects</a>
-      <button id="theme-toggle" class="icon-btn" aria-label="Toggle dark mode" title="Toggle theme"></button>
-    </nav>
-  </header>
-  <main class="section" id="main">
-    <div class="container">
-      <article id="content" class="card" style="padding:24px"></article>
+  <div class="m-page">
+    <div class="m-topbar">
+      <a class="m-topbar__name m-mono" href="/">Rahul Krishnan</a>
+      <nav class="m-tabs" aria-label="Site">
+        <a class="m-tab" href="/#about">About</a>
+        <a class="m-tab" href="/#recent">Recent</a>
+        <a class="m-tab" href="/#work" aria-selected="true">Work</a>
+      </nav>
+      <button id="theme-toggle" type="button" class="m-topbar__theme m-mono" aria-label="Toggle light/dark theme">Theme</button>
     </div>
-  </main>
-  <footer class="site-footer">
-    <div class="container footer-grid">
-      <div>
-        <strong>Rahul Krishnan</strong>
-        <p class="muted">Built with HTML, CSS and JS</p>
+
+    <main id="content">
+      <header class="m-header">
+        <a class="m-back m-mono" id="back-link" href="/#projects">&larr; Projects</a>
+        <h1 class="m-header__title" id="project-title"></h1>
+        <p class="m-header__tagline" id="project-summary"></p>
+      </header>
+      <div class="m-panel m-detail" id="project-body"></div>
+    </main>
+
+    <footer class="m-footer m-mono">
+      <span>Rahul Krishnan</span>
+      <div class="m-footer__links">
+        <a href="https://github.com/rahulk98">GitHub</a>
+        <a href="mailto:rahulkrishnan1105@gmail.com">Email</a>
+        <a href="privacy.html">Privacy Policy</a>
       </div>
-    </div>
-  </footer>
-  <script src="assets/js/main.js" defer></script>
+    </footer>
+  </div>
+
+  <script src="assets/js/subpage.js" defer></script>
   <script>
   (function(){
-    const root = document.documentElement;
-    const saved = localStorage.getItem('theme');
-    if (saved === 'light') root.classList.add('light');
-
     const esc = (s) => String(s == null ? '' : s)
-      .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+      .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 
-    // Reuse the shared renderDetail() from main.js when it is loaded; inline fallback otherwise.
-    function renderDetailInto(project, el){
-      if (!el) return;
-      if (typeof renderDetail === 'function') { renderDetail(project, el); return; }
-      const paras = (project && project.detail) || [];
-      el.innerHTML = paras.filter(Boolean).map(p => `<p>${esc(p)}</p>`).join('');
-    }
+    const title = document.getElementById('project-title');
+    const summary = document.getElementById('project-summary');
+    const body = document.getElementById('project-body');
+    const notFound = (text) => { title.textContent = text; };
 
     const params = new URLSearchParams(location.search);
     const slug = params.get('slug') || params.get('id');
-    const target = document.getElementById('content');
-    if (!slug) { target.innerHTML = '<p class="muted">Project not found.</p>'; return; }
+    if (!slug) { notFound('Project not found'); return; }
 
-    fetch('assets/data/projects.json')
+    fetch('assets/data/projects.json', { cache: 'no-cache' })
       .then(r => r.json())
       .then(projects => {
         const project = projects.find(p => p.slug === slug);
         if (!project) {
           document.title = 'Project not found - Rahul Krishnan';
-          target.innerHTML = '<p class="muted">Project not found.</p>';
+          notFound('Project not found');
           return;
         }
         document.title = `${project.title} - Rahul Krishnan`;
+
+        if ((project.keywords || []).includes('Research')) {
+          const back = document.getElementById('back-link');
+          back.href = '/#research';
+          back.innerHTML = '&larr; Research';
+        }
+        title.textContent = project.title;
+        summary.textContent = project.summary || '';
+
         const tags = (project.tags && project.tags.length) ? project.tags : (project.stack || []);
-        const linkKeys = Object.keys(project.links || {});
-        target.innerHTML = `
-          ${project.outcome ? `<p class="project-card__outcome">${esc(project.outcome)}</p>` : ''}
-          <h1>${esc(project.title)}</h1>
-          <p class="project-card__summary">${esc(project.summary || '')}</p>
-          <div id="content-detail" class="project-detail"></div>
-          <div class="tags">${tags.map(t => `<span class="tag">${esc(t)}</span>`).join('')}</div>
-          ${linkKeys.length ? `<div class="actions">${Object.entries(project.links).map(([k,v]) =>
-            `<a href="${esc(v)}" target="_blank" rel="noopener">${k.charAt(0).toUpperCase()+k.slice(1)}</a>`).join('')}</div>` : ''}
+        const paras = (project.detail || []).filter(Boolean);
+        const links = Object.entries(project.links || {});
+        body.innerHTML = `
+          ${project.outcome ? `<div class="m-paper__result"><span class="m-paper__result-label m-mono">Result</span><p class="m-paper__result-text">${esc(project.outcome)}</p></div>` : ''}
+          ${paras.length ? `<div class="m-prose">${paras.map(p => `<p>${esc(p)}</p>`).join('')}</div>` : ''}
+          ${tags.length ? `<div class="m-project__stack m-mono">${tags.map(t => `<span>${esc(t)}</span>`).join('')}</div>` : ''}
+          ${links.length ? `<div class="m-paper__links m-mono">${links.map(([k, v]) =>
+            `<a href="${esc(v)}" target="_blank" rel="noopener">${esc(k === 'github' ? 'GitHub' : k.charAt(0).toUpperCase() + k.slice(1))}</a>`).join('')}</div>` : ''}
         `;
-        renderDetailInto(project, document.getElementById('content-detail'));
       })
-      .catch(() => { target.innerHTML = '<p class="muted">Failed to load project.</p>'; });
+      .catch(() => notFound('Failed to load project'));
   })();
   </script>
 </body>
