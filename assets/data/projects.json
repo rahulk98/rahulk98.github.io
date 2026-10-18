@@ -63,6 +63,24 @@
     ]
   },
   {
+    "title": "A safety probe kept detecting harmful requests under KV-cache compression until the request itself was lost",
+    "slug": "kv-compression-safety-probes",
+    "date": "2026-10-01",
+    "year": "2026",
+    "featured": false,
+    "category": "LLM Research",
+    "keywords": ["LLMs & NLP", "Research"],
+    "outcome": "Under KV-cache compression, the model's behaviour degraded before the safety probe did.",
+    "summary": "I compressed the prompt KV cache of four Qwen3 models with JoLT, a low-rank compressor from my master's thesis, and with SnapKV, a token-eviction method, at several ratios. Each harmful or harmless request followed a long benign document. I measured refusals and unsafe responses with a safety classifier, and harmful-request detection with a frozen linear probe.",
+    "tags": ["Qwen3", "KV-cache compression", "Linear probes", "SnapKV"],
+    "stack": [],
+    "links": {
+      "github": "https://github.com/rahulk98/kv-compression-safety-probes",
+      "project page": "kv-compression-safety-probes/"
+    },
+    "detail": []
+  },
+  {
     "title": "A probe can tell, before the model reasons, whether it will follow a misleading hint",
     "slug": "cot-hint-probes",
     "date": "2026-10-01",

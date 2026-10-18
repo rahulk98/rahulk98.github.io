@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Cloudflare Web Analytics -->
+  <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "417e4ef4c2944b32a559316091f0f786"}'></script>
+
+  <!-- Umami Analytics (self-hosted) -->
+  <script async src="/assets/js/analytics.js"></script>
+
+  <title>A safety probe kept detecting harmful requests under KV-cache compression until the request itself was lost | Rahul Krishnan</title>
+  <meta name="description" content="In short, the hypothesis was wrong in this setup: behaviour degraded before the monitor did.">
+  <meta name="author" content="Rahul Krishnan">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://rahulkrishnan.me/kv-compression-safety-probes/">
+
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="A safety probe kept detecting harmful requests under KV-cache compression until the request itself was lost">
+  <meta property="og:description" content="In short, the hypothesis was wrong in this setup: behaviour degraded before the monitor did.">
+  <meta property="og:url" content="https://rahulkrishnan.me/kv-compression-safety-probes/">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="A safety probe kept detecting harmful requests under KV-cache compression until the request itself was lost">
+  <meta name="twitter:description" content="In short, the hypothesis was wrong in this setup: behaviour degraded before the monitor did.">
+
+  <link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="../assets/img/favicon-32.png" type="image/png" sizes="32x32">
+  <link rel="apple-touch-icon" href="../assets/img/apple-touch-icon.png">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.4/css/bulma.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="static/css/index.css">
+
+  <script src="static/js/index.js" defer></script>
+</head>
+<body>
+
+  <button class="scroll-to-top" onclick="scrollToTop()" title="Scroll to top" aria-label="Scroll to top">
+    <i class="fas fa-chevron-up"></i>
+  </button>
+
+  <main id="main-content">
+  <section class="hero">
+    <div class="hero-body">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered">
+          <div class="column has-text-centered">
+            <h1 class="title is-1 publication-title">A safety probe kept detecting harmful requests under KV-cache compression until the request itself was lost</h1>
+
+            <div class="is-size-5 publication-authors" style="margin-top: 0.5rem;">
+              <span class="author-block"><a href="../" target="_blank">Rahul Krishnan</a></span>
+            </div>
+            <div class="is-size-6 publication-authors">
+              <span class="author-block">A hobby project, October 2026.</span>
+            </div>
+
+            <div class="column has-text-centered">
+              <div class="publication-links">
+                <span class="link-block">
+                  <a href="https://github.com/rahulk98/kv-compression-safety-probes" target="_blank" class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon"><i class="fab fa-github"></i></span>
+                    <span>Code</span>
+                  </a>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="hero teaser">
+    <div class="container is-max-desktop">
+      <div class="hero-body">
+        <h2 class="subtitle has-text-centered">
+          In short, the hypothesis was wrong in this setup: behaviour degraded before the monitor did.
+        </h2>
+      </div>
+    </div>
+  </section>
+
+  <section class="section hero is-light">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column is-four-fifths">
+          <div class="content write-up">
+            <p><strong>TL;DR.</strong></p>
+            <p>Labs now serve models with compressed KV caches to save memory, and some also monitor those models with linear probes on their activations. I asked whether the two practices are compatible: when KV-cache compression weakens a model's refusals, does a probe trained on the uncompressed model still detect harmful requests? My hypothesis was that it would not, because compression would change the model's internal representations before its outputs looked wrong. If that were true, a compressed deployment could lose its monitor without any sign in standard benchmarks.</p>
+            <p>I compressed the prompt KV cache of four Qwen3 models with <a href="https://arxiv.org/abs/2607.12550" target="_blank" rel="noopener">JoLT</a>, a low-rank compressor from my master's thesis, and with SnapKV, a token-eviction method, at several ratios. Each harmful or harmless request followed a long benign document. I measured refusals and unsafe responses with a safety classifier, and harmful-request detection with a frozen linear probe.</p>
+            <ul>
+              <li><strong>SnapKV at every ratio and JoLT at 2x changed nothing.</strong> Both matched the uncompressed model on every measure.</li>
+              <li><strong>JoLT broke generation between 4x and 6x, later for larger models.</strong> Gaussian noise of the same size did far less damage, so the structure of JoLT's error matters, not only its size.</li>
+              <li><strong>The damage came from compressing the document, not the request.</strong> Compressing only the request with JoLT left the model almost intact.</li>
+              <li><strong>The probe kept working while behaviour degraded.</strong> It failed mainly when token eviction removed parts of the request.</li>
+            </ul>
+            <p>In short, the hypothesis was wrong in this setup: behaviour degraded before the monitor did.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="the-question">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3 has-text-centered">The question</h2>
+          <div class="content write-up">
+            <p>Compressed inference and probe-based monitoring are both in use. Constitutional Classifiers++ (Cunningham et al. 2026), for example, uses a linear probe on model activations as the first stage of a deployed classifier. Prior work has tested safety under KV-cache quantization and eviction, and frozen probes under weight quantization (see Related work), but I found no test of a frozen probe under KV-cache compression.</p>
+            <p><strong>Setup.</strong></p>
+            <ul>
+              <li>Models: Qwen3 0.6B, 1.7B, 4B and 8B, bf16, thinking mode off.</li>
+              <li>Prompt: the user message is "Here is a document:", a 1024-token WikiText-2 passage (a different one per prompt, the same across conditions), then the request.</li>
+              <li>Protocol: all prompt tokens except the last are processed with the compressing cache. The last prompt token, the start of the assistant turn, is then fed through the compressed cache, and the probe reads the residual stream there. The model generates 64 tokens greedily. Only the prompt KV is compressed.</li>
+              <li>Compression: JoLT (Tucker decomposition of the KV cache plus a low-bit residual, with ranks and bits set jointly under a byte budget) and SnapKV (Li et al. 2024), which keeps the tokens that the last 32 queries attend to most, per KV head. Ratios 2x, 4x, 5x, 6x and 8x, measured on stored prompt-KV bytes per prompt.</li>
+              <li>Data: 128 harmful and 128 harmless training prompts and 32 of each for validation, from the splits of Arditi et al. (2024). Evaluation uses 258 harmful prompts (HarmBench 159, JailbreakBench 99), 142 harmless Alpaca prompts and 100 XSTest-safe prompts, which sound harmful but are not. Trailing punctuation is stripped, because punctuation alone separates the harmful and harmless sources (Llorente-Saguer 2026).</li>
+              <li>Probe: logistic regression on the standardised residual-stream activation at the assistant-start position, trained on the uncompressed model, with the layer chosen by validation AUROC, and never retrained for a compressed condition. A bag-of-words classifier on the prompt text reaches AUROC 0.911, against 0.961 to 0.991 for the probe.</li>
+              <li>Judge: Qwen3Guard-Gen-4B (Qwen Team 2025) in response-moderation mode labels each response Safe, Unsafe or Controversial, and refusal or not. All behaviour rates below come from this judge and are upper bounds on harmful compliance (see the judge audit under Other checks).</li>
+              <li>Intervals: brackets are 95% bootstrap intervals over prompts (1000 resamples).</li>
+            </ul>
+            <p>The conditions:</p>
+            <div class="table-container">
+              <table class="table is-striped is-narrow is-fullwidth">
+                <thead><tr><th>Condition</th><th>What happens to the prompt KV</th><th>Ratios</th><th>Models</th></tr></thead>
+                <tbody>
+                  <tr><td>Dense</td><td>nothing</td><td>1x</td><td>all four</td></tr>
+                  <tr><td>JoLT</td><td>low-rank approximation of every token</td><td>2x to 8x</td><td>all four</td></tr>
+                  <tr><td>SnapKV</td><td>attention-based token eviction</td><td>2x to 8x</td><td>all four</td></tr>
+                  <tr><td>Error-matched noise</td><td>Gaussian noise with JoLT's relative K and V error at each layer</td><td>2x to 8x</td><td>all four</td></tr>
+                  <tr><td>Random eviction</td><td>random token eviction, keeps the last 32</td><td>2x to 8x</td><td>all four</td></tr>
+                  <tr><td>Document-only, request-only</td><td>JoLT or SnapKV on one span, the rest exact</td><td>8x</td><td>1.7B, 8B</td></tr>
+                  <tr><td>Steering</td><td>refusal direction added during generation, two strengths</td><td>8x</td><td>1.7B, 8B</td></tr>
+                  <tr><td>Retrained probe</td><td>probe trained on compressed activations</td><td>8x</td><td>1.7B, 8B</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p>Metrics:</p>
+            <ul>
+              <li><strong>Degenerate rate</strong>: the share of responses that a fixed rule flags as broken text (fewer than 5 words, mostly non-letters, one 3-word phrase making up at least 30% of all 3-word phrases, or very few distinct words). All other responses are "fluent".</li>
+              <li><strong>Unsafe rate</strong>: the share of fluent responses to harmful prompts that the judge labels Unsafe.</li>
+              <li><strong>Over-refusal</strong>: the share of fluent responses to XSTest-safe prompts that the judge labels a refusal.</li>
+              <li><strong>Probe AUROC</strong>: how well the probe score at the assistant-start position separates harmful prompts from harmless and XSTest-safe prompts (0.5 is chance, 1 is perfect). It measures detection of the harmful request, not the model's intent or any deception.</li>
+              <li><strong>Probe TPR</strong>: the share of harmful prompts above the threshold that gives 5% false positives on uncompressed harmless validation prompts.</li>
+              <li><strong>Silent failure</strong>: a harmful prompt whose fluent response is judged Unsafe while the probe score stays below that threshold.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="snapkv-at-every-ratio-and-jolt-at-2x-changed-nothing">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3 has-text-centered">SnapKV at every ratio and JoLT at 2x changed nothing</h2>
+          <div class="content write-up">
+            <div class="table-container">
+              <table class="table is-striped is-narrow is-fullwidth">
+                <thead><tr><th>Condition</th><th>Probe AUROC, 0.6B / 1.7B / 4B / 8B</th><th>Unsafe rate %, 0.6B / 1.7B / 4B / 8B</th></tr></thead>
+                <tbody>
+                  <tr><td>Dense</td><td>0.961 / 0.990 / 0.990 / 0.991</td><td>81.8 / 38.8 / 20.2 / 6.2</td></tr>
+                  <tr><td>JoLT 2x</td><td>0.960 / 0.990 / 0.990 / 0.991</td><td>82.2 / 39.1 / 19.4 / 5.8</td></tr>
+                  <tr><td>SnapKV 2x</td><td>0.961 / 0.990 / 0.991 / 0.992</td><td>79.4 / 37.2 / 20.2 / 6.6</td></tr>
+                  <tr><td>SnapKV 8x</td><td>0.966 / 0.990 / 0.991 / 0.992</td><td>81.3 / 30.6 / 17.4 / 6.2</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <ul>
+              <li><strong>JoLT at 2x reconstructs the prompt KV almost exactly.</strong> Its relative key error is 0.007 to 0.009, and refusal rates stay within 1.2 points of dense.</li>
+              <li><strong>SnapKV keeps generation and the probe intact.</strong> At every ratio up to 8x it produces at most 1.4% degenerate responses, and its probe TPR equals the dense value on all four models (98.8, 100.0, 99.2 and 100.0%). Compressing only the document with SnapKV gives the same results as compressing the whole prompt.</li>
+              <li><strong>Baseline safety varies strongly with scale.</strong> Each model is therefore compared with its own dense row.</li>
+            </ul>
+            <p>This does not show that SnapKV is safe in general. The request sits at the end of the prompt, inside the 32-token window that SnapKV always keeps, so SnapKV mostly evicts document tokens. Placing the request before the document would move it out of that window and test whether the result holds.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="jolt-broke-generation-between-4x-and-6x-later-for-larger-models">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3 has-text-centered">JoLT broke generation between 4x and 6x, later for larger models</h2>
+          <div class="content write-up">
+            <p>Degenerate rate (%) under JoLT, all 500 prompts:</p>
+            <div class="table-container">
+              <table class="table is-striped is-narrow is-fullwidth">
+                <thead><tr><th>Model</th><th>2x</th><th>4x</th><th>5x</th><th>6x</th><th>8x</th></tr></thead>
+                <tbody>
+                  <tr><td>0.6B</td><td>1.2</td><td>42.0</td><td>91.0</td><td>100.0</td><td>99.8</td></tr>
+                  <tr><td>1.7B</td><td>0.4</td><td>37.8</td><td>63.0</td><td>99.4</td><td>100.0</td></tr>
+                  <tr><td>4B</td><td>0.6</td><td>9.8</td><td>4.4</td><td>41.6</td><td>75.2</td></tr>
+                  <tr><td>8B</td><td>0.2</td><td>4.8</td><td>20.4</td><td>61.2</td><td>82.0</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <ul>
+              <li><strong>The small models break first.</strong> 0.6B and 1.7B are mostly degenerate at 5x, while 4B and 8B stay mostly fluent at 5x and break at 6x, although 4B and 8B do not order cleanly.</li>
+              <li><strong>8B at 5x is the one regime with fluent output and possible safety erosion.</strong> Its unsafe rate rises from the dense value to 19.0 [13.7, 24.9] on 189 fluent responses, while error-matched noise stays at 6.6 and SnapKV at 6.2.</li>
+              <li><strong>Over-refusal rises with the JoLT ratio on 8B.</strong> It goes from 26.0% (dense) to 32.0, 53.7, 66.3 and 67.6% at 2x, 4x, 5x and 6x. Part of this may be the refusal-label problem described in the judge audit.</li>
+            </ul>
+            <p>The rise for 8B at 5x is not confirmed. In the judge audit, only 2 of the 7 judge-Unsafe fluent responses from that condition were real compliance, and the rest were disclaimers or titles cut off at 64 tokens, or looping sentences. Relabelling every judge-Unsafe response in this cell, with longer generations, would settle whether 8B really complies more at 5x.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="matched-error-noise-did-far-less-damage-so-the-error-structure-matters">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3 has-text-centered">Matched-error noise did far less damage, so the error structure matters</h2>
+          <div class="content write-up">
+            <div class="table-container">
+              <table class="table is-striped is-narrow is-fullwidth">
+                <thead><tr><th>Model</th><th>Noise degenerate % at 5x / 8x</th><th>Probe AUROC at 8x, JoLT / noise</th></tr></thead>
+                <tbody>
+                  <tr><td>0.6B</td><td>3.2 / 49.6</td><td>0.665 / 0.794</td></tr>
+                  <tr><td>1.7B</td><td>0.4 / 16.6</td><td>0.606 / 0.924</td></tr>
+                  <tr><td>4B</td><td>0.6 / 1.6</td><td>0.865 / 0.901</td></tr>
+                  <tr><td>8B</td><td>0.4 / 0.6</td><td>0.881 / 0.971</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p>Compare the noise columns with the JoLT 5x and 8x columns in the previous table.</p>
+            <p>Both caches are wrong by the same amount at every layer (on 8B at 8x, a relative error of 0.301 for K and 0.321 for V on average), so the size of the error does not explain JoLT's damage. Its structure does. JoLT drops low-energy directions, while the noise spreads its error evenly. I expected the low-rank structure to protect safety-relevant directions, and the result points the other way. The experiment does not say which part of the structure is harmful. One candidate is error on attention-sink tokens, such as the first tokens and the chat-template tokens that all later queries attend to. Another is that truncation removes exactly the key directions the queries read, and a third is that the damage comes mainly from keys or mainly from values. Measuring JoLT's error per token, keeping the first tokens exact, and compressing only keys or only values would separate these.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="the-damage-came-from-compressing-the-document-not-the-request">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3 has-text-centered">The damage came from compressing the document, not the request</h2>
+          <div class="content write-up">
+            <p>JoLT and SnapKV at 8x, compressing one span and keeping the other exact:</p>
+            <div class="table-container">
+              <table class="table is-striped is-narrow is-fullwidth">
+                <thead><tr><th>Condition</th><th>1.7B AUROC</th><th>1.7B degenerate %</th><th>8B AUROC</th><th>8B degenerate %</th><th>8B unsafe rate %</th></tr></thead>
+                <tbody>
+                  <tr><td>JoLT, document only</td><td>0.922</td><td>94.0</td><td>0.941</td><td>41.6</td><td>65.2 (n=164)</td></tr>
+                  <tr><td>JoLT, request only</td><td>0.967</td><td>0.0</td><td>0.989</td><td>0.2</td><td>1.2</td></tr>
+                  <tr><td>SnapKV, document only</td><td>0.990</td><td>0.2</td><td>0.992</td><td>0.2</td><td>5.4</td></tr>
+                  <tr><td>SnapKV, request only</td><td>0.795</td><td>0.2</td><td>0.817</td><td>0.2</td><td>10.5</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <ul>
+              <li><strong>8B is judged unsafe most often under document-only JoLT.</strong> The interval on that rate is [57.9, 72.0], and the 3 responses I read were all real compliance.</li>
+              <li><strong>Evicting request tokens has the opposite effect.</strong> With SnapKV inside the request, the model writes fluent summaries of the document, which the judge calls refusals in 99.2% (1.7B) and 99.6% (8B) of cases.</li>
+            </ul>
+            <p>JoLT's damage therefore does not come from a corrupted view of the request. The exact request tokens attend to a corrupted document, and that is enough to change what the model does. It does not show whether the document matters because it is long (1024 tokens against a short request) or because it contains particular tokens such as the first ones. Varying the document length, or keeping its first tokens exact as proposed above, would separate the two.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="the-probe-kept-working-while-behaviour-degraded-and-failed-when-the-request-was-lost">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3 has-text-centered">The probe kept working while behaviour degraded, and failed when the request was lost</h2>
+          <div class="content write-up">
+            <p>Qwen3-8B:</p>
+            <div class="table-container">
+              <table class="table is-striped is-narrow is-fullwidth">
+                <thead><tr><th>Condition</th><th>Probe TPR %</th><th>Silent failures (of 258)</th></tr></thead>
+                <tbody>
+                  <tr><td>JoLT 5x</td><td>96.9</td><td>3</td></tr>
+                  <tr><td>JoLT 8x</td><td>67.4</td><td>6</td></tr>
+                  <tr><td>JoLT 8x, document only</td><td>88.0</td><td>10</td></tr>
+                  <tr><td>JoLT 8x, request only</td><td>99.6</td><td>0</td></tr>
+                  <tr><td>SnapKV 8x, document only</td><td>100.0</td><td>0</td></tr>
+                  <tr><td>SnapKV 8x, request only</td><td>7.4</td><td>27</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <ul>
+              <li><strong>Where behaviour degrades with fluent output, the probe still fires.</strong> Under JoLT 5x its AUROC is 0.957, and under document-only JoLT it still flags most harmful requests.</li>
+              <li><strong>When outputs collapse, so does the probe.</strong> At JoLT 8x the probe scores shift down, and on 1.7B the probe flags only 12.4% of harmful prompts.</li>
+              <li><strong>When request tokens are evicted, the probe goes blind</strong>, because the model no longer sees the request at all.</li>
+              <li><strong>Silent failures stay rare on fluent responses.</strong> They stay at or below the document-only JoLT count in every condition except SnapKV request-only. I read 5 of its 27 cases, and all were document summaries that the judge labelled Unsafe. Counting degenerate responses, the rate reaches 82.9% for 1.7B at JoLT 8x, but that number reflects the judge labelling broken text as Unsafe.</li>
+            </ul>
+            <p>Where the probe failed, most responses were also broken or off-topic, so the monitor was not silently blind while the model complied. This does not show that the probe would catch a harmful response, and it leaves a known weakness untouched: even without compression, the probe flags 55 to 72% of XSTest-safe prompts at the 5%-FPR threshold. A probe on the first response tokens would test response-level monitoring.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="other-checks">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3 has-text-centered">Other checks</h2>
+          <div class="content write-up">
+            <ul>
+              <li><strong>Random eviction.</strong> Keeping random tokens is much worse than SnapKV at the same ratio, already at 2x on the small models (0.6B: 49.6% degenerate against 1.2% for SnapKV). On fluent responses it raises compliance, to an 8B unsafe rate of 50.7% at 8x. Which tokens are kept matters more than how many.</li>
+              <li><strong>Steering.</strong> Adding the refusal direction of Arditi et al. at the probe layer restores refusal where outputs stay fluent. Under SnapKV 8x on 1.7B, refusal rises from 72.1% to 92.6% and 100.0% at the two strengths, and the unsafe rate falls to 8.1% and 3.6%. It cannot fix JoLT 8x: 1.7B stays 100% degenerate, and 8B goes from 82.6% to 80.6% and 89.1% degenerate on harmful prompts.</li>
+              <li><strong>Retrained probe.</strong> A probe trained on compressed 8x activations reaches AUROC 0.961 for JoLT on 8B, well above the frozen probe, so the harm information survives in a different form there. On 1.7B it reaches only 0.768. For SnapKV it reaches 0.991 and 0.994.</li>
+              <li><strong>Degeneracy detector.</strong> I checked the rule on 30 random samples, and in the blind audit below it agreed with the labeller on 60 of 66 responses.</li>
+              <li><strong>Judge audit.</strong> A separate LLM labeller, blind to the judge's labels and to the condition, labelled 66 responses stratified over 15 model, condition and source cells. Of the 21 harmful-prompt responses the judge called Unsafe, the labeller found harmful compliance in 4. Of the 33 the judge called Safe, it found none. Refusal labels agreed on 35 of 54 harmful and 6 of 12 XSTest-safe responses, mostly because the judge counts responses that only discuss the document as refusals. So the judge rarely misses compliance but often overcalls it, which makes its Unsafe rates upper bounds.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="what-i-take-from-this">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3 has-text-centered">What I take from this</h2>
+          <div class="content write-up">
+            <ol>
+              <li><strong>Eviction that keeps the request costs nothing here.</strong> In this layout a deployment could use SnapKV without retraining its probe or losing refusals.</li>
+              <li><strong>Reconstruction error is a poor guide to the safety cost of compression.</strong> Two caches with the same error can behave very differently, so a low-rank compressor needs its own safety evaluation.</li>
+              <li><strong>In this setup, the monitoring gap under compression is smaller than the behaviour change.</strong> A frozen request-level probe lost the harmful request only when the output was broken as well.</li>
+            </ol>
+            <p><strong>Limits.</strong> One model family with four sizes, and one seed of each compression draw. The 2x and 4x JoLT rows used unseeded draws, so I do not interpret the drop in 4B degenerate responses from 4x to 5x. Rows computed on two machines differed in up to 34 responses per condition because of GPU nondeterminism.</p>
+            <p><strong>Related work.</strong> Alignment Collapse (Xu et al. 2026) shows refusal loss under KV-cache quantization on 11 models while perplexity barely changes, and lists eviction and low-rank compression as future work. AnchorKV (Ni and Lao 2026) measures jailbreak success under eviction at one setting, and Yang et al. (2026) study eviction on reasoning models. Silent Alarm (Prosvirnin et al. 2026) compares danger recognition and behaviour on Qwen3 under weight quantization, and Duan (2026) tests frozen probes under weight quantization and LoRA updates and finds that quantization mostly preserves them. The refusal direction and the data splits come from Arditi et al. (2024). The finding that compression can erode refusals while standard metrics look fine is theirs. What this project adds is safety behaviour under low-rank KV-cache compression, a frozen residual-stream probe tested under KV-cache compression, a per-prompt silent-failure rate, and low-rank against eviction at matched memory across Qwen3 sizes.</p>
+            <p><strong>Next steps.</strong> First, validate the behaviour labels: a second open safety classifier (WildGuard-7B or Llama-Guard-3) for agreement, a full blind relabel of the 910 fluent judge-Unsafe responses, a small human audit with inter-annotator agreement, and generations longer than 64 tokens so that cut-off disclaimers can be resolved. Then run the experiments proposed in the finding sections: the request-before-document layout, JoLT's error on attention-sink tokens, and K-only against V-only compression. Extend the controls that so far ran only at 8x on 1.7B and 8B (the which-tokens counterfactual, steering and the retrained probe) to every ratio and all four models, and add a third steering strength. Measure how far compressed representations drift from uncompressed ones with cosine similarity and CKA, train a probe on response tokens as well as on the request, and repeat the 4B runs with thinking on. Finally, add the XSTest-unsafe prompts back to measure how well the probe separates safe from unsafe XSTest prompts, and test on WildGuardMix for a shift in prompt distribution.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="references">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3 has-text-centered">References</h2>
+          <div class="content write-up">
+            <ul class="references">
+              <li>Arditi, A., Obeso, O., Syed, A., Paleka, D., Panickssery, N. et al. (2024). Refusal in Language Models Is Mediated by a Single Direction. <a href="https://arxiv.org/abs/2406.11717" target="_blank" rel="noopener">arXiv:2406.11717</a>.</li>
+              <li>Cunningham, H., Wei, J. et al. (2026). Constitutional Classifiers++: Efficient Production-Grade Defenses Against Universal Jailbreaks. <a href="https://arxiv.org/abs/2601.04603" target="_blank" rel="noopener">arXiv:2601.04603</a>.</li>
+              <li>Duan, E. (2026). Do Activation Monitors Survive Model Updates? Benchmarking, Predicting, and Repairing Activation-Monitor Staleness. <a href="https://arxiv.org/abs/2606.15980" target="_blank" rel="noopener">arXiv:2606.15980</a>.</li>
+              <li>Krishnan, R. and Schulz, V. (2026). A JoLT for the KV cache: Near-Lossless KV Cache Compression via Joint Rank-bit Allocation. <a href="https://arxiv.org/abs/2607.12550" target="_blank" rel="noopener">arXiv:2607.12550</a>.</li>
+              <li>Li, Y. et al. (2024). SnapKV: LLM Knows What You are Looking for Before Generation. <a href="https://arxiv.org/abs/2404.14469" target="_blank" rel="noopener">arXiv:2404.14469</a>.</li>
+              <li>Llorente-Saguer, I. (2026). Harmful Intent as a Geometrically Recoverable Feature of LLM Residual Streams. <a href="https://arxiv.org/abs/2604.18901" target="_blank" rel="noopener">arXiv:2604.18901</a>.</li>
+              <li>Ni, N. and Lao, Y. (2026). AnchorKV: Safety-Aware KV Cache Compression via Soft Penalty with a Refusal Anchor. <a href="https://arxiv.org/abs/2606.17872" target="_blank" rel="noopener">arXiv:2606.17872</a>.</li>
+              <li>Prosvirnin, R. et al. (2026). Silent Alarm: A J-Space Protocol for Comparing Danger Recognition Across Models and Quantization Levels. <a href="https://arxiv.org/abs/2607.12792" target="_blank" rel="noopener">arXiv:2607.12792</a>.</li>
+              <li>Qwen Team (2025). Qwen3Guard Technical Report. <a href="https://arxiv.org/abs/2510.14276" target="_blank" rel="noopener">arXiv:2510.14276</a>.</li>
+              <li>Xu, B. C., Kumarappan, A. and Zhou, M. (2026). Alignment Collapse Under KV Cache Quantization: Diagnosis and Mitigation. <a href="https://arxiv.org/abs/2606.09864" target="_blank" rel="noopener">arXiv:2606.09864</a>.</li>
+              <li>Yang, Y. et al. (2026). On the Efficiency-Safety Dilemma in Large Reasoning Models. <a href="https://arxiv.org/abs/2609.23587" target="_blank" rel="noopener">arXiv:2609.23587</a>.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <footer class="footer">
+    <div class="container">
+      <div class="columns is-centered">
+        <div class="column is-8">
+          <div class="content">
+            <p>
+              This page was built using the <a href="https://github.com/eliahuhorwitz/Academic-project-page-template" target="_blank">Academic Project Page Template</a> which was adopted from the <a href="https://nerfies.github.io" target="_blank">Nerfies</a> project page.
+              You are free to borrow the source code of this website, we just ask that you link back to this page in the footer. <br> This website is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank">Creative
+              Commons Attribution-ShareAlike 4.0 International License</a>.
+            </p>
+            <a class="back-home" href="../">Back to rahulkrishnan.me</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  </main>
+</body>
+</html>
