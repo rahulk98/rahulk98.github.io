@@ -63,6 +63,24 @@
     ]
   },
   {
+    "title": "A probe can tell, before the model reasons, whether it will follow a misleading hint",
+    "slug": "cot-hint-probes",
+    "date": "2026-10-01",
+    "year": "2026",
+    "featured": false,
+    "category": "LLM Research",
+    "keywords": ["LLMs & NLP", "Research"],
+    "outcome": "In short, larger models carry a readable signal, before they reason, of whether they will follow a misleading hint, but most of it reflects what the model already leans toward, and I have not shown that the model uses it.",
+    "summary": "I gave Qwen3 0.6B, 1.7B, 4B and 8B (thinking mode off) 650 questions from 13 BIG-Bench Hard tasks, each with a hint toward a wrong option. I trained linear probes on the last prompt token to predict whether the final answer would follow the hint, compared them with cheap checks that need no hidden state, changed the hint to see what the probe responds to, and steered the model along the probe direction while it reasoned.",
+    "tags": ["Qwen3", "Linear probes", "Activation steering", "BIG-Bench Hard"],
+    "stack": [],
+    "links": {
+      "github": "https://github.com/rahulk98/cot-unfaithfulness",
+      "project page": "cot-hint-probes/"
+    },
+    "detail": []
+  },
+  {
     "title": "Fear of punishment did not teach the model to say \"I don't know\"",
     "slug": "fear-rlvr",
     "date": "2026-03-01",
@@ -108,7 +126,7 @@
     "title": "Reflective CoT Faithfulness Study (Think Twice)",
     "slug": "rcot-faithfulness",
     "date": "",
-    "year": "",
+    "year": "2025",
     "featured": false,
     "category": "LLM Research",
     "keywords": ["LLMs & NLP", "Research"],

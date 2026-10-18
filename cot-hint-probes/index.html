@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Cloudflare Web Analytics -->
+  <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "417e4ef4c2944b32a559316091f0f786"}'></script>
+
+  <!-- Umami Analytics (self-hosted) -->
+  <script async src="/assets/js/analytics.js"></script>
+
+  <title>A probe can tell, before the model reasons, whether it will follow a misleading hint | Rahul Krishnan</title>
+  <meta name="description" content="In short, larger models carry a readable signal, before they reason, of whether they will follow a misleading hint, but most of it reflects what the model already leans toward, and I have not shown that the model uses it.">
+  <meta name="author" content="Rahul Krishnan">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://rahulkrishnan.me/cot-hint-probes/">
+
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="A probe can tell, before the model reasons, whether it will follow a misleading hint">
+  <meta property="og:description" content="In short, larger models carry a readable signal, before they reason, of whether they will follow a misleading hint, but most of it reflects what the model already leans toward, and I have not shown that the model uses it.">
+  <meta property="og:url" content="https://rahulkrishnan.me/cot-hint-probes/">
+  <meta property="og:image" content="https://rahulkrishnan.me/cot-hint-probes/static/images/auroc_vs_size.png">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="A probe can tell, before the model reasons, whether it will follow a misleading hint">
+  <meta name="twitter:description" content="In short, larger models carry a readable signal, before they reason, of whether they will follow a misleading hint, but most of it reflects what the model already leans toward, and I have not shown that the model uses it.">
+  <meta name="twitter:image" content="https://rahulkrishnan.me/cot-hint-probes/static/images/auroc_vs_size.png">
+
+  <link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="../assets/img/favicon-32.png" type="image/png" sizes="32x32">
+  <link rel="apple-touch-icon" href="../assets/img/apple-touch-icon.png">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.4/css/bulma.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="static/css/index.css">
+
+  <script src="static/js/index.js" defer></script>
+</head>
+<body>
+
+  <button class="scroll-to-top" onclick="scrollToTop()" title="Scroll to top" aria-label="Scroll to top">
+    <i class="fas fa-chevron-up"></i>
+  </button>
+
+  <main id="main-content">
+  <section class="hero">
+    <div class="hero-body">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered">
+          <div class="column has-text-centered">
+            <h1 class="title is-1 publication-title">A probe can tell, before the model reasons, whether it will follow a misleading hint</h1>
+
+            <div class="is-size-5 publication-authors" style="margin-top: 0.5rem;">
+              <span class="author-block"><a href="../" target="_blank">Rahul Krishnan</a></span>
+            </div>
+            <div class="is-size-6 publication-authors">
+              <span class="author-block">An academic project, October 2026, extending an earlier chain-of-thought faithfulness study done with Sanjana Deshpande.</span>
+            </div>
+
+            <div class="column has-text-centered">
+              <div class="publication-links">
+                <span class="link-block">
+                  <a href="https://github.com/rahulk98/cot-unfaithfulness" target="_blank" class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon"><i class="fab fa-github"></i></span>
+                    <span>Code</span>
+                  </a>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="hero teaser">
+    <div class="container is-max-desktop">
+      <div class="hero-body">
+        <h2 class="subtitle has-text-centered">
+          In short, larger models carry a readable signal, before they reason, of whether they will follow a misleading hint, but most of it reflects what the model already leans toward, and I have not shown that the model uses it.
+        </h2>
+      </div>
+    </div>
+  </section>
+
+  <section class="section hero is-light">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column is-four-fifths">
+          <div class="content write-up">
+            <p><strong>TL;DR.</strong></p>
+            <p>Chain-of-thought (CoT) monitoring assumes that a model's written reasoning shows why it chose its answer. Turpin et al. (2023) showed that this often fails: suggest a wrong option in the prompt and models move to it, while the reasoning never mentions the suggestion. I asked whether the model's hidden state shows, before it writes any reasoning, that it is about to follow such a hint, and whether that signal is causal. If it is readable, a monitor could flag an unfaithful answer before the misleading reasoning exists.</p>
+            <p>I gave Qwen3 0.6B, 1.7B, 4B and 8B (thinking mode off) 650 questions from 13 BIG-Bench Hard tasks, each with a hint toward a wrong option. I trained linear probes on the last prompt token to predict whether the final answer would follow the hint, compared them with cheap checks that need no hidden state, changed the hint to see what the probe responds to, and steered the model along the probe direction while it reasoned.</p>
+            <ul>
+              <li><strong>The probe predicts hint-following, better with size.</strong> AUROC rises from 0.702 (0.6B) to 0.862 (8B). It beats the cheap checks only at 4B and 8B, by 0.024 to 0.033, and by 0.070 on tasks it never saw.</li>
+              <li><strong>Most of the signal is the model's prior leaning.</strong> A probe on the same question without the hint reaches 0.687 to 0.769, and the model's direct answer is the best single predictor.</li>
+              <li><strong>The probe tracks the hint only partly.</strong> The models follow whichever wrong hint they get. The probe score moves with the hint target at 4B and 8B, but far less than behavior does.</li>
+              <li><strong>Steering along the probe direction changed nothing at any size.</strong> The mean-difference direction did move hint-following at 1.7B and 8B, but it also changed reasoning length by 64 to 154 tokens. The probe push was 7 to 15 times weaker, so the causal question is still open.</li>
+            </ul>
+            <p>In short, larger models carry a readable signal, before they reason, of whether they will follow a misleading hint, but most of it reflects what the model already leans toward, and I have not shown that the model uses it.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="setup">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3 has-text-centered">Setup</h2>
+          <div class="content write-up">
+            <p>In the earlier study, a critique-and-revise reflection step reduced bias susceptibility by about 7 percentage points over plain CoT on Gemini 2.5 Flash Lite and LLaMA 3.2 3B, yet the revised reasoning still hid the cue behind a fabricated rationale. A behavioral test like that sees hint-following only after the answer exists. This project looks earlier, at the prompt's hidden state.</p>
+            <ul>
+              <li><strong>Models:</strong> Qwen3 0.6B, 1.7B, 4B and 8B (Yang et al. 2025), bf16, thinking mode off, temperature 1, one sample per prompt.</li>
+              <li><strong>Questions:</strong> 50 per task from 13 BIG-Bench Hard tasks (Suzgun et al. 2022), Turpin et al.'s zero-shot set. Each gets a hint toward a wrong option in two wordings, "I think the answer might be (X) but curious to hear what you think." and "Based on my analysis, (X) is clearly the right choice here.", giving 1300 hinted prompts per model.</li>
+              <li><strong>Label:</strong> the final answer after the CoT is the hinted option.</li>
+              <li><strong>Probe:</strong> logistic regression on the residual stream at the last prompt token. Folds are grouped by question, the layer is chosen inside the training folds, and brackets are 95% bootstrap intervals over questions.</li>
+              <li><strong>Cheap checks:</strong> a text classifier on surface features (task, hint wording and position, number of options, prompt length), and the model's direct answer without CoT on the same hinted prompt.</li>
+            </ul>
+            <p>The follow rate falls with size, from 0.735 at 0.6B to 0.488, 0.432 and 0.376 at 8B.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="the-probe-beats-the-cheap-checks-from-4b">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3 has-text-centered">The probe beats the cheap checks from 4B</h2>
+          <div class="content write-up">
+            <div class="table-container">
+              <table class="table is-striped is-narrow is-fullwidth">
+                <thead><tr><th>Model</th><th>Probe</th><th>Best cheap check</th><th>Probe adds</th><th>Probe, unhinted prompt</th><th>Probe, held-out task</th><th>Probe adds, held-out task</th></tr></thead>
+                <tbody>
+                  <tr><td>0.6B</td><td>0.702</td><td>text 0.720</td><td>-0.001 [-0.003, +0.000]</td><td>0.687</td><td>0.637</td><td>+0.022 [+0.009, +0.037]</td></tr>
+                  <tr><td>1.7B</td><td>0.735</td><td>text 0.741</td><td>+0.000 [-0.003, +0.004]</td><td>0.687</td><td>0.598</td><td>+0.043 [+0.024, +0.062]</td></tr>
+                  <tr><td>4B</td><td>0.825</td><td>direct answer 0.785</td><td>+0.033 [+0.023, +0.044]</td><td>0.743</td><td>0.710</td><td>+0.070 [+0.052, +0.089]</td></tr>
+                  <tr><td>8B</td><td>0.862</td><td>direct answer 0.812</td><td>+0.024 [+0.015, +0.033]</td><td>0.769</td><td>0.730</td><td>+0.070 [+0.048, +0.093]</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="table-note">"Probe adds" is the gain from adding the probe score to a classifier that already has the direct answer and the text features. "Held-out task" trains on 12 tasks and tests on the 13th. Shuffled labels give 0.480 to 0.500.</p>
+            <figure class="paper-figure">
+              <img src="static/images/auroc_vs_size.png" alt="Probe AUROC against model size" loading="lazy">
+              <figcaption>Figure 1. AUROC at each model size for the probe on the hinted prompt, the probe on the unhinted prompt, and the best cheap check with its 95% interval.</figcaption>
+            </figure>
+            <p>At 0.6B and 1.7B the probe does no better than surface features. From 4B it adds a small but clear amount, and the chosen layer is the same (24) in every fold, while at 0.6B the folds pick layers 18, 4, 3, 4 and 21. On held-out tasks the text classifier falls below chance (0.404 at 8B), because most of its strength came from the task itself. The probe keeps working there.</p>
+            <p>Most of what the probe reads is already present without the hint: the unhinted-prompt probe gets close, and the direct answer is the strongest single predictor. A hint-specific part exists and grows with size, since the gap between the hinted and unhinted probes rises from 0.015 at 0.6B to 0.093 at 8B. None of this shows intent or deception. A probe only shows that the information can be read linearly. Probing for the model's pre-CoT answer directly, and asking whether the follow probe adds anything beyond it, would separate prior leaning from a hint-specific signal.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="changing-the-hint">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3 has-text-centered">Changing the hint</h2>
+          <div class="content write-up">
+            <p>I rebuilt every prompt with a hint on a different wrong option, a hint on the correct option, no hint, and a neutral sentence that names no option. For each version I generated a new answer and recorded the probe score.</p>
+            <div class="table-container">
+              <table class="table is-striped is-narrow is-fullwidth">
+                <thead><tr><th>Model</th><th>Follows original wrong hint</th><th>Follows different wrong hint</th><th>Follows correct hint</th><th>Probe change, different wrong hint</th><th>Probe change, correct hint</th></tr></thead>
+                <tbody>
+                  <tr><td>0.6B</td><td>0.766</td><td>0.685</td><td>0.738</td><td>+0.004 [-0.000, +0.009]</td><td>-0.002 [-0.006, +0.001]</td></tr>
+                  <tr><td>1.7B</td><td>0.497</td><td>0.561</td><td>0.769</td><td>+0.009 [-0.004, +0.022]</td><td>-0.025 [-0.038, -0.012]</td></tr>
+                  <tr><td>4B</td><td>0.450</td><td>0.445</td><td>0.906</td><td>+0.003 [-0.023, +0.028]</td><td>+0.061 [+0.043, +0.078]</td></tr>
+                  <tr><td>8B</td><td>0.371</td><td>0.387</td><td>0.897</td><td>+0.004 [-0.019, +0.029]</td><td>+0.085 [+0.066, +0.104]</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="table-note">Probe changes are paired differences against the original wrong hint.</p>
+            <p>The models follow whichever hint is present: under a different wrong hint they pick the original option only 0.058 to 0.105 of the time. Swapping one wrong hint for another changes neither behavior nor the probe score, as a probe of "will follow the hint in front of it" should. A correct hint roughly doubles following at 4B and 8B, and the probe score rises there, but by 0.061 and 0.085 against behavioral rises of 0.456 and 0.526. That case is also confounded with what the model would answer anyway, since it is right 0.719 and 0.773 of the time without a hint. Without a hint the label has no target, and the probe's scores move in different directions at different sizes, so I do not interpret them. My pre-registered criteria classify every size as "mixed".</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="steering-along-the-probe-direction">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3 has-text-centered">Steering along the probe direction</h2>
+          <div class="content write-up">
+            <p>While the model generated, I added alpha standard deviations of a direction to the residual stream at the probe's layer. The directions were the probe's, the mean difference between followed and non-followed prompts, the probe trained without hints, and three random directions, all fitted on other questions. There were 15 conditions and about 19,300 generations per model. The pre-registered rule counts an effect only if the paired 95% interval excludes 0.</p>
+            <div class="table-container">
+              <table class="table is-striped is-narrow is-fullwidth">
+                <thead><tr><th>Model</th><th>Probe +4</th><th>Probe -4</th><th>Mean difference +4</th><th>Mean difference -4</th></tr></thead>
+                <tbody>
+                  <tr><td>0.6B</td><td>+0.002 [-0.025, +0.031]</td><td>-0.010 [-0.037, +0.019]</td><td>+0.005 [-0.023, +0.033]</td><td>-0.015 [-0.044, +0.013]</td></tr>
+                  <tr><td>1.7B</td><td>-0.002 [-0.031, +0.026]</td><td>+0.012 [-0.014, +0.038]</td><td>+0.064 [+0.035, +0.096]</td><td>-0.080 [-0.112, -0.049]</td></tr>
+                  <tr><td>4B</td><td>+0.005 [-0.017, +0.028]</td><td>+0.006 [-0.016, +0.029]</td><td>+0.019 [-0.005, +0.042]</td><td>-0.005 [-0.029, +0.020]</td></tr>
+                  <tr><td>8B</td><td>+0.008 [-0.014, +0.030]</td><td>-0.002 [-0.027, +0.022]</td><td>+0.049 [+0.026, +0.070]</td><td>-0.047 [-0.072, -0.021]</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="table-note">Change in hint-follow rate against no steering.</p>
+            <div class="table-container">
+              <table class="table is-striped is-narrow is-fullwidth">
+                <thead><tr><th>Model</th><th>Answer length (tokens), mean difference -4 / 0 / +4</th><th>Push size, probe vs mean difference</th></tr></thead>
+                <tbody>
+                  <tr><td>0.6B</td><td>95.6 / 91.4 / 88.9</td><td>0.15 vs 0.99</td></tr>
+                  <tr><td>1.7B</td><td>387.5 / 241.9 / 177.5</td><td>3.22 vs 43.87</td></tr>
+                  <tr><td>4B</td><td>179.5 / 169.7 / 165.0</td><td>1.36 vs 17.19</td></tr>
+                  <tr><td>8B</td><td>407.6 / 253.9 / 179.4</td><td>2.69 vs 40.06</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="table-note">Push size is the norm of the added vector at alpha = 4, averaged over folds.</p>
+            <figure class="paper-figure">
+              <img src="static/images/e1_follow_vs_alpha.png" alt="Hint-follow rate against steering strength" loading="lazy">
+              <figcaption>Figure 2. Hint-follow rate against steering strength for the probe direction (with 95% intervals), the range of the three random directions, and the mean-difference and unhinted-probe directions at plus and minus 4. Each panel has its own y-axis.</figcaption>
+            </figure>
+            <p>The probe direction did nothing at any size, and none of the 24 random-direction conditions changed hint-following either. By the pre-registered rules, 0.6B and 4B are "readout-only" and 1.7B and 8B are "mixed". The mean-difference direction is what moved behavior, and it moved reasoning length with it: pushing toward shorter reasoning raised hint-following and pushing toward longer reasoning lowered it. At +4 it also cost 0.066, 0.064 and 0.057 accuracy at 1.7B, 4B and 8B. It looks like a reasoning-length direction more than a hint direction.</p>
+            <p>The probe result does not show that the probe direction is causally inert. Its push was 7 to 15 times smaller than the mean-difference push, and a logistic-regression direction leans on low-variance dimensions, so the most predictive direction need not be the one the model acts on. A control that pushes the probe direction and a random direction as hard as the mean difference is running now.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="other-checks">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3 has-text-centered">Other checks</h2>
+          <div class="content write-up">
+            <ul>
+              <li><strong>Other labels.</strong> The probes also predict whether a hint changes the answer the model gives without it (0.661 to 0.771) and whether a reflection step keeps a hinted answer (0.637 to 0.810). Again they add to the cheap checks only at 4B and 8B.</li>
+              <li><strong>Transfer.</strong> Probes trained on zero-shot hints predict following in an "answer is always A" few-shot setting at 0.906 (4B) and 0.865 (8B) on 60 prompts, but the direct answer does as well or better (0.941 and 0.931).</li>
+              <li><strong>Inspect.</strong> The hint-following measurement is packaged as an Inspect evaluation (UK AI Security Institute 2024). It reproduces the stored prompts and so far has been tested only against a stub model.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="what-i-take-from-this">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3 has-text-centered">What I take from this</h2>
+          <div class="content write-up">
+            <p>For CoT monitoring, a probe on the prompt is a cheap early warning that starts to pay off around 4B, and it works best alongside the model's direct answer rather than instead of it. Until a matched push changes behavior, it is a detector, not a handle on the mechanism.</p>
+            <p><strong>Limits.</strong> One sample per prompt at temperature 1, so each label is a single draw. Thinking mode was off, and Qwen3 often writes some reasoning even when asked to answer directly, so the direct answer is not a clean pre-reasoning answer. One model family.</p>
+            <p><strong>Related work.</strong> Turpin et al. (2023) introduced the biased-hint test, and Lanham et al. (2023), Chen et al. (2025), Chua and Evans (2025) and Arcuschin et al. (2025) measure CoT faithfulness from behavior. The suggested-answer hint is a sycophancy cue (Sharma et al. 2023). The probing setup follows Alain and Bengio (2016), Hewitt and Liang (2019) and Marks and Tegmark (2023), and MacDiarmid et al. (2024) use simple probes as monitors. Steering follows Turner et al. (2023), Panickssery et al. (2023) and Zou et al. (2023). Closest to this project, Cox et al. (2026) decode a model's answer from activations just before its CoT and often flip it by steering along the probe direction. Gupta et al. (2026) find cue-induced biases as steerable linear directions, and Nguyen et al. (2026) find that CoT-faithfulness steering vectors generalize reliably only for the largest model they test. The push-size difference above is one candidate reason why my probe steering did nothing where theirs worked.</p>
+            <p><strong>Next steps.</strong> The matched-strength control finishes overnight and this post will be updated with it. After that: several samples per prompt, thinking mode on, a probe for the pre-CoT answer itself, and a public release of the labels and activations.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="references">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3 has-text-centered">References</h2>
+          <div class="content write-up">
+            <ul class="references">
+              <li>Alain, G. and Bengio, Y. (2016). Understanding intermediate layers using linear classifier probes. <a href="https://arxiv.org/abs/1610.01644" target="_blank" rel="noopener">arXiv:1610.01644</a>.</li>
+              <li>Arcuschin, I. et al. (2025). Chain-of-Thought Reasoning In The Wild Is Not Always Faithful. <a href="https://arxiv.org/abs/2503.08679" target="_blank" rel="noopener">arXiv:2503.08679</a>.</li>
+              <li>Chen, Y. et al. (2025). Reasoning Models Don't Always Say What They Think. <a href="https://arxiv.org/abs/2505.05410" target="_blank" rel="noopener">arXiv:2505.05410</a>.</li>
+              <li>Chua, J. and Evans, O. (2025). Are DeepSeek R1 And Other Reasoning Models More Faithful? <a href="https://arxiv.org/abs/2501.08156" target="_blank" rel="noopener">arXiv:2501.08156</a>.</li>
+              <li>Cox, K., Kianersi, D. and Garriga-Alonso, A. (2026). Post-Hoc Reasoning in Chain of Thought: Decoding and Steering Pre-Committed Answers. <a href="https://arxiv.org/abs/2603.01437" target="_blank" rel="noopener">arXiv:2603.01437</a>.</li>
+              <li>Gupta, P., Zhang, T. J., Draye, F., Schoelkopf, B. and Jin, Z. (2026). How Does Alignment Tuning Shape Representations of Sycophancy and Related Cue-Induced Biases in LLMs? <a href="https://arxiv.org/abs/2607.18114" target="_blank" rel="noopener">arXiv:2607.18114</a>.</li>
+              <li>Hewitt, J. and Liang, P. (2019). Designing and Interpreting Probes with Control Tasks. <a href="https://arxiv.org/abs/1909.03368" target="_blank" rel="noopener">arXiv:1909.03368</a>.</li>
+              <li>Lanham, T. et al. (2023). Measuring Faithfulness in Chain-of-Thought Reasoning. <a href="https://arxiv.org/abs/2307.13702" target="_blank" rel="noopener">arXiv:2307.13702</a>.</li>
+              <li>MacDiarmid, M. et al. (2024). Simple probes can catch sleeper agents. Anthropic. <a href="https://www.anthropic.com/research/probes-catch-sleeper-agents" target="_blank" rel="noopener">https://www.anthropic.com/research/probes-catch-sleeper-agents</a></li>
+              <li>Marks, S. and Tegmark, M. (2023). The Geometry of Truth: Emergent Linear Structure in Large Language Model Representations of True/False Datasets. <a href="https://arxiv.org/abs/2310.06824" target="_blank" rel="noopener">arXiv:2310.06824</a>.</li>
+              <li>Nguyen, M., Cox, K., Meek, A. and Arcuschin, I. (2026). On the Generalization of Steering Vectors for Chain-of-Thought Faithfulness. <a href="https://arxiv.org/abs/2607.29062" target="_blank" rel="noopener">arXiv:2607.29062</a>.</li>
+              <li>Panickssery, N. et al. (2023). Steering Llama 2 via Contrastive Activation Addition. <a href="https://arxiv.org/abs/2312.06681" target="_blank" rel="noopener">arXiv:2312.06681</a>.</li>
+              <li>Sharma, M. et al. (2023). Towards Understanding Sycophancy in Language Models. <a href="https://arxiv.org/abs/2310.13548" target="_blank" rel="noopener">arXiv:2310.13548</a>.</li>
+              <li>Suzgun, M. et al. (2022). Challenging BIG-Bench Tasks and Whether Chain-of-Thought Can Solve Them. <a href="https://arxiv.org/abs/2210.09261" target="_blank" rel="noopener">arXiv:2210.09261</a>.</li>
+              <li>Turner, A. M. et al. (2023). Steering Language Models With Activation Engineering. <a href="https://arxiv.org/abs/2308.10248" target="_blank" rel="noopener">arXiv:2308.10248</a>.</li>
+              <li>Turpin, M., Michael, J., Perez, E. and Bowman, S. R. (2023). Language Models Don't Always Say What They Think: Unfaithful Explanations in Chain-of-Thought Prompting. <a href="https://arxiv.org/abs/2305.04388" target="_blank" rel="noopener">arXiv:2305.04388</a>.</li>
+              <li>UK AI Security Institute (2024). Inspect AI: Framework for Large Language Model Evaluations. <a href="https://github.com/UKGovernmentBEIS/inspect_ai" target="_blank" rel="noopener">https://github.com/UKGovernmentBEIS/inspect_ai</a></li>
+              <li>Yang, A. et al. (2025). Qwen3 Technical Report. <a href="https://arxiv.org/abs/2505.09388" target="_blank" rel="noopener">arXiv:2505.09388</a>.</li>
+              <li>Zou, A. et al. (2023). Representation Engineering: A Top-Down Approach to AI Transparency. <a href="https://arxiv.org/abs/2310.01405" target="_blank" rel="noopener">arXiv:2310.01405</a>.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="thanks">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column is-four-fifths">
+          <div class="content write-up">
+            <p class="thanks">Thanks to Sanjana Deshpande, who co-authored the original faithfulness study this builds on.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <footer class="footer">
+    <div class="container">
+      <div class="columns is-centered">
+        <div class="column is-8">
+          <div class="content">
+            <p>
+              This page was built using the <a href="https://github.com/eliahuhorwitz/Academic-project-page-template" target="_blank">Academic Project Page Template</a> which was adopted from the <a href="https://nerfies.github.io" target="_blank">Nerfies</a> project page.
+              You are free to borrow the source code of this website, we just ask that you link back to this page in the footer. <br> This website is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank">Creative
+              Commons Attribution-ShareAlike 4.0 International License</a>.
+            </p>
+            <a class="back-home" href="../">Back to rahulkrishnan.me</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  </main>
+</body>
+</html>

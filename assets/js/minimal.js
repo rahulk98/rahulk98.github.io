@@ -711,11 +711,10 @@ function buildMinimalProjects(research) {
     return section;
 }
 
+// Newest year first; within a year, newest date first.
 function sortMinimalProjects(a, b) {
-    if (Boolean(a.featured) !== Boolean(b.featured)) {
-        return a.featured ? -1 : 1;
-    }
-    return String(b.date || '').localeCompare(String(a.date || ''));
+    const year = project => parseInt(String(project.year || ''), 10) || 0;
+    return (year(b) - year(a)) || String(b.date || '').localeCompare(String(a.date || ''));
 }
 
 function buildMinimalFooter(site) {
