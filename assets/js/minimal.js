@@ -303,10 +303,8 @@ function buildMinimalPanel(tabId, personal, minimal) {
         panel.appendChild(buildMinimalBio(personal, minimal));
     } else if (tabId === 'work') {
         panel.appendChild(buildMinimalWorkFilter());
-        const research = buildMinimalPapers();
-        research.appendChild(buildMinimalProjects(true));
-        panel.appendChild(research);
-        panel.appendChild(buildMinimalProjects(false));
+        panel.appendChild(buildMinimalResearch());
+        panel.appendChild(buildMinimalProjects());
     } else if (tabId === 'recent') {
         panel.appendChild(buildMinimalNews(minimal));
         panel.appendChild(buildMinimalExperience());
@@ -545,8 +543,8 @@ function appendEducationMeta(meta, entry) {
     meta.textContent = parts.join(' ');
 }
 
-function buildMinimalPapers() {
-    const publications = (window.publicationsData || {}).publications || [];
+// Papers and unpublished research projects share one list, newest year first.
+function buildMinimalResearch() {
     const section = document.createElement('section');
     section.className = 'm-section';
     section.id = 'papers';
@@ -557,83 +555,93 @@ function buildMinimalPapers() {
     section.appendChild(label);
 
     const list = document.createElement('div');
-    list.className = 'm-papers';
+    list.className = 'm-projects';
 
-    publications.forEach(pub => {
-        const item = document.createElement('article');
-        item.className = 'm-paper';
-
-        const titleHref = pub.projectPage || pub.url;
-        const title = document.createElement(titleHref ? 'a' : 'span');
-        title.className = 'm-paper__title';
-        title.textContent = pub.title;
-        if (titleHref) {
-            title.href = titleHref;
-            if (!pub.projectPage) title.rel = 'noopener';
-        }
-        item.appendChild(title);
-
-        const authors = document.createElement('p');
-        authors.className = 'm-paper__authors m-mono';
-        authors.textContent = pub.authors || '[AUTHOR LIST]';
-        item.appendChild(authors);
-
-        const venue = document.createElement('p');
-        venue.className = 'm-paper__venue';
-        const venueName = document.createElement('em');
-        venueName.textContent = pub.conference || '';
-        venue.appendChild(venueName);
-        if (pub.year) {
-            venue.appendChild(document.createTextNode(`, ${pub.year}`));
-        }
-        item.appendChild(venue);
-
-        if (pub.description) {
-            const desc = document.createElement('p');
-            desc.className = 'm-paper__desc';
-            desc.textContent = pub.description;
-            item.appendChild(desc);
-        }
-
-        if (pub.result) {
-            const result = document.createElement('div');
-            result.className = 'm-paper__result';
-
-            const resultLabel = document.createElement('span');
-            resultLabel.className = 'm-paper__result-label m-mono';
-            resultLabel.textContent = 'Result';
-            result.appendChild(resultLabel);
-
-            const resultText = document.createElement('p');
-            resultText.className = 'm-paper__result-text';
-            resultText.textContent = pub.result;
-            result.appendChild(resultText);
-
-            item.appendChild(result);
-        }
-
-        const linkEntries = [];
-        if (pub.url) linkEntries.push({ label: labelForPaperLink(pub.url), url: pub.url });
-        if (pub.projectPage) linkEntries.push({ label: 'Project page', url: pub.projectPage });
-
-        if (linkEntries.length) {
-            const links = document.createElement('div');
-            links.className = 'm-paper__links m-mono';
-            linkEntries.forEach(entry => {
-                const a = document.createElement('a');
-                a.href = entry.url;
-                if (entry.url === pub.url) a.rel = 'noopener';
-                a.textContent = entry.label;
-                links.appendChild(a);
-            });
-            item.appendChild(links);
-        }
-
-        list.appendChild(item);
-    });
+    const publications = (window.publicationsData || {}).publications || [];
+    const projects = (window.projectsData || [])
+        .filter(project => !hasLinkedPublication(project) && isResearchProject(project));
+    [
+        ...publications.map(entry => ({ entry, build: buildMinimalPaper })),
+        ...projects.map(entry => ({ entry, build: buildMinimalProject }))
+    ]
+        .sort((a, b) => sortMinimalByYear(a.entry, b.entry))
+        .forEach(({ entry, build }) => list.appendChild(build(entry)));
 
     section.appendChild(list);
     return section;
+}
+
+function buildMinimalPaper(pub) {
+    const item = document.createElement('article');
+    item.className = 'm-paper';
+
+    const titleHref = pub.projectPage || pub.url;
+    const title = document.createElement(titleHref ? 'a' : 'span');
+    title.className = 'm-paper__title';
+    title.textContent = pub.title;
+    if (titleHref) {
+        title.href = titleHref;
+        if (!pub.projectPage) title.rel = 'noopener';
+    }
+    item.appendChild(title);
+
+    const authors = document.createElement('p');
+    authors.className = 'm-paper__authors m-mono';
+    authors.textContent = pub.authors || '[AUTHOR LIST]';
+    item.appendChild(authors);
+
+    const venue = document.createElement('p');
+    venue.className = 'm-paper__venue';
+    const venueName = document.createElement('em');
+    venueName.textContent = pub.conference || '';
+    venue.appendChild(venueName);
+    if (pub.year) {
+        venue.appendChild(document.createTextNode(`, ${pub.year}`));
+    }
+    item.appendChild(venue);
+
+    if (pub.description) {
+        const desc = document.createElement('p');
+        desc.className = 'm-paper__desc';
+        desc.textContent = pub.description;
+        item.appendChild(desc);
+    }
+
+    if (pub.result) {
+        const result = document.createElement('div');
+        result.className = 'm-paper__result';
+
+        const resultLabel = document.createElement('span');
+        resultLabel.className = 'm-paper__result-label m-mono';
+        resultLabel.textContent = 'Result';
+        result.appendChild(resultLabel);
+
+        const resultText = document.createElement('p');
+        resultText.className = 'm-paper__result-text';
+        resultText.textContent = pub.result;
+        result.appendChild(resultText);
+
+        item.appendChild(result);
+    }
+
+    const linkEntries = [];
+    if (pub.url) linkEntries.push({ label: labelForPaperLink(pub.url), url: pub.url });
+    if (pub.projectPage) linkEntries.push({ label: 'Project page', url: pub.projectPage });
+
+    if (linkEntries.length) {
+        const links = document.createElement('div');
+        links.className = 'm-paper__links m-mono';
+        linkEntries.forEach(entry => {
+            const a = document.createElement('a');
+            a.href = entry.url;
+            if (entry.url === pub.url) a.rel = 'noopener';
+            a.textContent = entry.label;
+            links.appendChild(a);
+        });
+        item.appendChild(links);
+    }
+
+    return item;
 }
 
 function labelForPaperLink(url) {
@@ -652,67 +660,65 @@ function isResearchProject(project) {
     return (project.keywords || []).includes('Research');
 }
 
-// research = true: unpublished research projects, listed under the papers.
-// research = false: the remaining projects, as their own section.
-function buildMinimalProjects(research) {
-    const projects = (window.projectsData || [])
-        .filter(project => !hasLinkedPublication(project) && isResearchProject(project) === research)
-        .slice()
-        .sort(sortMinimalProjects);
-    const section = document.createElement(research ? 'div' : 'section');
-    section.className = research ? 'm-projects' : 'm-section m-projects';
-    if (!research) section.id = 'projects-list';
-
-    projects.forEach(project => {
-        const item = document.createElement('article');
-        item.className = 'm-project';
-
-        const head = document.createElement('div');
-        head.className = 'm-project__head';
-
-        const title = document.createElement(project.slug ? 'a' : 'span');
-        title.className = 'm-project__title';
-        title.textContent = project.title;
-        if (project.slug) {
-            title.href = (project.links && project.links['project page']) || `project.html?slug=${encodeURIComponent(project.slug)}`;
-        }
-        head.appendChild(title);
-
-        if (project.year) {
-            const year = document.createElement('span');
-            year.className = 'm-project__year m-mono';
-            year.textContent = project.year;
-            head.appendChild(year);
-        }
-        item.appendChild(head);
-
-        if (project.outcome) {
-            const outcome = document.createElement('p');
-            outcome.className = 'm-project__outcome';
-            outcome.textContent = project.outcome;
-            item.appendChild(outcome);
-        }
-
-        const tags = (project.tags || project.stack || []).slice(0, 4);
-        if (tags.length) {
-            const stack = document.createElement('div');
-            stack.className = 'm-project__stack m-mono';
-            tags.forEach(tag => {
-                const span = document.createElement('span');
-                span.textContent = tag;
-                stack.appendChild(span);
-            });
-            item.appendChild(stack);
-        }
-
-        section.appendChild(item);
-    });
-
+// Projects that are not research, as their own section.
+function buildMinimalProjects() {
+    const section = document.createElement('section');
+    section.className = 'm-section m-projects';
+    section.id = 'projects-list';
+    (window.projectsData || [])
+        .filter(project => !hasLinkedPublication(project) && !isResearchProject(project))
+        .sort(sortMinimalByYear)
+        .forEach(project => section.appendChild(buildMinimalProject(project)));
     return section;
 }
 
+function buildMinimalProject(project) {
+    const item = document.createElement('article');
+    item.className = 'm-project';
+
+    const head = document.createElement('div');
+    head.className = 'm-project__head';
+
+    const title = document.createElement(project.slug ? 'a' : 'span');
+    title.className = 'm-project__title';
+    title.textContent = project.title;
+    if (project.slug) {
+        title.href = (project.links && project.links['project page']) || `project.html?slug=${encodeURIComponent(project.slug)}`;
+    }
+    head.appendChild(title);
+
+    if (project.year) {
+        const year = document.createElement('span');
+        year.className = 'm-project__year m-mono';
+        year.textContent = project.year;
+        head.appendChild(year);
+    }
+    item.appendChild(head);
+
+    if (project.outcome) {
+        const outcome = document.createElement('p');
+        outcome.className = 'm-project__outcome';
+        outcome.textContent = project.outcome;
+        item.appendChild(outcome);
+    }
+
+    const tags = (project.tags || project.stack || []).slice(0, 4);
+    if (tags.length) {
+        const stack = document.createElement('div');
+        stack.className = 'm-project__stack m-mono';
+        tags.forEach(tag => {
+            const span = document.createElement('span');
+            span.textContent = tag;
+            stack.appendChild(span);
+        });
+        item.appendChild(stack);
+    }
+
+    return item;
+}
+
 // Newest year first; within a year, newest date first.
-function sortMinimalProjects(a, b) {
+function sortMinimalByYear(a, b) {
     const year = project => parseInt(String(project.year || ''), 10) || 0;
     return (year(b) - year(a)) || String(b.date || '').localeCompare(String(a.date || ''));
 }

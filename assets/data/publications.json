@@ -5,6 +5,7 @@
       "authors": "Rahul Krishnan and Volker Schulz, Universitaet Trier",
       "conference": "arXiv preprint",
       "year": 2026,
+      "date": "2026-07-01",
       "url": "https://arxiv.org/abs/2607.12550",
       "description": "My MSc thesis preprint reports near-lossless 2x to 3x KV cache compression, with accuracy staying within 2 percentage points of the uncompressed model, across five models and four model families.",
       "result": "At 3x compression GSM8K moves -1.21 pp on Mistral-7B and RULER 64K moves -0.10 pp on LLaMA-3.1-8B, with perplexity within 0.3% of dense on all five models. The FlashJoLT fused decode kernel cuts peak decode KV memory by 3.61x.",
@@ -15,6 +16,7 @@
       "authors": "Rahul Krishnan and Volker Schulz, Universitaet Trier",
       "conference": "arXiv preprint, in preparation for Numerical Linear Algebra with Applications (NLAA)",
       "year": 2026,
+      "date": "2026-09-01",
       "url": "https://arxiv.org/abs/2609.28029",
       "description": "A companion to the JoLT paper that treats the KV cache as a fourth-order tensor, measures its singular-value spectra on Mistral-7B-v0.3 and LLaMA-2-13B, and compares Tucker, CP, tensor train and t-SVD at matched storage.",
       "result": "Token and feature modes are low-rank while head and layer modes are nearly full-rank. Tucker has the lowest reconstruction error at every compression ratio from 2x to 5x, and post-RoPE keys lose 41% to 64% of their pre-RoPE compressibility."

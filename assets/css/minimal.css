@@ -638,12 +638,6 @@
 
 /* Papers */
 
-.m-papers {
-    display: flex;
-    flex-direction: column;
-    gap: 30px;
-}
-
 .m-paper {
     display: flex;
     flex-direction: column;
@@ -739,16 +733,23 @@
 
 /* Projects */
 
-.m-papers + .m-projects {
-    margin-top: 30px;
-}
-
 .m-project {
     display: flex;
     flex-direction: column;
     gap: 6px;
     padding: 20px 0;
     border-top: 1px solid var(--m-rule);
+}
+
+.m-projects > .m-paper {
+    padding: 20px 0;
+    border-top: 1px solid var(--m-rule);
+}
+
+/* The section label already draws a rule above the first entry */
+.m-section__label + .m-projects > :first-child {
+    border-top: 0;
+    padding-top: 0;
 }
 
 .m-project__head {
