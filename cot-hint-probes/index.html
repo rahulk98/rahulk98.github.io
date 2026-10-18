@@ -219,7 +219,7 @@
               <figcaption>Figure 2. Hint-follow rate against steering strength for the probe direction (with 95% intervals), the range of the three random directions, and the mean-difference and unhinted-probe directions at plus and minus 4. Each panel has its own y-axis.</figcaption>
             </figure>
             <p>The probe direction did nothing at any size, and none of the 24 random-direction conditions changed hint-following either. By the pre-registered rules, 0.6B and 4B are "readout-only" and 1.7B and 8B are "mixed". The mean-difference direction is what moved behavior, and it moved reasoning length with it: pushing toward shorter reasoning raised hint-following and pushing toward longer reasoning lowered it. At +4 it also cost 0.066, 0.064 and 0.057 accuracy at 1.7B, 4B and 8B. It looks like a reasoning-length direction more than a hint direction.</p>
-            <p>The probe result does not show that the probe direction is causally inert. Its push was 7 to 15 times smaller than the mean-difference push, and a logistic-regression direction leans on low-variance dimensions, so the most predictive direction need not be the one the model acts on. A control that pushes the probe direction and a random direction as hard as the mean difference is running now.</p>
+            <p>The probe result does not show that the probe direction is causally inert. Its push was 7 to 15 times smaller than the mean-difference push, and a logistic-regression direction leans on low-variance dimensions, so the most predictive direction need not be the one the model acts on. Pushing the probe direction and a random direction as hard as the mean difference would separate "inert" from "too weak".</p>
           </div>
         </div>
       </div>
@@ -235,7 +235,7 @@
             <ul>
               <li><strong>Other labels.</strong> The probes also predict whether a hint changes the answer the model gives without it (0.661 to 0.771) and whether a reflection step keeps a hinted answer (0.637 to 0.810). Again they add to the cheap checks only at 4B and 8B.</li>
               <li><strong>Transfer.</strong> Probes trained on zero-shot hints predict following in an "answer is always A" few-shot setting at 0.906 (4B) and 0.865 (8B) on 60 prompts, but the direct answer does as well or better (0.941 and 0.931).</li>
-              <li><strong>Inspect.</strong> The hint-following measurement is packaged as an Inspect evaluation (UK AI Security Institute 2024). It reproduces the stored prompts and so far has been tested only against a stub model.</li>
+              <li><strong>Inspect.</strong> The hint-following measurement is packaged as an Inspect evaluation (UK AI Security Institute 2024) in the repository.</li>
             </ul>
           </div>
         </div>
@@ -252,7 +252,7 @@
             <p>For CoT monitoring, a probe on the prompt is a cheap early warning that starts to pay off around 4B, and it works best alongside the model's direct answer rather than instead of it. Until a matched push changes behavior, it is a detector, not a handle on the mechanism.</p>
             <p><strong>Limits.</strong> One sample per prompt at temperature 1, so each label is a single draw. Thinking mode was off, and Qwen3 often writes some reasoning even when asked to answer directly, so the direct answer is not a clean pre-reasoning answer. One model family.</p>
             <p><strong>Related work.</strong> Turpin et al. (2023) introduced the biased-hint test, and Lanham et al. (2023), Chen et al. (2025), Chua and Evans (2025) and Arcuschin et al. (2025) measure CoT faithfulness from behavior. The suggested-answer hint is a sycophancy cue (Sharma et al. 2023). The probing setup follows Alain and Bengio (2016), Hewitt and Liang (2019) and Marks and Tegmark (2023), and MacDiarmid et al. (2024) use simple probes as monitors. Steering follows Turner et al. (2023), Panickssery et al. (2023) and Zou et al. (2023). Closest to this project, Cox et al. (2026) decode a model's answer from activations just before its CoT and often flip it by steering along the probe direction. Gupta et al. (2026) find cue-induced biases as steerable linear directions, and Nguyen et al. (2026) find that CoT-faithfulness steering vectors generalize reliably only for the largest model they test. The push-size difference above is one candidate reason why my probe steering did nothing where theirs worked.</p>
-            <p><strong>Next steps.</strong> The matched-strength control finishes overnight and this post will be updated with it. After that: several samples per prompt, thinking mode on, a probe for the pre-CoT answer itself, and a public release of the labels and activations.</p>
+            <p><strong>Next steps.</strong> The strength-matched steering control above, several samples per prompt, thinking mode on, a probe for the pre-CoT answer itself, and a public release of the labels and activations.</p>
           </div>
         </div>
       </div>
