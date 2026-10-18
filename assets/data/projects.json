@@ -63,7 +63,7 @@
     ]
   },
   {
-    "title": "A safety probe kept detecting harmful requests under KV-cache compression until the request itself was lost",
+    "title": "Do Safety Probes Survive KV-Cache Compression?",
     "slug": "kv-compression-safety-probes",
     "date": "2026-10-01",
     "year": "2026",
