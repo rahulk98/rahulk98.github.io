@@ -187,7 +187,8 @@
             </div>
             <script>
               (function () {
-                var labels = ['right', 'wrong 1', 'wrong 2', 'skip'];
+                var labels = ['right', 'wrong', 'skip'];
+                var shown = [0, 1, 3];
                 var slider = document.getElementById('dial-t');
                 var out = document.getElementById('dial-t-value');
                 var bars = document.getElementById('dial-bars');
@@ -214,7 +215,9 @@
                 function render() {
                   var t = parseFloat(slider.value);
                   out.textContent = t.toFixed(2);
-                  advantages(t).forEach(function (a, i) {
+                  var adv = advantages(t);
+                  shown.forEach(function (k, i) {
+                    var a = adv[k];
                     var bar = rows[i].querySelector('.dial-bar');
                     var w = Math.min(Math.abs(a) / scale, 1) * 50;
                     bar.style.width = w + '%';

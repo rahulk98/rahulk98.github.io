@@ -63,7 +63,7 @@
     ]
   },
   {
-    "title": "FEAR - Asymmetric RLVR for LLM Calibration and Abstention",
+    "title": "Fear of punishment did not teach the model to say \"I don't know\"",
     "slug": "fear-rlvr",
     "date": "2026-03-01",
     "year": "2026",
@@ -71,7 +71,7 @@
     "category": "LLM Research",
     "keywords": ["LLMs & NLP", "Research"],
     "thumbnail": "assets/img/projects/fear-rlvr-thumb.jpg",
-    "outcome": "Punishing wrong answers made the model skip more, not better.",
+    "outcome": "Punishing wrong answers made the model skip more often, not more wisely.",
     "summary": "I asked what happens when a model is trained by fear of punishment instead, with wrong answers costing more than right answers earn. In short, punishment changed how often the model skipped, not how well it chose when to skip, and in fact pushed the model towards misalignment.",
     "tags": ["GRPO", "RLVR", "Qwen 2.5", "LoRA"],
     "stack": ["Python", "PyTorch", "GRPO (TRL)", "LoRA / PEFT", "vLLM", "Qwen 2.5", "Hugging Face", "Weights & Biases"],
