@@ -473,6 +473,10 @@ a:focus {
   .content .table.is-narrow th {
     padding: 0.35em 0.2em;
   }
+
+  .content .table th {
+    hyphens: auto;
+  }
 }
 
 /* t-dial widget in the mechanism section */
