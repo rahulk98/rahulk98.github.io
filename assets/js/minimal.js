@@ -10,8 +10,8 @@
  * the other design.
  */
 
-const MINIMAL_FONTS_HREF = 'https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;1,6..72,400&family=IBM+Plex+Mono:wght@400;500&display=swap';
-const MINIMAL_TAB_IDS = ['about', 'recent', 'work'];
+const MINIMAL_FONTS_HREF = 'https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,500;1,8..60,400&family=IBM+Plex+Mono:wght@400;500&display=swap';
+const MINIMAL_TAB_IDS = ['about', 'recent', 'work', 'writing'];
 // Filters inside the Work tab; their hashes also open the Work tab.
 const MINIMAL_WORK_FILTERS = ['research', 'projects'];
 
@@ -111,10 +111,9 @@ function applyMinimalHash() {
 }
 
 function setMinimalWorkFilter(filter) {
-    const papers = document.getElementById('papers');
-    const projects = document.getElementById('projects-list');
-    if (papers) papers.hidden = filter === 'projects';
-    if (projects) projects.hidden = filter === 'research';
+    document.querySelectorAll('#work-list > [data-kind]').forEach(item => {
+        item.hidden = filter !== 'all' && item.dataset.kind !== filter;
+    });
     Object.keys(minimalFilterButtons).forEach(key => {
         minimalFilterButtons[key].setAttribute('aria-pressed', key === filter ? 'true' : 'false');
     });
@@ -219,14 +218,13 @@ function buildMinimalIdentity(personal, site, minimal) {
 
     const social = site.social || {};
     const resume = ((window.navigationData || {}).menu || []).find(item => item.download);
-    const firstPub = ((window.publicationsData || {}).publications || []).find(pub => pub.url);
 
     const links = document.createElement('div');
     links.className = 'm-identity__links m-mono';
     const entries = [
         { text: 'Email', url: social.email ? `mailto:${social.email}` : null },
         { text: 'CV', url: resume ? resume.url : null },
-        { text: 'arXiv', url: firstPub ? firstPub.url : null },
+        { text: 'Google Scholar', url: social.scholar },
         { text: 'GitHub', url: social.github }
     ];
     entries.forEach(entry => {
@@ -303,10 +301,10 @@ function buildMinimalPanel(tabId, personal, minimal) {
         panel.appendChild(buildMinimalBio(personal, minimal));
     } else if (tabId === 'work') {
         panel.appendChild(buildMinimalWorkFilter());
-        panel.appendChild(buildMinimalResearch());
-        panel.appendChild(buildMinimalProjects());
+        panel.appendChild(buildMinimalWork());
+    } else if (tabId === 'writing') {
+        panel.appendChild(buildMinimalWriting());
     } else if (tabId === 'recent') {
-        panel.appendChild(buildMinimalNews(minimal));
         panel.appendChild(buildMinimalExperience());
         panel.appendChild(buildMinimalEducation());
     }
@@ -368,49 +366,6 @@ function buildMinimalBio(personal, minimal) {
         bio.appendChild(p);
     });
     return bio;
-}
-
-function buildMinimalNews(minimal) {
-    const news = (minimal && minimal.news) || [];
-    const section = document.createElement('section');
-    section.className = 'm-section';
-    section.id = 'news';
-
-    const heading = document.createElement('div');
-    heading.className = 'm-section__label m-mono';
-    heading.textContent = 'News';
-    section.appendChild(heading);
-
-    const rows = document.createElement('div');
-    rows.className = 'm-rows';
-    news.forEach(item => {
-        const row = document.createElement('div');
-        row.className = 'm-row';
-
-        const metaEl = document.createElement('span');
-        metaEl.className = 'm-row__meta m-mono';
-        metaEl.textContent = item.date;
-        row.appendChild(metaEl);
-
-        const body = document.createElement('div');
-        body.className = 'm-row__body';
-
-        const kindEl = document.createElement('span');
-        kindEl.className = 'm-row__kind m-mono';
-        kindEl.textContent = item.kind || '';
-        body.appendChild(kindEl);
-
-        const textEl = document.createElement('p');
-        textEl.className = 'm-row__text';
-        textEl.textContent = item.text;
-        body.appendChild(textEl);
-
-        row.appendChild(body);
-        rows.appendChild(row);
-    });
-    section.appendChild(rows);
-
-    return section;
 }
 
 function buildMinimalExperience() {
@@ -543,31 +498,27 @@ function appendEducationMeta(meta, entry) {
     meta.textContent = parts.join(' ');
 }
 
-// Papers and unpublished research projects share one list, newest year first.
-function buildMinimalResearch() {
+// Papers, research projects and other projects share one list, newest first.
+// Each item carries its filter kind.
+function buildMinimalWork() {
     const section = document.createElement('section');
-    section.className = 'm-section';
-    section.id = 'papers';
-
-    const label = document.createElement('div');
-    label.className = 'm-section__label m-mono';
-    label.textContent = 'Research';
-    section.appendChild(label);
-
-    const list = document.createElement('div');
-    list.className = 'm-projects';
+    section.className = 'm-section m-projects';
+    section.id = 'work-list';
 
     const publications = (window.publicationsData || {}).publications || [];
     const projects = (window.projectsData || [])
-        .filter(project => !hasLinkedPublication(project) && isResearchProject(project));
+        .filter(project => !hasLinkedPublication(project));
     [
-        ...publications.map(entry => ({ entry, build: buildMinimalPaper })),
-        ...projects.map(entry => ({ entry, build: buildMinimalProject }))
+        ...publications.map(entry => ({ entry, kind: 'research', build: buildMinimalPaper })),
+        ...projects.map(entry => ({ entry, kind: isResearchProject(entry) ? 'research' : 'projects', build: buildMinimalProject }))
     ]
         .sort((a, b) => sortMinimalByYear(a.entry, b.entry))
-        .forEach(({ entry, build }) => list.appendChild(build(entry)));
+        .forEach(({ entry, kind, build }) => {
+            const item = build(entry);
+            item.dataset.kind = kind;
+            section.appendChild(item);
+        });
 
-    section.appendChild(list);
     return section;
 }
 
@@ -660,15 +611,42 @@ function isResearchProject(project) {
     return (project.keywords || []).includes('Research');
 }
 
-// Projects that are not research, as their own section.
-function buildMinimalProjects() {
+// Write-up pages, newest first, under the post's own title and line.
+function buildMinimalWriting() {
     const section = document.createElement('section');
     section.className = 'm-section m-projects';
-    section.id = 'projects-list';
+    section.id = 'writing-list';
     (window.projectsData || [])
-        .filter(project => !hasLinkedPublication(project) && !isResearchProject(project))
+        .filter(project => project.writing && (project.links || {})['project page'])
         .sort(sortMinimalByYear)
-        .forEach(project => section.appendChild(buildMinimalProject(project)));
+        .forEach(project => {
+            const item = document.createElement('article');
+            item.className = 'm-project';
+
+            const head = document.createElement('div');
+            head.className = 'm-project__head';
+            const title = document.createElement('a');
+            title.className = 'm-project__title';
+            title.href = project.links['project page'];
+            title.textContent = project.writing.title;
+            head.appendChild(title);
+
+            if (project.date) {
+                const date = document.createElement('span');
+                date.className = 'm-project__year m-mono';
+                date.textContent = new Date(project.date + 'T00:00:00').toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+                head.appendChild(date);
+            }
+            item.appendChild(head);
+
+            if (project.writing.outcome) {
+                const outcome = document.createElement('p');
+                outcome.className = 'm-project__outcome';
+                outcome.textContent = project.writing.outcome;
+                item.appendChild(outcome);
+            }
+            section.appendChild(item);
+        });
     return section;
 }
 

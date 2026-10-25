@@ -1,0 +1,313 @@
+<!doctype html>
+<html lang="en" data-design="minimal">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex" />
+  <title>Fear of punishment did not teach the model to say "I don't know" - Rahul Krishnan</title>
+  <meta name="description" content="I asked what happens when a model is trained by fear of punishment instead, with wrong answers costing more than right answers earn. Punishment changed how often the model skipped, not how well it chose when to skip, and in fact pushed the model towards misalignment.">
+  <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+  <script>
+      (function () {
+          try {
+              var saved = localStorage.getItem('theme');
+              var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+              var theme = saved || (prefersDark ? 'dark' : 'light');
+              var root = document.documentElement;
+              root.classList.remove('light', 'dark');
+              root.classList.add(theme === 'light' ? 'light' : 'dark');
+          } catch (e) {}
+      })();
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/css/minimal.css?v=20261020v3" />
+  <link rel="stylesheet" href="/assets/css/post.css?v=20261020v4" />
+</head>
+<body>
+  <div class="m-page">
+    <div class="m-topbar">
+      <a class="m-topbar__name m-mono" href="/">Rahul Krishnan</a>
+      <nav class="m-tabs" aria-label="Site">
+        <a class="m-tab" href="/#about">About</a>
+        <a class="m-tab" href="/#recent">Recent</a>
+        <a class="m-tab" href="/#work">Work</a>
+        <a class="m-tab" href="/#writing" aria-selected="true">Writing</a>
+      </nav>
+      <button id="theme-toggle" type="button" class="m-topbar__theme m-mono" aria-label="Toggle light/dark theme">Theme</button>
+    </div>
+
+    <main id="content">
+      <header class="m-header">
+        <a class="m-back m-mono" href="/#writing">&larr; Writing</a>
+        <h1 class="m-header__title">Fear of punishment did not teach the model to say "I don't know"</h1>
+        <p class="m-header__tagline">I asked what happens when a model is trained by fear of punishment instead, with wrong answers costing more than right answers earn. Punishment changed how often the model skipped, not how well it chose when to skip, and in fact pushed the model towards misalignment.</p>
+        <p class="p-meta m-mono">Rahul Krishnan.<br>An academic project, March to June 2026, in collaboration with Sanjana Deshpande.</p>
+        <div class="p-links m-mono">
+          <a href="https://github.com/rahulk98/project-fear" target="_blank" rel="noopener">Code</a>
+        </div>
+      </header>
+
+      <div class="m-prose p-body">
+<p><strong>TL;DR.</strong></p>
+            <p>Language models are usually trained by the hope of reward: right answers earn points and wrong answers cost nothing. That encourages guessing, which is one reason models make things up. I asked what happens when a model is trained by fear of punishment instead, with wrong answers costing more than right answers earn. The hypothesis was that a model afraid of making mistakes would become better aligned with what we want: honest about what it does not know, saying "I don't know" (an IDK response) and skipping exactly the questions it would otherwise get wrong.</p>
+            <p>I trained Qwen 2.5 1.5B on math problems with GRPO, a standard reinforcement learning method, under eight reward settings ranging from no punishment to punishment only. I then tested each model on six benchmarks.</p>
+            <ul>
+              <li><strong>All eight settings were one dial.</strong> GRPO rescales rewards within each batch of answers, so every setting reduces to a single number: how close a skip sits to a right answer.</li>
+              <li><strong>Turning up the dial meant more skipping, not better skipping.</strong> The model skipped more often (from 14% to 61% of MATH answers), but accuracy on the questions it still answered fell from 61.8% to 51.3%, and its skips landed less often on hard problems.</li>
+              <li><strong>The skips were almost never IDK responses.</strong> At most 0.5% of skips admitted uncertainty. The rest were responses cut off at the length limit or, under heavy punishment, responses written as Python code or left unboxed, which the grader could not score. Instead of becoming more honest, the model learned to avoid being graded, a small but real case of misalignment.</li>
+              <li><strong>The model already knew when it was likely wrong.</strong> A simple probe on its internal state predicts its mistakes. Skipping wherever that probe is least confident beats the punished models by 3 to 11 accuracy points at the same answer rate on GSM8K, and matches them on MATH.</li>
+            </ul>
+            <p>In short, punishment changed how often the model skipped, not how well it chose when to skip, and in fact pushed the model towards misalignment.</p>
+<h2 id="the-question">The question</h2>
+<p>The idea behind this project, FEAR, is simple. If a wrong answer costs more than a skip, a model that wants to maximize its reward should answer only when it is fairly sure, and skip the rest.</p>
+            <p><strong>Setup.</strong></p>
+            <ul>
+              <li>Model: Qwen 2.5 1.5B, trained with GRPO (Shao et al. 2024), a standard reinforcement learning method for reasoning models.</li>
+              <li>Training data: 5883 math problems (hard MATH problems and the longest GSM8K problems).</li>
+              <li>A "skip" is any answer without a final boxed result. There was no explicit skip option.</li>
+              <li>Testing: MATH (5000 problems), GSM8K (1319), AIME 2024 and 2025 (30 each), MMLU-STEM and TruthfulQA, with 16 answers sampled per problem and one best guess. Ranges in brackets are 95% intervals.</li>
+              <li>Details: LoRA, 8 answers per problem during training, 1500 steps, learning rate 1e-6, KL coefficient 0.04, temperature 0.7, at most 1024 generated tokens.</li>
+            </ul>
+            <p>I trained eight reward settings:</p>
+            <div class="p-table">
+              <table>
+                <thead><tr><th>Setting</th><th>Right</th><th>Wrong</th><th>Skip</th><th>Skip value t</th></tr></thead>
+                <tbody>
+                  <tr><td>P0</td><td>+1.0</td><td>0.0</td><td>0.0</td><td>0</td></tr>
+                  <tr><td>S0 (symmetric)</td><td>+1.0</td><td>-1.0</td><td>0.0</td><td>0.50</td></tr>
+                  <tr><td>C1</td><td>+1.0</td><td>-1.0</td><td>+0.2</td><td>0.60</td></tr>
+                  <tr><td>S1</td><td>+1.0</td><td>-2.0</td><td>0.0</td><td>0.67</td></tr>
+                  <tr><td>C2</td><td>+1.0</td><td>-1.0</td><td>+0.5</td><td>0.75</td></tr>
+                  <tr><td>S2</td><td>+0.5</td><td>-2.0</td><td>0.0</td><td>0.80</td></tr>
+                  <tr><td>S3</td><td>+0.1</td><td>-1.0</td><td>0.0</td><td>0.91</td></tr>
+                  <tr><td>S4</td><td>0.0</td><td>-1.0</td><td>0.0</td><td>1.00</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p>S1 to S4 impose increasingly severe penalty on wrong answers, C1 and C2 pay for skipping instead, and P0 never punishes.</p>
+            <p><strong>t</strong> says where a skip sits between a wrong answer and a right one: t = (skip reward - wrong reward) / (right reward - wrong reward). At t = 0 a skip is as bad as a wrong answer, at t = 0.5 it sits halfway, and at t = 1 it is as good as a right answer. It is also the confidence a reward-maximizing model should need before answering: under S3 (t = 0.91), it should answer only when it is more than 91% sure.</p>
+<h2 id="every-setting-was-one-dial">Every setting was one dial</h2>
+<p>GRPO does not use rewards directly. For each problem it samples a group of answers, subtracts the group's average reward from each answer, and divides by how spread out the rewards are. The model is then pushed toward answers that scored above the group average.</p>
+            <p>This rescaling erases most of the reward design. Take a group with one right and three wrong answers. Rewards of +1/-1, +1/0 or even +10/-30 all produce the same training scores: +1.5 for the right answer and -0.5 for each wrong one. Only the order matters, not the size of the gap. So every setting behaves exactly like right = 1, wrong = 0 and skip = t. The settings above are positions of one dial. A group with only right and wrong answers is treated the same under every setting. The dial matters only when a group also contains skips. Here is the training signal for a group of one right, two wrong and one skipped answer:</p>
+            <div class="p-table">
+              <table>
+                <thead><tr><th>Setting</th><th>t</th><th>Right</th><th>Wrong</th><th>Skip</th></tr></thead>
+                <tbody>
+                  <tr><td>S0</td><td>0.50</td><td>+1.306</td><td>-0.783</td><td>+0.261</td></tr>
+                  <tr><td>C1</td><td>0.60</td><td>+1.225</td><td>-0.816</td><td>+0.408</td></tr>
+                  <tr><td>C2</td><td>0.75</td><td>+1.091</td><td>-0.849</td><td>+0.606</td></tr>
+                  <tr><td>S2</td><td>0.80</td><td>+1.046</td><td>-0.856</td><td>+0.665</td></tr>
+                  <tr><td>S3</td><td>0.91</td><td>+0.946</td><td>-0.864</td><td>+0.782</td></tr>
+                  <tr><td>S4</td><td>1.00</td><td>+0.866</td><td>-0.866</td><td>+0.866</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p>Turning the dial up makes skipping more attractive, but by the same amount for every question, so it carries no information about which questions the model will get wrong. A check with the trainer's own code on 12,638 real answer groups confirmed this: two different settings with the same t gave training signals within 0.0007 of each other. Che et al. (2026) analyze the same effect formally.</p>
+            <div class="dial-widget" id="dial-widget">
+              <h3 class="dial-title">Try the dial</h3>
+              <p class="dial-caption">Scores for a group of four answers (one right, two wrong, one skip) after GRPO's normalization, as the skip value t moves from 0 to 1.</p>
+              <div class="dial-control">
+                <label for="dial-t">Skip value t</label>
+                <input type="range" id="dial-t" min="0" max="1" step="0.01" value="0.5">
+                <output for="dial-t" id="dial-t-value">0.50</output>
+              </div>
+              <div class="dial-presets" role="group" aria-label="Set the skip value t">
+                <button type="button" data-t="0">0</button>
+                <button type="button" data-t="0.5">0.5</button>
+                <button type="button" data-t="0.75">0.75</button>
+                <button type="button" data-t="0.91">0.91</button>
+                <button type="button" data-t="1">1</button>
+              </div>
+              <div class="dial-bars" id="dial-bars" aria-live="polite"></div>
+            </div>
+            <script>
+              (function () {
+                var labels = ['right', 'wrong', 'skip'];
+                var shown = [0, 1, 3];
+                var slider = document.getElementById('dial-t');
+                var out = document.getElementById('dial-t-value');
+                var bars = document.getElementById('dial-bars');
+                var buttons = document.querySelectorAll('.dial-presets button');
+                var scale = 1.75;
+                bars.innerHTML = labels.map(function (l) {
+                  return '<div class="dial-row"><span class="dial-label">' + l + '</span>' +
+                    '<span class="dial-track"><span class="dial-bar"></span></span>' +
+                    '<span class="dial-num"></span></div>';
+                }).join('');
+                var rows = bars.querySelectorAll('.dial-row');
+                function advantages(t) {
+                  var r = [1, 0, 0, t];
+                  var mean = r.reduce(function (a, b) { return a + b; }, 0) / r.length;
+                  var ss = r.reduce(function (a, b) { return a + (b - mean) * (b - mean); }, 0);
+                  var std = Math.sqrt(ss / (r.length - 1));
+                  return r.map(function (x) { return std > 0 ? (x - mean) / std : 0; });
+                }
+                function fmt(a) {
+                  var s = Math.abs(a).toFixed(3);
+                  if (s === '0.000') return '0.000';
+                  return (a > 0 ? '+' : '-') + s;
+                }
+                function render() {
+                  var t = parseFloat(slider.value);
+                  out.textContent = t.toFixed(2);
+                  var adv = advantages(t);
+                  shown.forEach(function (k, i) {
+                    var a = adv[k];
+                    var bar = rows[i].querySelector('.dial-bar');
+                    var w = Math.min(Math.abs(a) / scale, 1) * 50;
+                    bar.style.width = w + '%';
+                    bar.style.left = a >= 0 ? '50%' : (50 - w) + '%';
+                    bar.className = 'dial-bar ' + (a >= 0 ? 'is-pos' : 'is-neg');
+                    rows[i].querySelector('.dial-num').textContent = fmt(a);
+                  });
+                  buttons.forEach(function (b) {
+                    b.setAttribute('aria-pressed', parseFloat(b.dataset.t) === t ? 'true' : 'false');
+                  });
+                }
+                slider.addEventListener('input', render);
+                buttons.forEach(function (b) {
+                  b.addEventListener('click', function () { slider.value = b.dataset.t; render(); });
+                });
+                render();
+              })();
+            </script>
+<h2 id="turning-up-the-dial-more-skipping-not-better-skipping">Turning up the dial: more skipping, not better skipping</h2>
+<div class="p-table">
+              <table>
+                <thead><tr><th>Setting</th><th>Skip rate (MATH)</th><th>Accuracy on answered questions</th><th>Skips on hard problems</th></tr></thead>
+                <tbody>
+                  <tr><td>S0 (t = 0.5)</td><td>14%</td><td>61.8%</td><td>80%</td></tr>
+                  <tr><td>S1 (t = 0.67)</td><td>16%</td><td>61.7%</td><td>76%</td></tr>
+                  <tr><td>S3 (t = 0.91)</td><td>20%</td><td>60.2%</td><td>68%</td></tr>
+                  <tr><td>S4 (t = 1)</td><td>61%</td><td>51.3%</td><td>53%</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="table-note">Accuracy is from the best guess. A problem counts as hard if the untrained model solved it less than half the time. Skipping at random would put 50% of skips on hard problems.</p>
+            <figure class="p-figure">
+              <img src="../../grpo-abstention-dial/static/images/fig01_abstention_sweep.png" alt="Skip rate by setting and benchmark" loading="lazy">
+              <figcaption>Figure 1. Skip rate of each setting on six benchmarks. It rises with the penalty everywhere except the two small AIME sets, where S1 skips slightly less than S0 within wide intervals.</figcaption>
+            </figure>
+            <ul>
+              <li><strong>Accuracy on answered questions fell instead of rising.</strong> From S0 to S3 it dropped 1.6 points [0.6, 2.7], and 2.5 points on MATH and 2.7 on GSM8K across sampled answers. On the 1324 MATH problems every setting chose to answer, it fell from 62.6% (S0) to 49.4% (S4).</li>
+              <li><strong>Heavier penalties made skips less targeted at hard problems.</strong> The goal was for the model to skip the problems it would get wrong. From S0 to S3 on MATH, skips on hard problems rose only slightly (from 11.3% to 13.9% of all answers), while skips on easy problems more than doubled (from 2.9% to 6.5%). The share of skips on hard problems therefore fell from 80% to 68%, a drop of 11.5 points [10.6, 12.5], and to 53% at S4, close to the 50% expected from skipping at random. On GSM8K, MMLU-STEM and TruthfulQA, skips were no more likely on hard problems than on easy ones at any penalty. The cause is how GRPO scores a skip: a skip is reinforced when t is higher than its group's average reward, which is roughly the share of right answers. On a hard problem few answers are right, so a skip is reinforced at any t. On an easy problem most answers are right, so a skip is reinforced only when t is high. For a problem the model solves 80% of the time, a skip is discouraged at t = 0.5 but reinforced at t = 0.91. With the answers held fixed, the share of skips on easy problems that receive a positive training signal rises from 19% at t = 0.5 to 69% at t = 0.91 on MATH, and from 5% to 49% on GSM8K.</li>
+              <li>
+                <p><strong>The model's sense of its own reliability did not improve.</strong> For each problem I used the agreement among the model's 16 answers as its confidence. I then sorted problems from most to least confident and measured accuracy as more and more problems are included (Figure 2). If the model's confidence is reliable, its most confident answers are almost all right, so accuracy stays high as problems are added and only drops at the end, where the unsure answers are. I summarize each curve by its average error, where lower is better:</p>
+                <div class="p-table">
+                  <table>
+                    <thead><tr><th>Setting</th><th>MATH</th><th>GSM8K</th></tr></thead>
+                    <tbody>
+                      <tr><td>P0 (no punishment)</td><td>0.107</td><td>0.041</td></tr>
+                      <tr><td>S0</td><td>0.113</td><td>0.050</td></tr>
+                      <tr><td>untrained model</td><td>0.120</td><td>0.066</td></tr>
+                      <tr><td>S3</td><td>0.122</td><td>0.064</td></tr>
+                      <tr><td>S4</td><td>about 0.25</td><td>about 0.29</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+                <p>Punishment did not help: S3 is slightly worse than S0, and P0, which never punishes, is slightly but measurably the best (0.006 better than S0, interval 0.002 to 0.009). S4 collapses. This score also rewards plain accuracy, so part of these small gaps comes from accuracy differences. The curves in Figure 2 show the ranking itself, and for S0 to S3, C1 and C2 they lie almost on top of each other.</p>
+              </li>
+              <li><strong>Paying for skips and punishing guesses did the same thing.</strong> C2 and S2 sit at nearly the same dial position (0.75 and 0.80) and are indistinguishable in accuracy (C2 minus S2: -0.1 points [-0.3, +0.1]) and ranking.</li>
+            </ul>
+            <figure class="p-figure">
+              <img src="../../grpo-abstention-dial/static/images/fig04_auacc_curves.png" alt="Selective accuracy curves on MATH" loading="lazy">
+              <figcaption>Figure 2. Accuracy on the problems each model is most sure about, as more problems are included (MATH). The curves for S0 to S3, C1 and C2 overlap, and only S4 is worse.</figcaption>
+            </figure>
+<h2 id="what-the-skips-really-were">What the skips really were</h2>
+<p>I sorted every skipped answer with an automated Python checker: did it hit the length limit, state an answer without boxing it, contain uncertainty phrases such as "cannot determine", or contain Python code. To test the checker, an LLM read 54 skipped answers and labeled them without seeing the checker's labels. The two agreed on about 89% of skipped answers, weighting each category by how common it is. They agreed in every sampled case for the two largest categories, running out of space and Python code. Most disagreements were between "answer not boxed" and the rare categories. The "unsure" check overcounts, because it also catches math answers such as "there is no solution", so true refusals are even rarer than the table shows.</p>
+            <div class="p-table">
+              <table>
+                <thead><tr><th>Setting, benchmark</th><th>Skipped answers</th><th>Ran out of space</th><th>Answer given but not boxed</th><th>Python code instead</th><th>Said it was unsure</th></tr></thead>
+                <tbody>
+                  <tr><td>P0, MATH</td><td>9,340</td><td>99%</td><td>1%</td><td>0%</td><td>0.0%</td></tr>
+                  <tr><td>S0, MATH</td><td>11,399</td><td>85%</td><td>12%</td><td>3%</td><td>0.1%</td></tr>
+                  <tr><td>S3, MATH</td><td>16,308</td><td>58%</td><td>19%</td><td>22%</td><td>0.3%</td></tr>
+                  <tr><td>S4, MATH</td><td>49,068</td><td>8%</td><td>24%</td><td>68%</td><td>0.4%</td></tr>
+                  <tr><td>S0, GSM8K</td><td>3,650</td><td>3%</td><td>92%</td><td>4%</td><td>0.5%</td></tr>
+                  <tr><td>S4, GSM8K</td><td>18,964</td><td>0.4%</td><td>58%</td><td>41%</td><td>0.2%</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p>IDK responses never exceeded 0.5% of skips. With the symmetric reward, a skip was usually a long solution cut off at the 1024-token limit, which is why those skips lined up with hard problems. With heavier penalties, the model increasingly answered in Python code or without a box, forms the grader could not score, which earned the safe skip reward instead of the penalty. The punishment taught the model to avoid being graded, not to admit uncertainty. This is a small, concrete example of misalignment: the model optimized the measurement (do not get scored as wrong) rather than the behavior the reward was meant to teach (be honest when unsure). In AI safety this is called specification gaming, and it happened here with a reward designed specifically to make the model more careful.</p>
+<h2 id="the-model-already-knew">The model already knew</h2>
+<p>Did the model have the information needed to skip well? I tested this with a linear probe on the symmetric model, S0.</p>
+            <p><strong>Probe.</strong> For 2000 of S0's sampled MATH answers (1000 right, 1000 wrong), I recorded the final-token hidden state (1536 dimensions per layer) and trained a logistic regression to predict correctness. Cross-validation is grouped by question (5 folds), the layer is selected within the training folds, and shuffled labels give 0.51 to 0.55. A problem's confidence is the mean probe score over its answers. GSM8K is handled the same way.</p>
+            <p><strong>Comparison.</strong> AUROC for predicting whether S0's majority answer is correct (0.5 is chance, 1 is perfect):</p>
+            <div class="p-table">
+              <table>
+                <thead><tr><th>Signal</th><th>Cost</th><th>MATH (1663 problems)</th><th>GSM8K (1033 problems)</th></tr></thead>
+                <tbody>
+                  <tr><td>Linear probe</td><td>1 forward pass</td><td>0.78</td><td>0.72</td></tr>
+                  <tr><td>P(True), zero-shot</td><td>1 forward pass</td><td>0.48 to 0.57</td><td>0.57 to 0.59</td></tr>
+                  <tr><td>Semantic entropy, K = 4</td><td>4 samples</td><td>0.81</td><td>0.76</td></tr>
+                  <tr><td>Self-consistency, K = 2 / 4 / 8</td><td>2 / 4 / 8 samples</td><td>0.73 / 0.83 / 0.88</td><td>0.64 / 0.74 / 0.82</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p>One probe pass (0.78) sits between self-consistency at K = 2 and K = 4, so it is worth about three samples (2.96 on MATH, 3.69 on GSM8K). On TruthfulQA with shuffled options it reaches 0.79, against 0.59 for the chosen option letter. The sampling-based signals are slightly optimistic, since their samples overlap with the label.</p>
+            <p>A simple linear classifier thus extracts a correctness signal that asking the model does not. The information is linearly readable in the model's representations, yet the model does not report it when asked, a gap between what it represents and what it says. Three caveats: a TF-IDF classifier on question and answer text gets close (0.78 against the probe's 0.82 per answer on MATH, 0.67 against 0.79 on TruthfulQA), the per-problem score partly reflects problem difficulty, and P(True) may fail simply because a 1.5B model follows that prompt poorly. Probing each answer's own hidden state, controlling for difficulty, and testing larger models would separate these.</p>
+            <p><strong>Probe-guided skipping.</strong> S0 answers greedily and skips its lowest-scoring problems until its answer rate matches a penalty-trained model's. Accuracy on answered problems, paired bootstrap over problems:</p>
+            <div class="p-table">
+              <table>
+                <thead><tr><th>Penalty-trained model</th><th>GSM8K answer rate</th><th>Its accuracy</th><th>Symmetric model + probe</th><th>Gain</th></tr></thead>
+                <tbody>
+                  <tr><td>S1</td><td>91%</td><td>67.8%</td><td>70.7%</td><td>+2.9 [1.2, 4.5]</td></tr>
+                  <tr><td>S2</td><td>84%</td><td>67.8%</td><td>72.5%</td><td>+4.7 [2.4, 7.1]</td></tr>
+                  <tr><td>C2</td><td>84%</td><td>67.2%</td><td>72.6%</td><td>+5.3 [2.9, 7.8]</td></tr>
+                  <tr><td>S3</td><td>72%</td><td>66.2%</td><td>77.2%</td><td>+11.0 [7.5, 14.1]</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p>On MATH it matches S1 to S3 and C2 within noise and beats S4 by 33 points.</p>
+            <p>So the penalty-trained models skip problems they would likely have solved, while the information needed to skip only the likely-wrong ones already exists in the model. Training changed how often the model skips without connecting that behavior to what it represents about its own correctness, a mismatch between internal state and behavior that is a form of misalignment. This does not show that a penalty-trained model knows an answer is right and deliberately skips it: only S0 was probed, and most skips were truncated or ungradeable answers. Probing the penalty-trained models on the questions they skip, and training with a probe-based skip reward, would test both points.</p>
+<h2 id="other-checks">Other checks</h2>
+<ul>
+              <li><strong>3B model.</strong> S0 and P0 reached the same MATH accuracy (42.2% and 41.9%), but S0 skipped about twice as often on MATH (6.9% vs 3.2%) and seven times as often on GSM8K.</li>
+              <li><strong>No normalization.</strong> Without GRPO's subtract-and-divide step the penalty does get through: S2 skipped 46% of MATH problems against 15% for S0 (80% vs 19% on GSM8K), but indiscriminately.</li>
+              <li><strong>A different task.</strong> As judges of reasoning steps (PRM800K), the models' skipping carried over and rose with the dial (34% for S0 to 55% for S4), while judging accuracy stayed flat (63.5% to 64.8%).</li>
+              <li><strong>Per-question skip rewards.</strong> Setting the skip reward per question from answer agreement or from the probe did not target hard problems better than a fixed dial, in an offline test on saved answers.</li>
+              <li><strong>TruthfulQA.</strong> My first copy listed the correct option first, so I re-ran every model with shuffled options: accuracy moved by 2 to 3.5 points and the order of settings held.</li>
+            </ul>
+<h2 id="what-i-take-from-this">What I take from this</h2>
+<ol>
+              <li><strong>The reward design was one dial.</strong> GRPO reduces any right/wrong/skip reward to a single number.</li>
+              <li><strong>Turning up the dial meant more skipping, not better skipping.</strong> Accuracy on answered questions fell, a smaller share of skips landed on hard problems, and almost none of the skips admitted uncertainty. Under heavy penalties the model avoided being graded instead, a small case of misalignment.</li>
+              <li><strong>The model already knew when it was likely wrong.</strong> A cheap probe on its internal state predicts its mistakes, and skipping by that signal matches or beats the penalty-trained models at the same answer rate.</li>
+            </ol>
+            <p><strong>Limits.</strong> One 1.5B model for the main sweep and two settings at 3B. Most settings were trained once. The three trained twice (S0, S3, C2) agreed closely (MATH accuracy 45.9% vs 45.8%, 40.6% vs 40.1%, 42.6% vs 42.6%). "Skip" mixes truncation and formatting with real abstention. I have not tested other training methods, an explicit skip option, larger models or longer training.</p>
+            <p><strong>Related work.</strong> Che et al. (2026) prove the same normalization effect and propose a repair. Liu et al. (2025) show the divide step biases training by question difficulty. Zhu et al. (2025) study training only on wrong answers, which S3 resembles. TruthRL (Wei et al. 2025), Reinforced Hesitation (Mohamadi et al. 2025), TIAR (Pan et al. 2026) and RLCR (Damani et al. 2025) propose other skip and confidence rewards. P(True) (Kadavath et al. 2022) and semantic entropy (Kuhn et al. 2023, Farquhar et al. 2024) are the standard confidence signals compared above.</p>
+            <p><strong>Next steps.</strong> Add an explicit skip option and more room to answer. Reward confidence per answer, for example a stated confidence or a probe-based skip reward. Report where skips land, not just how often. The repository includes an Inspect evaluation that measures this for any model.</p>
+<h2 id="references">References</h2>
+<ul class="references">
+              <li>Che, X., Yuan, Y., Zhao, W. and Yu, C. (2026). Abstention as an Action Can Kill Both the Reward Gradient and the KL Anchor: Collapse Law and Repair for Error-Penalized Reinforcement Learning. <a href="https://arxiv.org/abs/2608.00301" target="_blank" rel="noopener">arXiv:2608.00301</a>.</li>
+              <li>Damani, M. et al. (2025). Beyond Binary Rewards: Training LMs to Reason About Their Uncertainty (RLCR). <a href="https://arxiv.org/abs/2507.16806" target="_blank" rel="noopener">arXiv:2507.16806</a>.</li>
+              <li>Farquhar, S., Kossen, J., Kuhn, L. and Gal, Y. (2024). Detecting hallucinations in large language models using semantic entropy. Nature 630, 625-630.</li>
+              <li>Kadavath, S. et al. (2022). Language Models (Mostly) Know What They Know. <a href="https://arxiv.org/abs/2207.05221" target="_blank" rel="noopener">arXiv:2207.05221</a>.</li>
+              <li>Kuhn, L., Gal, Y. and Farquhar, S. (2023). Semantic Uncertainty: Linguistic Invariances for Uncertainty Estimation in Natural Language Generation. <a href="https://arxiv.org/abs/2302.09664" target="_blank" rel="noopener">arXiv:2302.09664</a>.</li>
+              <li>Liu, Z. et al. (2025). Understanding R1-Zero-Like Training: A Critical Perspective (Dr. GRPO). <a href="https://arxiv.org/abs/2503.20783" target="_blank" rel="noopener">arXiv:2503.20783</a>.</li>
+              <li>Mohamadi, M. A., Wang, T. and Li, Z. (2025). Honesty over Accuracy: Trustworthy Language Models through Reinforced Hesitation. <a href="https://arxiv.org/abs/2511.11500" target="_blank" rel="noopener">arXiv:2511.11500</a>.</li>
+              <li>Pan, M. et al. (2026). TIAR: Trajectory-Informed Advantage Reweighting for LLM Abstention Learning. <a href="https://arxiv.org/abs/2605.25850" target="_blank" rel="noopener">arXiv:2605.25850</a>.</li>
+              <li>Shao, Z. et al. (2024). DeepSeekMath: Pushing the Limits of Mathematical Reasoning in Open Language Models (introduces GRPO). <a href="https://arxiv.org/abs/2402.03300" target="_blank" rel="noopener">arXiv:2402.03300</a>.</li>
+              <li>Wei, Z. et al. (2025). TruthRL: Incentivizing Truthful LLMs via Reinforcement Learning. <a href="https://arxiv.org/abs/2509.25760" target="_blank" rel="noopener">arXiv:2509.25760</a>.</li>
+              <li>Zhu, X. et al. (2025). The Surprising Effectiveness of Negative Reinforcement in LLM Reasoning. <a href="https://arxiv.org/abs/2506.01347" target="_blank" rel="noopener">arXiv:2506.01347</a>.</li>
+            </ul>
+<p class="thanks">Thanks to Sanjana Deshpande, who collaborated on the project.</p>
+      </div>
+    </main>
+
+    <footer class="m-footer m-mono">
+      <span>Rahul Krishnan</span>
+      <div class="m-footer__links">
+        <a href="https://github.com/rahulk98">GitHub</a>
+        <a href="mailto:rahulkrishnan1105@gmail.com">Email</a>
+        <a href="/privacy.html">Privacy Policy</a>
+      </div>
+    </footer>
+  </div>
+
+  <script src="/assets/js/subpage.js" defer></script>
+  <script src="/assets/js/post.js?v=20261020v1" defer></script>
+</body>
+</html>

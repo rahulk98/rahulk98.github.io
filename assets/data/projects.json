@@ -2,6 +2,7 @@
   {
     "title": "Low-Rank Tensor Decomposition for Key-Value Cache Compression in Large Language Models",
     "slug": "kv-cache-tensor",
+    "writing": {"title": "JoLT: Near-Lossless KV Cache Compression", "outcome": "Near-lossless 2x to 3x KV cache compression with accuracy within 2 percentage points of the uncompressed model"},
     "date": "2026-07-01",
     "year": "2026 - Present",
     "featured": true,
@@ -65,6 +66,7 @@
   {
     "title": "Do Safety Probes Survive KV-Cache Compression?",
     "slug": "kv-compression-safety-probes",
+    "writing": {"title": "Do Safety Probes Survive KV-Cache Compression?", "outcome": "Under KV-cache compression, the model's behaviour degraded before the safety probe did."},
     "date": "2026-10-01",
     "year": "2026",
     "featured": false,
@@ -83,6 +85,7 @@
   {
     "title": "A probe can predict when a model will follow a misleading hint, but not whether the hint caused the answer",
     "slug": "cot-hint-probes",
+    "writing": {"title": "A probe can predict when a model will follow a misleading hint, but not whether the hint caused the answer", "outcome": "A probe can flag when a model is likely to follow a misleading hint, but neither probes nor an LLM monitor reading the CoT showed CoT-specific evidence that the hint caused the answer."},
     "date": "2026-10-01",
     "year": "2026",
     "featured": false,
@@ -101,6 +104,7 @@
   {
     "title": "Fear of punishment did not teach the model to say \"I don't know\"",
     "slug": "fear-rlvr",
+    "writing": {"title": "Fear of punishment did not teach the model to say \"I don't know\"", "outcome": "Punishing wrong answers made the model skip more often, not more wisely."},
     "date": "2026-03-01",
     "year": "2026",
     "featured": false,

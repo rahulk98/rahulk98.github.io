@@ -4,28 +4,6 @@
         "label": "Ask about my work",
         "note": "A retrieval assistant indexed over my papers, projects, and CV answers questions here."
     },
-    "news": [
-        {
-            "date": "Jul 2026",
-            "kind": "Paper",
-            "text": "Preprint out: A JoLT for the KV Cache, near-lossless 2x to 3x compression across five models."
-        },
-        {
-            "date": "Sep 2026",
-            "kind": "Paper",
-            "text": "Companion preprint out: Tensor Decomposition of Transformer Key-Value Caches, comparing Tucker, CP, tensor train and t-SVD on the KV cache. In preparation for NLAA."
-        },
-        {
-            "date": "2026",
-            "kind": "Position",
-            "text": "Research assistant with Prof. Dr. Volker Schulz, Department of Mathematics, Universitaet Trier."
-        },
-        {
-            "date": "Sep 2026",
-            "kind": "Education",
-            "text": "MSc Data Science at Universitaet Trier, expected. Current grade 1.5."
-        }
-    ],
     "about": [
         "I am a machine learning researcher and software engineer specializing in efficient LLM inference, numerical optimization, and reliable AI systems. At Universitaet Trier, I research KV cache compression under Prof. Dr. Volker Schulz, pairing graduate research with more than four years of enterprise software development experience at SAP Labs India.",
         "My primary research tackles the memory wall in long-context language models. Through JoLT, an approach combining partial Tucker decomposition with low-bit residuals, I demonstrated near-lossless 2x to 3x KV cache compression across five models—maintaining accuracy within 2 percentage points on 64K-context and GSM8K benchmarks, with a custom fused kernel reducing peak decode memory by 3.61x. I also study model trust, exploring whether step-by-step explanations reflect actual model reasoning and analyzing how asymmetric penalties in RLVR steer model calibration.",
@@ -39,12 +17,17 @@
         {
             "id": "recent",
             "title": "Recent",
-            "tagline": "News, work experience and education."
+            "tagline": "Work experience and education."
         },
         {
             "id": "work",
             "title": "Work",
             "tagline": "Papers on KV cache compression with their headline results, and systems and studies without a publication."
+        },
+        {
+            "id": "writing",
+            "title": "Writing",
+            "tagline": "Write-ups of research projects, each with its main result."
         }
     ]
 }

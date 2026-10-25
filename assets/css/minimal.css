@@ -28,7 +28,7 @@
     --m-bg: #171614;
     --m-panel: #1f1e1b;
     --m-fg: #edeae3;
-    --m-muted: #b8b2a8;
+    --m-muted: #d4cec4;
     --m-rule: #3a3732;
     --m-accent: #d2895c;
     --m-accent-hover: #e5a179;
@@ -38,7 +38,7 @@
     margin: 0;
     background: var(--m-bg);
     color: var(--m-fg);
-    font-family: Newsreader, Georgia, "Times New Roman", serif;
+    font-family: "Source Serif 4", Georgia, "Times New Roman", serif;
     -webkit-font-smoothing: antialiased;
 }
 
@@ -233,48 +233,6 @@
     padding-bottom: 8px;
     border-bottom: 1px solid var(--m-rule);
     margin-bottom: 18px;
-}
-
-.m-rows {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-}
-
-.m-row {
-    display: grid;
-    grid-template-columns: 96px minmax(0, 1fr);
-    gap: 20px;
-    align-items: baseline;
-}
-
-.m-row__meta {
-    font-size: 14px;
-    letter-spacing: 0.04em;
-    color: var(--m-muted);
-    white-space: nowrap;
-}
-
-.m-row__text {
-    font-size: 19px;
-    line-height: 1.65;
-}
-
-.m-row__body {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-}
-
-.m-row__kind {
-    align-self: flex-start;
-    font-size: 12px;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--m-muted);
-    padding: 2px 8px;
-    border: 1px solid var(--m-rule);
-    border-radius: 3px;
 }
 
 /* Experience and education */
@@ -487,7 +445,7 @@
     width: 100%;
     font-size: 19px;
     line-height: 1.6;
-    font-family: Newsreader, Georgia, "Times New Roman", serif;
+    font-family: "Source Serif 4", Georgia, "Times New Roman", serif;
     color: var(--m-fg);
 }
 
@@ -614,7 +572,7 @@
     font-size: 16px;
     font-style: italic;
     color: var(--m-muted);
-    font-family: Newsreader, Georgia, "Times New Roman", serif;
+    font-family: "Source Serif 4", Georgia, "Times New Roman", serif;
 }
 
 [data-design="minimal"] .rag-note {
@@ -726,8 +684,7 @@
     border-bottom-color: var(--m-accent);
 }
 
-.m-filter + .m-section,
-.m-filter + .m-section[hidden] + .m-section {
+.m-filter + .m-section {
     padding-top: 40px;
 }
 
@@ -746,10 +703,9 @@
     border-top: 1px solid var(--m-rule);
 }
 
-/* The section label already draws a rule above the first entry */
-.m-section__label + .m-projects > :first-child {
-    border-top: 0;
-    padding-top: 0;
+/* Items hidden by the work filter */
+.m-projects > [hidden] {
+    display: none;
 }
 
 .m-project__head {
@@ -915,11 +871,6 @@
 
     .m-identity__name {
         font-size: 32px;
-    }
-
-    .m-row {
-        grid-template-columns: minmax(0, 1fr);
-        gap: 4px;
     }
 
     [data-design="minimal"] .rag-form {
