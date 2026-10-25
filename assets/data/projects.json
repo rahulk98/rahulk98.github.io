@@ -81,15 +81,15 @@
     "detail": []
   },
   {
-    "title": "A probe can tell, before the model reasons, whether it will follow a misleading hint",
+    "title": "A probe can predict when a model will follow a misleading hint, but not whether the hint caused the answer",
     "slug": "cot-hint-probes",
     "date": "2026-10-01",
     "year": "2026",
     "featured": false,
     "category": "LLM Research",
     "keywords": ["LLMs & NLP", "Research"],
-    "outcome": "Steering along the probe direction does nothing, even when pushed as hard as a direction that does change behavior.",
-    "summary": "Chain-of-thought (CoT) monitoring assumes that a model's written reasoning shows why it chose its answer. Turpin et al. (2023) showed that this often fails: suggest a wrong option in the prompt and the model moves to it, while its reasoning never mentions the suggestion. I asked whether the hidden state at the end of the prompt already shows that the model is about to follow such a hint, and whether that signal is causal.",
+    "outcome": "A probe can flag when a model is likely to follow a misleading hint, but neither probes nor an LLM monitor reading the CoT showed CoT-specific evidence that the hint caused the answer.",
+    "summary": "Language models often follow a misleading hint without saying so in their chain of thought (CoT); such a CoT is called unfaithful. This matters for safety because reading the CoT is one way to catch a misaligned model, which works only if the CoT shows what drove the answer. On Qwen3 0.6B to 8B, I trained linear probes on hidden states to predict hint-following, then tested two things: whether the probe signal is causal, and whether a probe can tell when the hint caused the answer, which is what makes a CoT unfaithful.",
     "tags": ["Qwen3", "Linear probes", "Activation steering", "BIG-Bench Hard"],
     "stack": [],
     "links": {
