@@ -627,7 +627,7 @@ function buildMinimalWriting() {
             head.className = 'm-project__head';
             const title = document.createElement('a');
             title.className = 'm-project__title';
-            title.href = project.links['project page'];
+            title.href = '/writing/' + project.links['project page'];
             title.textContent = project.writing.title;
             head.appendChild(title);
 
