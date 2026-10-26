@@ -14,12 +14,12 @@
   <meta name="description" content="A probe can flag when a model is likely to follow a misleading hint, but neither probes nor an LLM monitor reading the CoT showed CoT-specific evidence that the hint caused the answer.">
   <meta name="author" content="Rahul Krishnan">
   <meta name="robots" content="index, follow">
-  <link rel="canonical" href="https://rahulkrishnan.me/cot-hint-probes/">
+  <link rel="canonical" href="https://rahulkrishnan.me/writing/cot-hint-probes/">
 
   <meta property="og:type" content="article">
   <meta property="og:title" content="A probe can predict when a model will follow a misleading hint, but not whether the hint caused the answer">
   <meta property="og:description" content="A probe can flag when a model is likely to follow a misleading hint, but neither probes nor an LLM monitor reading the CoT showed CoT-specific evidence that the hint caused the answer.">
-  <meta property="og:url" content="https://rahulkrishnan.me/cot-hint-probes/">
+  <meta property="og:url" content="https://rahulkrishnan.me/writing/cot-hint-probes/">
   <meta property="og:image" content="https://rahulkrishnan.me/cot-hint-probes/static/images/auroc_vs_size_clean.png">
 
   <meta name="twitter:card" content="summary_large_image">
@@ -34,7 +34,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.4/css/bulma.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="static/css/index.css">
+  <link rel="stylesheet" href="static/css/index.css?v=20261026v1">
 
   <script src="static/js/index.js" defer></script>
 </head>
@@ -199,7 +199,7 @@
           <div class="content write-up">
 <p>I compared three detectors of caused versus anyway (Figure 2): the prompt probe, retrained on this label; an <strong>end-of-CoT probe</strong>, which reads the hidden state at the last token of the reasoning; and a <strong>monitor</strong>, an LLM given the prompt, the CoT and the answer and asked how likely it is that the hint caused the answer. I also ran each monitor without the CoT.</p>
 <figure class="paper-figure">
-<img src="static/images/where_detectors_read.png" alt="Where each detector reads" loading="lazy">
+<a class="figure-wide" href="static/images/where_detectors_read.png" target="_blank" rel="noopener"><img src="static/images/where_detectors_read.png" alt="Where each detector reads" loading="lazy"></a>
 <figcaption>Figure 2. The two probes read hidden states before and after the reasoning; the monitor reads the reasoning text.</figcaption>
 </figure>
 <div class="table-container">

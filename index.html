@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-design="minimal">
 <head>
     <!-- Cloudflare Web Analytics -->
     <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "417e4ef4c2944b32a559316091f0f786"}'></script>
@@ -8,7 +8,7 @@
     <script async src="/assets/js/analytics.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rahul Krishnan, Machine Learning Portfolio</title>
+    <title>Rahul Krishnan</title>
     <meta name="description" content="Rahul Krishnan is an MSc Data Science student and research assistant at Universitaet Trier with over four years of software engineering experience at SAP Labs India.">
     <link rel="canonical" href="https://rahulkrishnan.me/">
 
@@ -20,7 +20,7 @@
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://rahulkrishnan.me/">
-    <meta property="og:title" content="Rahul Krishnan, Machine Learning Portfolio">
+    <meta property="og:title" content="Rahul Krishnan">
     <meta property="og:description" content="MSc Data Science student and research assistant at Universitaet Trier with over four years of software engineering experience at SAP Labs India.">
     <meta property="og:image" content="https://rahulkrishnan.me/assets/img/og-image.jpg">
     <meta property="og:image:width" content="1200">
@@ -29,7 +29,7 @@
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="https://rahulkrishnan.me/">
-    <meta property="twitter:title" content="Rahul Krishnan, Machine Learning Portfolio">
+    <meta property="twitter:title" content="Rahul Krishnan">
     <meta property="twitter:description" content="MSc Data Science student and research assistant at Universitaet Trier with over four years of software engineering experience at SAP Labs India.">
     <meta property="twitter:image" content="https://rahulkrishnan.me/assets/img/og-image.jpg">
 
@@ -47,32 +47,8 @@
         })();
     </script>
 
-    <!-- Preload critical resources -->
-    <link rel="preload" href="assets/css/styles.css?v=20260807v1" as="style">
-    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap" as="style">
+    <link rel="stylesheet" href="assets/css/minimal.css?v=20261026v1">
 
-    <link rel="stylesheet" href="assets/css/styles.css?v=20260807v1">
-    <link rel="stylesheet" href="assets/css/blog.css?v=20260412v1">
-    <link rel="stylesheet" href="assets/css/minimal.css?v=20261020v3">
-    <script>
-        // Apply the last known design immediately so a repeat visit does not
-        // flash the other one. config.json is still the source of truth.
-        (function () {
-            // First visit has no cached choice, so assume the design config.json
-            // currently ships. Without this the classic markup paints first.
-            var design = 'minimal';
-            try {
-                var override = new URLSearchParams(window.location.search).get('design');
-                var cached = override || localStorage.getItem('siteDesign');
-                if (cached === 'classic' || cached === 'minimal') {
-                    design = cached;
-                }
-            } catch (error) { /* keep the default */ }
-            document.documentElement.dataset.design = design;
-        })();
-    </script>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap">
-    
     <!-- Structured Data -->
     <script type="application/ld+json">
     {
@@ -101,227 +77,7 @@
 <body>
     <div id="minimal-root"></div>
 
-    <header class="header">
-        <div class="container">
-            <nav class="nav">
-                <button class="mobile-menu-toggle" aria-expanded="false" aria-label="Toggle navigation menu">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </button>
-                <ul class="nav-list" role="menu">
-                    <li role="menuitem"><a href="#hero">Home</a></li>
-                    <li role="menuitem"><a href="#about">About</a></li>
-                    <li role="menuitem"><a href="#experience">Experience</a></li>
-                    <li role="menuitem"><a href="#projects">Projects</a></li>
-                    <li role="menuitem"><a href="#skills">Skills</a></li>
-                    <li role="menuitem"><a href="#education">Education</a></li>
-                    <li role="menuitem"><a href="#contact">Contact</a></li>
-                </ul>
-                <div class="theme-switcher">
-                    <button id="theme-toggle" aria-label="Toggle light/dark theme"></button>
-                </div>
-            </nav>
-        </div>
-    </header>
-
-    <main class="main">
-        <section id="hero" class="hero">
-            <div class="container">
-                <div class="hero-content">
-                    <div class="hero-image">
-                        <picture>
-                            <source srcset="assets/img/profile-600.webp" type="image/webp">
-                            <img src="assets/img/profile-600.jpg" alt="Rahul Krishnan, MSc Data Science Student"
-                                 width="300" height="300" loading="eager" fetchpriority="high">
-                        </picture>
-                        <div class="hero-text">
-                            <h1 id="hero-name">Rahul Krishnan</h1>
-                            <p class="hero-subtitle" id="hero-subtitle">MSc Data Science student and research assistant at Universitaet Trier with over four years of software engineering experience at SAP Labs India. I build efficient and reliable machine learning systems, from LLM inference and evaluation to recommender systems and cloud deployment.</p>
-                            <div class="cta-group">
-                                <a href="#projects" class="cta-button" id="hero-cta" aria-label="View my projects">View My Work</a>
-                                <a href="assets/resume/Rahul_Krishnan_Resume.pdf" class="cta-button cta-secondary" target="_blank" rel="noopener" aria-label="View my resume">View My Resume</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div id="rag-pane" class="rag-pane" aria-live="polite">
-                        <!-- RAG Header -->
-                        <div class="rag-header">
-                            <div class="rag-title-row">
-                                <h3 class="rag-title">AI-Powered Q&A</h3>
-                                <span class="rag-chip">RAG</span>
-                                <button id="rag-info-btn" class="rag-info-btn" aria-label="How it works" title="How it works">?</button>
-                            </div>
-                            <p class="rag-subtitle">Context-aware answers sourced from my resume and project documents.</p>
-                        </div>
-
-                        
-
-                        
-                        
-                        <!-- Enhanced thinking states -->
-                        <div id="rag-thinking" class="rag-thinking" hidden>
-                            <div class="thinking-stage" id="thinking-retrieval">
-                                <div class="thinking-icon"></div>
-                                <span class="thinking-text">Retrieving context...</span>
-                            </div>
-                            <div class="thinking-stage" id="thinking-generation">
-                                <div class="thinking-icon"></div>
-                                <span class="thinking-text">Generating answer...</span>
-                            </div>
-                        </div>
-                        
-                        <div id="rag-output" class="rag-output">
-                            <div class="rag-bg-title">Ask anything about Rahul</div>
-                        </div>
-                        
-                        <form id="rag-form" class="rag-form">
-                            <label class="sr-only" for="rag-input">Ask a question</label>
-                            <input id="rag-input" type="text" placeholder="Ask a question about Rahul" autocomplete="off">
-                            <button id="rag-send" type="submit" aria-label="Send">Send</button>
-                        </form>
-                        
-                        <!-- Powered by section -->
-                        <div class="rag-credits">
-                            <span class="credits-text">Powered by <span class="credits-link" id="llm-link">OpenRouter</span> and <span class="credits-link" id="tech-stack-link">LlamaIndex</span></span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-        <div class="container">
-            <section id="about" class="section">
-                <h2>About Me</h2>
-                <!-- Paragraphs will be injected from assets/data/personal.json by assets/js/main.js -->
-            </section>
-
-            <section id="experience" class="section">
-                <h2>Experience</h2>
-                <div id="experience-list"></div>
-            </section>
-
-            <section id="projects" class="section">
-                <h2>Projects</h2>
-                <div class="project-filters" id="project-filters">
-                    <!-- Filter buttons will be dynamically generated from project categories - Updated 2025-10-19 -->
-                </div>
-                <div id="project-list" class="project-grid"></div>
-            </section>
-
-            <section id="skills" class="section">
-                <h2>Skills</h2>
-                <div class="skills-grid" id="skills-container">
-                  <!-- Skills will be loaded from JSON data -->
-                </div>
-            </section>
-
-            <section id="education" class="section education" aria-labelledby="education-title">
-                <div class="education__inner">
-                    <h2 id="education-title" class="education__title">Education</h2>
-                    <div class="education__list" id="education-list" role="list">
-                        <!-- Education entries injected as <article class='edu-card' role='listitem'> -->
-                    </div>
-                </div>
-            </section>
-
-            <section id="certifications" class="section certifications" aria-labelledby="certifications-title">
-                <div class="certifications__inner">
-                    <h2 id="certifications-title" class="certifications__title">Certifications</h2>
-                    <div class="certifications__grid" id="certifications-list" role="list"></div>
-                </div>
-            </section>
-
-            <section id="publications" class="section">
-                <h2>Publications</h2>
-                <ul id="publications-list">
-                  <!-- Publications will be loaded from JSON data -->
-                </ul>
-            </section>
-
-            <!-- Blog section temporarily disabled
-            <section id="blog-teaser" class="section" hidden>
-                <h2>Recent Writing</h2>
-                <div class="blog-teaser-grid" id="blog-teaser-list"></div>
-                <div style="text-align:center;">
-                    <a class="cta-button cta-secondary" href="/blog/">View all posts</a>
-                </div>
-            </section>
-            -->
-
-
-            <section id="contact" class="section">
-                <h2>Get In Touch</h2>
-                <div style="display:flex;justify-content:center;">
-                    <div class="contact-card">
-                        <p>Interested in collaboration or have a project in mind? Let's connect!</p>
-                        <div class="social-links">
-                            <a href="mailto:rahulkrishnan1105@gmail.com" aria-label="Email Rahul Krishnan">Email</a>
-                            <a href="https://github.com/rahulk98" target="_blank" rel="noopener" aria-label="View Rahul's GitHub profile">GitHub</a>
-                        </div>
-                    </div>
-                </div>
-            </section>
-        </div>
-    </main>
-
-    <footer class="footer">
-        <div class="container">
-            <p id="footer-content">&copy; 2024 Rahul Krishnan. All rights reserved. | <a href="privacy.html">Privacy Policy</a></p>
-        </div>
-    </footer>
-
-    <div id="project-modal" class="modal">
-        <div class="modal-content">
-            <span class="close-button">&times;</span>
-            <h2 id="modal-title"></h2>
-            <p id="modal-summary"></p>
-            <p id="modal-description"></p>
-            <div id="modal-detail" class="project-detail"></div>
-            <div id="modal-highlights-container" class="highlights" hidden>
-                <h3>Highlights</h3>
-                <ul id="modal-highlights"></ul>
-            </div>
-            <div id="modal-stack" class="tags"></div>
-            <div id="modal-links" class="actions"></div>
-        </div>
-    </div>
-
-    <!-- RAG How It Works Modal -->
-    <div id="rag-info-modal" class="modal">
-        <div class="modal-content">
-            <span class="close-button" id="rag-modal-close">&times;</span>
-            <h2>How this AI works</h2>
-            <div class="rag-explanation">
-                <div class="explanation-item">
-                    <div class="explanation-icon">1</div>
-                    <div class="explanation-content">
-                        <h4>Hybrid retrieval</h4>
-                        <p>Embeds your query locally and runs it through both BM25 keyword search and vector search over Rahul's documents, fusing the two result lists.</p>
-                    </div>
-                </div>
-                <div class="explanation-item">
-                    <div class="explanation-icon">2</div>
-                    <div class="explanation-content">
-                        <h4>Reranks the context</h4>
-                        <p>A local cross-encoder reranks the fused candidates so only the most relevant passages from Rahul's resume, projects, and notes reach the model.</p>
-                    </div>
-                </div>
-                <div class="explanation-item">
-                    <div class="explanation-icon">3</div>
-                    <div class="explanation-content">
-                        <h4>Generates grounded answers</h4>
-                        <p>An open model served via OpenRouter answers from the retrieved passages. Follow-up questions work too: the conversation is condensed into a standalone query first.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <p class="tech-stack-info">Built with <strong>LlamaIndex</strong>, <strong>OpenRouter</strong>, and <strong>local embeddings + reranker</strong> (ONNX, zero per-query API cost)</p>
-            </div>
-        </div>
-    </div>
-
-
-    <script src="assets/js/minimal.js?v=20261025v1"></script>
-    <script src="assets/js/main.js?v=20261018v1"></script>
+    <script src="assets/js/minimal.js?v=20261026v1"></script>
+    <script src="assets/js/main.js?v=20261026v1"></script>
 </body>
 </html>

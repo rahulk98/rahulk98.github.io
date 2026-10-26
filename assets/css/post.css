@@ -362,3 +362,15 @@
         padding: 6px 5px;
     }
 }
+
+/* Wide diagrams keep a readable size on phones and scroll sideways; tapping opens the full image */
+.p-figure .figure-wide {
+    display: block;
+    overflow-x: auto;
+}
+
+@media (max-width: 560px) {
+    .p-figure .figure-wide img {
+        min-width: 640px;
+    }
+}

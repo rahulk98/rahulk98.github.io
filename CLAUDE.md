@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Static portfolio website for Rahul Krishnan, deployed on GitHub Pages at `rahulkrishnan.me`. Built with vanilla HTML, CSS, and JavaScript - no build tools or frameworks.
+Static portfolio website for Rahul Krishnan, deployed on GitHub Pages at `rahulkrishnan.me`. Vanilla HTML, CSS, and JavaScript, no build step or frameworks.
 
 ## Development
 
@@ -18,36 +18,25 @@ No build step, linting, or test suite exists. Changes are deployed by pushing to
 
 ## Architecture
 
-**Data-driven rendering**: All content is stored as JSON in `assets/data/` and loaded at runtime by `assets/js/main.js`. The HTML files contain structural templates; `main.js` fetches JSON data via `loadAllData()` then populates DOM sections (projects, experience, skills, education, publications, navigation, footer).
-
-Key data files and what they feed:
-- `projects.json` - project cards on index page (category filtering, Problem/Role/Outcome structure)
-- `experience.json`, `education.json`, `publications.json`, `skills.json` - respective sections
-- `personal.json` - hero/about section, contact info
-- `site.json` - site-wide metadata (title, description, OG tags)
-- `navigation.json` - nav links; `footer.json` - footer content
-- `privacy.json` - privacy policy content; `error.json` - 404 page content
-- `config.json` - registry of all data file paths and section render order
-
-Section render order (from config.json): hero -> about -> experience -> projects -> skills -> education -> publications -> contact
+**Home page**: `index.html` is a shell. `assets/js/main.js` runs `initializeApp()`: `loadAllData()` fetches every file listed in `assets/data/config.json` (no-cache) into `window.<name>Data`, then `renderMinimal()` (in `assets/js/minimal.js`) builds the tabs About, Recent, Work (All/Research/Projects filter) and Writing, then the theme toggle and RAG chat are set up. To change content, edit the JSON in `assets/data/` (see `assets/data/README.md`), not the HTML.
 
 **Pages**:
-- `index.html` - main portfolio page (all sections)
-- `project.html` - individual project detail page (reads project slug from URL, renders from projects.json)
-- `privacy.html` - privacy policy
-- `404.html` - custom error page
+- `index.html` - home page (tabs)
+- `project.html` - project detail page (reads the slug from the URL, renders from projects.json)
+- `privacy.html`, `404.html`
+- `writing/<slug>/index.html` - write-ups in the site design (`minimal.css` + `post.css`, `post.js` section rail). These are the canonical versions; the Writing tab links here.
+- `<slug>/index.html` - older academic-template copies of the same write-ups (Bulma, own `static/` folder). Their canonical tag points to `writing/<slug>/` and they are not in the sitemap.
 
-**Theming**: Dark/light mode via CSS custom properties in `assets/css/styles.css` (`:root` and `.dark` class). JS toggles the class and persists to localStorage.
+**Permanent URLs**: `/cot-hint-probes/`, `/grpo-abstention-dial/` and `/kv-compression-safety-probes/` were linked in job applications. Never delete, rename, or redirect them; they must keep returning the page. Check all three return 200 after any push that touches those folders.
 
-**RAG chatbot**: `main.js` includes `initializeRag()` and `setupRagModal()` for an AI Q&A feature embedded in the site.
+**Write-up updates**: a write-up exists twice (academic copy and `writing/` copy). When the source post changes, update both, copy text verbatim, and keep figures in `<slug>/static/images/` (the `writing/` page references them from there).
 
-**Initialization flow**: `DOMContentLoaded` -> `initializeApp()` -> `loadAllData()` (fetches all JSON) -> individual `load*()` functions populate DOM -> UI setup functions (theme, modal, nav, filtering, scroll, intersection observer).
+**Theming**: CSS custom properties in `assets/css/minimal.css`; dark mode via the `dark` class on `<html>`, persisted to localStorage and applied before first paint.
 
 ## Key Conventions
 
-- Project data uses the schema: `title`, `category` (ml/nlp/deployment), `slug`, `stack[]`, `summary`, `problem`, `role`, `outcome`, `links{github, demo}`
-- CSS uses custom properties (`--accent`, `--font-family-base`, `--section-padding-desktop`) - modify `:root` in styles.css for theming
-- Responsive breakpoints: mobile <768px, tablet 768-1024px, desktop 1024px+
+- 4-space indentation. Bump the `?v=` stamp on a CSS or JS link when the file changes.
+- A project with a write-up has `links["project page"]` and a `writing` object (`title`, `outcome`) in `projects.json`.
 - Umami website ID: `cd8992ec-09ff-4125-9feb-fcd610bd4e2f` (self-hosted on personal-box, dashboard tailnet-only)
-- Every page (incl. `_layouts/default.html` and `jolt-thesis/index.html`) loads Umami only through `<script async src="/assets/js/analytics.js">`, which injects the tracker after `load`. Never add the Umami tag directly or with `defer`: a hanging analytics host would then hold back `DOMContentLoaded`, and with it all of `main.js` rendering, until the connection times out.
+- Every page loads Umami only through `<script async src="/assets/js/analytics.js">`, which injects the tracker after `load`. Never add the Umami tag directly or with `defer`: a hanging analytics host would then hold back `DOMContentLoaded`, and with it all home page rendering, until the connection times out.
 - The RAG backend (`rag.rahulkrishnan.me`, also on personal-box) may be offline: `initializeRag()` probes `/health` and disables the chat with an offline note rather than failing. Its CORS only allows `https://rahulkrishnan.me`, so the chat always shows offline on a local server.

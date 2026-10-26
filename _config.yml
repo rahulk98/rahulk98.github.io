@@ -1,12 +1,7 @@
 title: Rahul Krishnan
-description: Technical writing on machine learning, data science, and software engineering.
+description: Machine learning research and engineering by Rahul Krishnan.
 url: https://rahulkrishnan.me
 baseurl: ""
-
-permalink: /blog/:year/:month/:slug/
-
-plugins:
-  - jekyll-feed
 
 exclude:
   - generate_thumbnails.py

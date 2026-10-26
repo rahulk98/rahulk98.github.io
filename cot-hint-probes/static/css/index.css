@@ -608,3 +608,15 @@ a:focus {
 .references a {
   overflow-wrap: anywhere;
 }
+
+/* Wide diagrams keep a readable size on phones and scroll sideways; tapping opens the full image */
+.paper-figure .figure-wide {
+    display: block;
+    overflow-x: auto;
+}
+
+@media screen and (max-width: 768px) {
+    .paper-figure .figure-wide img {
+        min-width: 640px;
+    }
+}

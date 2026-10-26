@@ -4,6 +4,21 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>JoLT: Near-Lossless KV Cache Compression - Rahul Krishnan</title>
+  <meta name="description" content="JoLT jointly allocates Tucker ranks and low-bit residual budgets to compress the LLM KV cache near-losslessly through 3x, with a fused decode kernel that cuts peak decode memory by 3.61x.">
+  <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "417e4ef4c2944b32a559316091f0f786"}'></script>
+  <script async src="/assets/js/analytics.js"></script>
+  <meta name="author" content="Rahul Krishnan">
+  <meta name="robots" content="index, follow">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="JoLT: Near-Lossless KV Cache Compression">
+  <meta property="og:description" content="JoLT jointly allocates Tucker ranks and low-bit residual budgets to compress the LLM KV cache near-losslessly through 3x, with a fused decode kernel that cuts peak decode memory by 3.61x.">
+  <meta property="og:url" content="https://rahulkrishnan.me/writing/jolt-thesis/">
+  <meta property="og:image" content="https://rahulkrishnan.me/jolt-thesis/static/images/teaser_free_zone.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="JoLT: Near-Lossless KV Cache Compression">
+  <meta name="twitter:description" content="JoLT jointly allocates Tucker ranks and low-bit residual budgets to compress the LLM KV cache near-losslessly through 3x, with a fused decode kernel that cuts peak decode memory by 3.61x.">
+  <meta name="twitter:image" content="https://rahulkrishnan.me/jolt-thesis/static/images/teaser_free_zone.png">
+  <link rel="canonical" href="https://rahulkrishnan.me/writing/jolt-thesis/">
   <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
   <script>
       (function () {
@@ -21,7 +36,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/assets/css/minimal.css?v=20261020v3" />
-  <link rel="stylesheet" href="/assets/css/post.css?v=20261020v4" />
+  <link rel="stylesheet" href="/assets/css/post.css?v=20261026v1" />
   <style>
     /* Animated teaser: the design's stage scales itself to this box, which
        keeps a 16:9 frame plus the 44px playback bar the engine draws. */

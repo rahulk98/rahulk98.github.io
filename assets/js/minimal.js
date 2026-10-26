@@ -1,13 +1,5 @@
 /*
- * Minimal design renderer.
- *
- * The site ships two designs. config.json decides which one runs:
- *   "design": "classic"  -> the original sectioned portfolio in index.html
- *   "design": "minimal"  -> the single-column researcher page built here
- *
- * Append ?design=classic or ?design=minimal to any URL to override the config
- * for one visit. The resolved choice is cached so repeat visits do not flash
- * the other design.
+ * Minimal design renderer: the single-column researcher page built into #minimal-root.
  */
 
 const MINIMAL_FONTS_HREF = 'https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,500;1,8..60,400&family=IBM+Plex+Mono:wght@400;500&display=swap';
@@ -22,51 +14,11 @@ let minimalFilterButtons = {};
 let minimalActiveTab = 'about';
 let minimalCtx = null;
 
-function resolveDesign(config) {
-    const options = (config && config.designOptions) || ['classic', 'minimal'];
-    let choice = null;
-
-    try {
-        choice = new URLSearchParams(window.location.search).get('design');
-    } catch (error) {
-        choice = null;
-    }
-
-    // Whether the choice came from a real source rather than the last-resort
-    // fallback. Caching the fallback would pin a visitor to it for good after a
-    // single failed config fetch.
-    let resolved = options.includes(choice);
-
-    if (!resolved) {
-        const fromConfig = config && config.design;
-        choice = fromConfig || 'classic';
-        resolved = Boolean(fromConfig) && options.includes(choice);
-    }
-    if (!options.includes(choice)) {
-        choice = 'classic';
-        resolved = false;
-    }
-
-    if (resolved) {
-        try {
-            localStorage.setItem('siteDesign', choice);
-        } catch (error) {
-            // Storage can be unavailable in private mode. The config still decides.
-        }
-    }
-
-    return choice;
-}
-
 function renderMinimal() {
     const root = document.getElementById('minimal-root');
     if (!root) return;
 
     loadMinimalFonts();
-
-    // The classic markup is removed rather than hidden so that shared element
-    // ids (#rag-pane, #theme-toggle) resolve to the minimal page.
-    document.querySelectorAll('.header, .main, .footer').forEach(el => el.remove());
 
     const personal = window.personalData || {};
     const site = window.siteData || {};
@@ -329,7 +281,7 @@ function buildMinimalAsk(minimal) {
         section.appendChild(note);
     }
 
-    // Same element ids the classic hero used, so initializeRag() runs unchanged.
+    // Element ids that initializeRag() in main.js expects.
     const pane = document.createElement('div');
     pane.id = 'rag-pane';
     pane.className = 'rag-pane';

@@ -5,6 +5,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>A probe can predict when a model will follow a misleading hint, but not whether the hint caused the answer - Rahul Krishnan</title>
   <meta name="description" content="A probe can flag when a model is likely to follow a misleading hint, but neither probes nor an LLM monitor reading the CoT showed CoT-specific evidence that the hint caused the answer.">
+  <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "417e4ef4c2944b32a559316091f0f786"}'></script>
+  <script async src="/assets/js/analytics.js"></script>
+  <meta name="author" content="Rahul Krishnan">
+  <meta name="robots" content="index, follow">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="A probe can predict when a model will follow a misleading hint, but not whether the hint caused the answer">
+  <meta property="og:description" content="A probe can flag when a model is likely to follow a misleading hint, but neither probes nor an LLM monitor reading the CoT showed CoT-specific evidence that the hint caused the answer.">
+  <meta property="og:url" content="https://rahulkrishnan.me/writing/cot-hint-probes/">
+  <meta property="og:image" content="https://rahulkrishnan.me/cot-hint-probes/static/images/auroc_vs_size_clean.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="A probe can predict when a model will follow a misleading hint, but not whether the hint caused the answer">
+  <meta name="twitter:description" content="A probe can flag when a model is likely to follow a misleading hint, but neither probes nor an LLM monitor reading the CoT showed CoT-specific evidence that the hint caused the answer.">
+  <meta name="twitter:image" content="https://rahulkrishnan.me/cot-hint-probes/static/images/auroc_vs_size_clean.png">
+  <link rel="canonical" href="https://rahulkrishnan.me/writing/cot-hint-probes/">
   <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
   <script>
       (function () {
@@ -22,7 +36,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/assets/css/minimal.css?v=20261020v3" />
-  <link rel="stylesheet" href="/assets/css/post.css?v=20261020v4" />
+  <link rel="stylesheet" href="/assets/css/post.css?v=20261026v1" />
 </head>
 <body>
   <div class="m-page">
@@ -92,7 +106,7 @@
 <h2 id="a-strong-monitor-s-advantage-does-not-come-from-the-cot">A strong monitor's advantage does not come from the CoT</h2>
 <p>I compared three detectors of caused versus anyway (Figure 2): the prompt probe, retrained on this label; an <strong>end-of-CoT probe</strong>, which reads the hidden state at the last token of the reasoning; and a <strong>monitor</strong>, an LLM given the prompt, the CoT and the answer and asked how likely it is that the hint caused the answer. I also ran each monitor without the CoT.</p>
 <figure class="p-figure">
-<img src="../../cot-hint-probes/static/images/where_detectors_read.png" alt="Where each detector reads" loading="lazy">
+<a class="figure-wide" href="../../cot-hint-probes/static/images/where_detectors_read.png" target="_blank" rel="noopener"><img src="../../cot-hint-probes/static/images/where_detectors_read.png" alt="Where each detector reads" loading="lazy"></a>
 <figcaption>Figure 2. The two probes read hidden states before and after the reasoning; the monitor reads the reasoning text.</figcaption>
 </figure>
 <div class="p-table">
