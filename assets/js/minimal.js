@@ -613,7 +613,7 @@ function buildMinimalProject(project) {
     title.className = 'm-project__title';
     title.textContent = project.title;
     if (project.slug) {
-        title.href = (project.links && project.links['project page']) || `project.html?slug=${encodeURIComponent(project.slug)}`;
+        title.href = (project.links && project.links['project page']) || `/projects/${encodeURIComponent(project.slug)}/`;
     }
     head.appendChild(title);
 

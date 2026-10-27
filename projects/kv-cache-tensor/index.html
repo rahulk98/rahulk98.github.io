@@ -1,0 +1,72 @@
+<!DOCTYPE html><html lang="en" data-design="minimal"><head>
+    <!-- Cloudflare Web Analytics -->
+    <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon="{&quot;token&quot;: &quot;417e4ef4c2944b32a559316091f0f786&quot;}"></script>
+
+    <!-- Umami Analytics (self-hosted) -->
+    <script async="" src="/assets/js/analytics.js"></script>
+    <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Low-Rank Tensor Decomposition for Key-Value Cache Compression in Large Language Models - Rahul Krishnan</title>
+  <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="/assets/img/favicon-32.png" type="image/png" sizes="32x32">
+  <link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
+  <script>
+      (function () {
+          try {
+              var saved = localStorage.getItem('theme');
+              var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+              var theme = saved || (prefersDark ? 'dark' : 'light');
+              var root = document.documentElement;
+              root.classList.remove('light', 'dark');
+              root.classList.add(theme === 'light' ? 'light' : 'dark');
+          } catch (e) {}
+      })();
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+  <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,500;1,8..60,400&amp;family=IBM+Plex+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/css/minimal.css?v=20261020v3">
+<link rel="canonical" href="https://rahulkrishnan.me/projects/kv-cache-tensor/"><meta name="description" content="For my registered MSc thesis at Universitaet Trier, I am developing JoLT for memory-efficient LLM inference. It combines partial Tucker decomposition with a compact low-bit correction term (a rotated residual) and an optimization step (Lagrangian budget allocation) that decides how much to compress each part of the cache under a fixed memory budget. The related preprint is A JoLT for the KV Cache: https://arxiv.org/abs/2607.12550."><script type="application/ld+json">{"@context":"https://schema.org","@type":"CreativeWork","name":"Low-Rank Tensor Decomposition for Key-Value Cache Compression in Large Language Models","description":"For my registered MSc thesis at Universitaet Trier, I am developing JoLT for memory-efficient LLM inference. It combines partial Tucker decomposition with a compact low-bit correction term (a rotated residual) and an optimization step (Lagrangian budget allocation) that decides how much to compress each part of the cache under a fixed memory budget. The related preprint is A JoLT for the KV Cache: https://arxiv.org/abs/2607.12550.","url":"https://rahulkrishnan.me/projects/kv-cache-tensor/","author":{"@type":"Person","name":"Rahul Krishnan","url":"https://rahulkrishnan.me/"}}</script></head>
+<body>
+  <div class="m-page">
+    <div class="m-topbar">
+      <a class="m-topbar__name m-mono" href="/">Rahul Krishnan</a>
+      <nav class="m-tabs" aria-label="Site">
+        <a class="m-tab" href="/#about">About</a>
+        <a class="m-tab" href="/#recent">Recent</a>
+        <a class="m-tab" href="/#work" aria-selected="true">Work</a>
+        <a class="m-tab" href="/#writing">Writing</a>
+      </nav>
+      <button id="theme-toggle" type="button" class="m-topbar__theme m-mono" aria-label="Toggle light/dark theme">Theme</button>
+    </div>
+
+    <main id="content">
+      <header class="m-header">
+        <a class="m-back m-mono" id="back-link" href="/#research">← Research</a>
+        <h1 class="m-header__title" id="project-title">Low-Rank Tensor Decomposition for Key-Value Cache Compression in Large Language Models</h1>
+        <p class="m-header__tagline" id="project-summary">For my registered MSc thesis at Universitaet Trier, I am developing JoLT for memory-efficient LLM inference. It combines partial Tucker decomposition with a compact low-bit correction term (a rotated residual) and an optimization step (Lagrangian budget allocation) that decides how much to compress each part of the cache under a fixed memory budget. The related preprint is A JoLT for the KV Cache: https://arxiv.org/abs/2607.12550.</p>
+      </header>
+      <div class="m-panel m-detail" id="project-body">
+          <div class="m-paper__result"><span class="m-paper__result-label m-mono">Result</span><p class="m-paper__result-text">Near-lossless 2x to 3x KV cache compression with accuracy within 2 percentage points of the uncompressed model</p></div>
+          <div class="m-prose"><p>KV caches can become a major memory cost during long-context LLM inference. In my thesis, I combine partial Tucker decomposition, a low-rank factorization over token and feature modes, with a rotated low-bit residual that cheaply corrects the approximation.</p><p>I use a Lagrangian dual to jointly choose the compression settings (decomposition ranks and residual bit widths) under a storage budget. Across five models and four model families, JoLT achieved near-lossless 2x to 3x compression while keeping accuracy within 2 percentage points of the uncompressed model. I evaluated it on 64K long-context retrieval and GSM8K reasoning.</p></div>
+          <div class="m-project__stack m-mono"><span>PyTorch</span><span>Tucker Decomposition</span><span>Lagrangian Optimization</span><span>LLM Inference</span></div>
+          <div class="m-paper__links m-mono"><a href="https://arxiv.org/abs/2607.12550" target="_blank" rel="noopener">Preprint</a><a href="/jolt-thesis/" target="_blank" rel="noopener">Project page</a></div>
+        </div>
+    </main>
+
+    <footer class="m-footer m-mono">
+      <span>Rahul Krishnan</span>
+      <div class="m-footer__links">
+        <a href="https://github.com/rahulk98">GitHub</a>
+        <a href="mailto:rahulkrishnan1105@gmail.com">Email</a>
+        <a href="/privacy.html">Privacy Policy</a>
+      </div>
+    </footer>
+  </div>
+
+  <script src="/assets/js/subpage.js" defer=""></script>
+
+
+
+</body></html>

@@ -96,6 +96,7 @@
           return;
         }
         document.title = `${project.title} - Rahul Krishnan`;
+        document.querySelector('link[rel="canonical"]').href = 'https://rahulkrishnan.me/projects/' + encodeURIComponent(project.slug) + '/';
 
         if ((project.keywords || []).includes('Research')) {
           const back = document.getElementById('back-link');

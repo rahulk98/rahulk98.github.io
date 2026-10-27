@@ -12,6 +12,11 @@ exclude:
   - vendor
   - .jekyll-cache
   - node_modules
+  - scripts
+  - tests
+  - docs
+  - package.json
+  - package-lock.json
   - .venv
   - Gemfile
   - Gemfile.lock

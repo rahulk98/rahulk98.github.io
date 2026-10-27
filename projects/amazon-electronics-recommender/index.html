@@ -1,0 +1,72 @@
+<!DOCTYPE html><html lang="en" data-design="minimal"><head>
+    <!-- Cloudflare Web Analytics -->
+    <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon="{&quot;token&quot;: &quot;417e4ef4c2944b32a559316091f0f786&quot;}"></script>
+
+    <!-- Umami Analytics (self-hosted) -->
+    <script async="" src="/assets/js/analytics.js"></script>
+    <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Amazon Electronics Recommender System - Rahul Krishnan</title>
+  <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="/assets/img/favicon-32.png" type="image/png" sizes="32x32">
+  <link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
+  <script>
+      (function () {
+          try {
+              var saved = localStorage.getItem('theme');
+              var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+              var theme = saved || (prefersDark ? 'dark' : 'light');
+              var root = document.documentElement;
+              root.classList.remove('light', 'dark');
+              root.classList.add(theme === 'light' ? 'light' : 'dark');
+          } catch (e) {}
+      })();
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+  <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,500;1,8..60,400&amp;family=IBM+Plex+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/css/minimal.css?v=20261020v3">
+<link rel="canonical" href="https://rahulkrishnan.me/projects/amazon-electronics-recommender/"><meta name="description" content="I built an end-to-end recommender on a 390,757-interaction Amazon Electronics sample. My Two-Tower MLP combines collaborative, metadata, and SBERT title signals, with FAISS candidate retrieval and MLP reranking in a FastAPI service on Azure Container Apps."><script type="application/ld+json">{"@context":"https://schema.org","@type":"CreativeWork","name":"Amazon Electronics Recommender System","description":"I built an end-to-end recommender on a 390,757-interaction Amazon Electronics sample. My Two-Tower MLP combines collaborative, metadata, and SBERT title signals, with FAISS candidate retrieval and MLP reranking in a FastAPI service on Azure Container Apps.","url":"https://rahulkrishnan.me/projects/amazon-electronics-recommender/","author":{"@type":"Person","name":"Rahul Krishnan","url":"https://rahulkrishnan.me/"}}</script></head>
+<body>
+  <div class="m-page">
+    <div class="m-topbar">
+      <a class="m-topbar__name m-mono" href="/">Rahul Krishnan</a>
+      <nav class="m-tabs" aria-label="Site">
+        <a class="m-tab" href="/#about">About</a>
+        <a class="m-tab" href="/#recent">Recent</a>
+        <a class="m-tab" href="/#work" aria-selected="true">Work</a>
+        <a class="m-tab" href="/#writing">Writing</a>
+      </nav>
+      <button id="theme-toggle" type="button" class="m-topbar__theme m-mono" aria-label="Toggle light/dark theme">Theme</button>
+    </div>
+
+    <main id="content">
+      <header class="m-header">
+        <a class="m-back m-mono" id="back-link" href="/#projects">← Projects</a>
+        <h1 class="m-header__title" id="project-title">Amazon Electronics Recommender System</h1>
+        <p class="m-header__tagline" id="project-summary">I built an end-to-end recommender on a 390,757-interaction Amazon Electronics sample. My Two-Tower MLP combines collaborative, metadata, and SBERT title signals, with FAISS candidate retrieval and MLP reranking in a FastAPI service on Azure Container Apps.</p>
+      </header>
+      <div class="m-panel m-detail" id="project-body">
+          <div class="m-paper__result"><span class="m-paper__result-label m-mono">Result</span><p class="m-paper__result-text">Two-Tower MLP reached NDCG@10 of 0.3342, up from 0.3051 for the baseline, with sub-100ms CPU inference</p></div>
+          <div class="m-prose"><p>I developed the system on an Amazon Reviews 2023 Electronics sample of 41,909 users, 136,934 items, and 390,757 interactions. I compared collaborative filtering with metadata and SBERT text-based models before selecting a Two-Tower MLP.</p><p>My best model reached NDCG@10 of 0.3342 versus 0.3051 for the collaborative-filtering baseline, a 9.5% relative gain, with paired t-tests across five seeds. I used FAISS to retrieve candidates from item embeddings and the full MLP to rerank them using metadata and text features.</p><p>I bundled the inference assets in one checkpoint, reducing startup time from 30 to 45 seconds to 2 to 3 seconds. I deployed the FastAPI service on Azure Container Apps with sub-100ms CPU inference after warm start. The current model does not handle new users or items with no interaction history.</p></div>
+          <div class="m-project__stack m-mono"><span>PyTorch</span><span>SBERT</span><span>FAISS</span><span>Azure</span></div>
+          <div class="m-paper__links m-mono"><a href="https://github.com/rahulk98/Amazon-Product-Recommendation-System?tab=readme-ov-file" target="_blank" rel="noopener">GitHub</a><a href="https://recommender-api-app.calmsea-6aa29b51.germanywestcentral.azurecontainerapps.io/recommendation/demo" target="_blank" rel="noopener">Demo</a></div>
+        </div>
+    </main>
+
+    <footer class="m-footer m-mono">
+      <span>Rahul Krishnan</span>
+      <div class="m-footer__links">
+        <a href="https://github.com/rahulk98">GitHub</a>
+        <a href="mailto:rahulkrishnan1105@gmail.com">Email</a>
+        <a href="/privacy.html">Privacy Policy</a>
+      </div>
+    </footer>
+  </div>
+
+  <script src="/assets/js/subpage.js" defer=""></script>
+
+
+
+</body></html>

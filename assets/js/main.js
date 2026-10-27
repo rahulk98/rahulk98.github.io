@@ -1,7 +1,14 @@
 document.addEventListener('DOMContentLoaded', initializeApp);
 
 async function initializeApp() {
-    await loadAllData();
+    const embedded = document.getElementById('portfolio-data');
+    if (embedded) {
+        Object.entries(JSON.parse(embedded.textContent)).forEach(([key, value]) => {
+            window[key + 'Data'] = value;
+        });
+    } else {
+        await loadAllData();
+    }
     renderMinimal();
     setupThemeToggle();
     initializeRag();
